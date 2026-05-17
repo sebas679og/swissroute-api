@@ -15,7 +15,7 @@ services:
     networks:
       - swissroute-api-network
 
-  ms-gateway:
+  swissroute-api:
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,6 +23,13 @@ services:
       - "8080:8080"
     depends_on:
       - postgres-datasource
+    environment:
+      SWISS_ROUTE_DATASOURCE_USERNAME: ${SWISS_ROUTE_DATASOURCE_USERNAME}
+      SWISS_ROUTE_DATASOURCE_PASSWORD: ${SWISS_ROUTE_DATASOURCE_PASSWORD}
+      SWISS_ROUTE_DATASOURCE_URL: jdbc:postgresql://postgres-datasource:5432/${SWISS_ROUTE_DATASOURCE_DB}
+      SWISS_ROUTE_JPA_DDL: ${SWISS_ROUTE_JPA_DDL}
+      SWISS_ROUTE_JPA_SHOW_SQL: ${SWISS_ROUTE_JPA_SHOW_SQL}
+      SWAGGER_UI_DOCUMENTATION_ENABLED: ${SWAGGER_UI_DOCUMENTATION_ENABLED}
     restart: on-failure
     networks:
       - swissroute-api-network
