@@ -17,7 +17,7 @@ services:
 
   ms-gateway:
     build:
-      context: ./ms-gateway
+      context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
