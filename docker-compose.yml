@@ -1,0 +1,32 @@
+name: Swiss Route API
+
+services:
+  postgres-datasource:
+    image: postgres:18.3
+    environment:
+      POSTGRES_USER: ${SWISS_ROUTE_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SWISS_ROUTE_DATASOURCE_PASSWORD}
+      POSTGRES_DB: ${SWISS_ROUTE_DATASOURCE_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./swissroute-api-data:/var/lib/postgresql
+    restart: always
+    networks:
+      - swissroute-api-network
+
+  ms-gateway:
+    build:
+      context: ./ms-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-datasource
+    restart: on-failure
+    networks:
+      - swissroute-api-network
+
+networks:
+  swissroute-api-network:
+    driver: bridge

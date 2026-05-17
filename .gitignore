@@ -34,3 +34,6 @@ build/
 
 ### .Env ###
 .env
+
+### Database ###
+swissroute-api-data/
