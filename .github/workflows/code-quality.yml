@@ -1,0 +1,28 @@
+name: Code Quality for Swiss Route API
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          cache: maven
+
+      - name: Spotless - Check format
+        run: mvn spotless:check
+
+      - name: Checkstyle - Check style
+        run: mvn checkstyle:check
+
+      - name: PMD - Check for code issues
+        run: mvn pmd:check
