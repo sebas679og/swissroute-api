@@ -1,4 +1,4 @@
-name: Code Quality for Swiss Router
+name: Code Quality for Swiss Route API
 
 on:
   pull_request:

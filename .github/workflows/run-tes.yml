@@ -1,4 +1,4 @@
-name: Run Tests for Swwiss Route API
+name: Run Tests for Swiss Route API
 
 on:
   pull_request:
