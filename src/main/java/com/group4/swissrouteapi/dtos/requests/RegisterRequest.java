@@ -1,5 +1,6 @@
 package com.group4.swissrouteapi.dtos.requests;
 
+import com.group4.swissrouteapi.utils.validators.passwords.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -19,6 +20,7 @@ public class RegisterRequest {
     private String email;
 
     @NotBlank(message = "Password is required")
+    @ValidPassword
     private String password;
 
     @NotBlank(message = "Base city is required")
