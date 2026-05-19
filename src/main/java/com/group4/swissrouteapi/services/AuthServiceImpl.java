@@ -11,6 +11,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * AuthServiceImpl
+ *
+ * <p>Concrete implementation of the {@link AuthService} interface.
+ *
+ * <p>Provides user registration functionality by coordinating validation, persistence, password
+ * encoding, and response mapping.
+ *
+ * <p>Annotated with {@link Service} for Spring component scanning and {@link
+ * RequiredArgsConstructor} to enable constructor-based dependency injection.
+ *
+ * <p>Relies on {@link UserRepository} for persistence, {@link ProcessorRegisterUser} for user
+ * creation logic, {@link PasswordEncoder} for secure password handling, and {@link AuthMapper} for
+ * mapping entities to response DTOs.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {

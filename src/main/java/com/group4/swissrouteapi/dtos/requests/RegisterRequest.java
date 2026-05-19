@@ -7,6 +7,23 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * RegisterRequest
+ *
+ * <p>Data transfer object representing the payload required to register a new user in the system.
+ *
+ * <p>Contains user details such as name, email, password, and base city. Validation annotations
+ * ensure that all fields are provided and meet the required format and constraints:
+ *
+ * <ul>
+ *   <li>{@code @NotBlank} enforces non-empty values.
+ *   <li>{@code @Email} validates proper email format.
+ *   <li>{@code @ValidPassword} applies custom password rules.
+ * </ul>
+ *
+ * <p>Annotated with Lombok {@link Getter}, {@link Setter}, and {@link Builder} to generate
+ * boilerplate code and support fluent object construction.
+ */
 @Getter
 @Setter
 @Builder

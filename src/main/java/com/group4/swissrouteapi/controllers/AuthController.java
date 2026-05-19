@@ -21,6 +21,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * AuthController
+ *
+ * <p>REST controller responsible solely for handling user registration and authentication requests.
+ *
+ * <p>Annotated with {@link RestController} to expose endpoints as RESTful services, {@link
+ * RequestMapping} for base path configuration, and {@link RequiredArgsConstructor} to enable
+ * constructor-based dependency injection.
+ *
+ * <p>Tagged with {@link io.swagger.v3.oas.annotations.tags.Tag} for API documentation, grouping
+ * authentication-related endpoints under the "Auth" category.
+ */
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
