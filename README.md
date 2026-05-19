@@ -43,10 +43,10 @@ history of their planned trips.
 ```
 usuarios
 ├── id             UUID PK
-├── nombre         VARCHAR NOT NULL
+├── name         VARCHAR NOT NULL
 ├── email          VARCHAR UNIQUE NOT NULL
 ├── password       VARCHAR NOT NULL
-├── ciudad_base    VARCHAR
+├── base_city    VARCHAR
 └── created_at     TIMESTAMP DEFAULT NOW()
 
 rutas_favoritas
