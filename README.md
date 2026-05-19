@@ -42,7 +42,7 @@ history of their planned trips.
 
 ```
 usuarios
-├── id             UUIDv7 PK
+├── id             UUID PK
 ├── nombre         VARCHAR NOT NULL
 ├── email          VARCHAR UNIQUE NOT NULL
 ├── password       VARCHAR NOT NULL
@@ -50,7 +50,7 @@ usuarios
 └── created_at     TIMESTAMP DEFAULT NOW()
 
 rutas_favoritas
-├── id             UUIDv7 PK
+├── id             UUID PK
 ├── usuario_id     BIGINT FK → usuarios.id
 ├── nombre         VARCHAR NOT NULL
 ├── origen         VARCHAR NOT NULL
@@ -59,7 +59,7 @@ rutas_favoritas
 └── created_at     TIMESTAMP DEFAULT NOW()
 
 historial_busquedas
-├── id             UUIDv7 PK
+├── id             UUID PK
 ├── usuario_id     BIGINT FK → usuarios.id
 ├── origen         VARCHAR NOT NULL
 ├── destino        VARCHAR NOT NULL
@@ -67,7 +67,7 @@ historial_busquedas
 └── num_resultados INT
 
 estaciones_favoritas
-├── id                 UUIDv7 PK
+├── id                 UUID PK
 ├── usuario_id         BIGINT FK → usuarios.id
 ├── estacion_id_externo VARCHAR NOT NULL
 ├── nombre_estacion    VARCHAR NOT NULL
