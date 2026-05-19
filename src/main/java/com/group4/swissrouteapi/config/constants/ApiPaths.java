@@ -4,8 +4,7 @@ public final class ApiPaths {
 
     private ApiPaths() {}
 
-    public static final class AuthPaths {
-        public static final String PATH = "api/users";
-        public static final String REGISTER = String.join(PATH, "/register");
+    public static final class Auth {
+        public static final String REGISTER = "api/users/register";
     }
 }
