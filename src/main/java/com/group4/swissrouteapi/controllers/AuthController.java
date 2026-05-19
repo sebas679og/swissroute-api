@@ -18,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+  private final AuthService authService;
 
-    @PostMapping(ApiPaths.Auth.REGISTER)
-    public ResponseEntity<RegisterResponse> registerUser(@RequestBody @Valid RegisterRequest request){
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.registerUser(request));
-    }
+  @PostMapping(ApiPaths.Auth.REGISTER)
+  public ResponseEntity<RegisterResponse> registerUser(
+      @RequestBody @Valid RegisterRequest request) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(authService.registerUser(request));
+  }
 }

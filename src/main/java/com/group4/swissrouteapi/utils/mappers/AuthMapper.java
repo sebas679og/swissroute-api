@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface AuthMapper {
 
-    RegisterResponse toRegisterResponse(UserEntity user);
+  RegisterResponse toRegisterResponse(UserEntity user);
 }

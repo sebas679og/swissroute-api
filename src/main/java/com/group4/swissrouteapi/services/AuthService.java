@@ -5,5 +5,5 @@ import com.group4.swissrouteapi.dtos.responses.RegisterResponse;
 
 public interface AuthService {
 
-    RegisterResponse registerUser(RegisterRequest request);
+  RegisterResponse registerUser(RegisterRequest request);
 }

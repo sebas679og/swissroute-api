@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProcessorRegisterUser {
 
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    @Transactional
-    public UserEntity userRegister(String name, String email, String password, String baseCity){
-        UserEntity userEntity =
-                UserEntity.builder().name(name).email(email).password(password).baseCity(baseCity).build();
-        return userRepository.save(userEntity);
-    }
+  @Transactional
+  public UserEntity userRegister(String name, String email, String password, String baseCity) {
+    UserEntity userEntity =
+        UserEntity.builder().name(name).email(email).password(password).baseCity(baseCity).build();
+    return userRepository.save(userEntity);
+  }
 }

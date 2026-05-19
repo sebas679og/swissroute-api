@@ -13,24 +13,24 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl implements AuthService {
 
-    private final UserRepository userRepository;
-    private final ProcessorRegisterUser processorRegisterUser;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthMapper authMapper;
+  private final UserRepository userRepository;
+  private final ProcessorRegisterUser processorRegisterUser;
+  private final PasswordEncoder passwordEncoder;
+  private final AuthMapper authMapper;
 
-    @Override
-    public RegisterResponse registerUser(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new ResourceConflictException("Email is already in use.");
-        }
-        UserEntity user = processorRegisterUser.userRegister(
-                request.getName(),
-                request.getEmail(),
-                passwordEncoder.encode(request.getPassword()),
-                request.getBaseCity()
-        );
-        return authMapper.toRegisterResponse(user);
+  @Override
+  public RegisterResponse registerUser(RegisterRequest request) {
+    if (userRepository.existsByEmail(request.getEmail())) {
+      throw new ResourceConflictException("Email is already in use.");
     }
+    UserEntity user =
+        processorRegisterUser.userRegister(
+            request.getName(),
+            request.getEmail(),
+            passwordEncoder.encode(request.getPassword()),
+            request.getBaseCity());
+    return authMapper.toRegisterResponse(user);
+  }
 }

@@ -55,7 +55,11 @@ public class UserEntity {
   @Column(name = "base_city")
   private String baseCity;
 
-  @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
+  @Column(
+      name = "created_at",
+      nullable = false,
+      updatable = false,
+      columnDefinition = "TIMESTAMP WITH TIME ZONE")
   private Instant createdAt;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

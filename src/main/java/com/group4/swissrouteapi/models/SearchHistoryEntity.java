@@ -52,7 +52,11 @@ public class SearchHistoryEntity {
   @Column(nullable = false)
   private String destination;
 
-  @Column(name = "searched_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
+  @Column(
+      name = "searched_at",
+      nullable = false,
+      updatable = false,
+      columnDefinition = "TIMESTAMP WITH TIME ZONE")
   private Instant searchedAt;
 
   @Column(name = "result_count")

@@ -5,10 +5,9 @@ import io.swagger.v3.oas.annotations.info.Info;
 
 /** Configuration class for OpenAPI (Swagger) documentation. */
 @OpenAPIDefinition(
-        info =
+    info =
         @Info(
-                title = "SwissRoute API",
-                description = "REST API for route planning and navigation in Switzerland",
-                version = "1.0.0"))
-public class OpenApiConfig {
-}
+            title = "SwissRoute API",
+            description = "REST API for route planning and navigation in Switzerland",
+            version = "1.0.0"))
+public class OpenApiConfig {}
