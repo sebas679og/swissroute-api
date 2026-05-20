@@ -1,0 +1,76 @@
+{
+  "info": {
+    "_postman_id": "afb773c4-ba22-4556-89f3-287629562f89",
+    "name": "Swiss Route Api",
+    "description": "Backend REST API for planning and tracking public transport trips in Switzerland. Built with Java + Spring Boot + PostgreSQL, it acts as a business layer on top of the [Swiss Public Transport API](https://transport.opendata.ch/docs.html), allowing registered users to search connections, save favorite routes and stations, consult station boards, and keep a history of their planned trips.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "35777093"
+  },
+  "item": [
+    {
+      "name": "Auth Service",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Joe Doe\",\n  \"email\": \"joedoe@email.com\",\n  \"password\": \"Password123!\",\n  \"baseCity\": \"Madrid\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/register",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            },
+            "description": "# 👤 User Registration\n\n## 📌 Endpoint\n\n**POST**  \n`http://localhost:8080/api/users/register`\n\n---\n\n## 📖 Description\n\nRegisters a new user in the **SwissRoute API** platform.\n\nThis endpoint allows public user registration by providing basic account information such as name, email, password, and base city.\n\nFor security purposes:\n\n- Passwords are encrypted using **BCrypt**\n    \n- Passwords must comply with strong security rules before being accepted\n    \n\n---\n\n# 🔐 Access\n\n**Public endpoint**  \nNo authentication required.\n\n---\n\n# 📥 Request\n\n## Request Body (JSON)\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| name | String | ✅ Yes | Full name of the user |\n| email | String | ✅ Yes | Unique email address |\n| password | String | ✅ Yes | User password following security requirements |\n| baseCity | String | ✅ Yes | User's base city |\n\n---\n\n## Password Requirements\n\nThe password must contain:\n\n- Minimum **8 characters**\n    \n- At least:\n    \n    - One uppercase letter\n        \n    - One lowercase letter\n        \n    - One number\n        \n    - One special character\n        \n\n### Example of a valid password\n\n``` text\nPassword123!\n\n ```\n\n---\n\n### Example Request\n\n``` http\nPOST /api/users/register\nContent-Type: application/json\n\n ```\n\n``` json\n{\n  \"name\": \"Joe Doe\",\n  \"email\": \"joedoe@email.com\",\n  \"password\": \"Password123!\",\n  \"baseCity\": \"Madrid\"\n}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 201 Created\n\nThe user was successfully registered.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"name\": \"Joe Doe\",\n    \"email\": \"joedoe@email.com\",\n    \"baseCity\": \"Madrid\",\n    \"createdAt\": \"2026-05-20T00:04:05.836Z\"\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid or missing data.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"email: Email is required; name: Name is required; password: Password is required; baseCity: Base city is required\",\n    \"timestamp\": \"2026-05-20T00:05:24.008Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing required fields\n    \n- Invalid email format\n    \n- Password does not meet security requirements\n    \n- Malformed request body\n    \n\n---\n\n## ⚠️ 409 Conflict\n\nThe email address is already registered.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 409,\n    \"name\": \"CONFLICT\",\n    \"description\": \"Email is already in use.\",\n    \"timestamp\": \"2026-05-20T00:04:38.297Z\"\n}\n\n ```"
+          },
+          "response": []
+        }
+      ],
+      "description": "Registration and access to the platform"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": ""
+    }
+  ]
+}

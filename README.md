@@ -148,9 +148,9 @@ http://localhost:8080/v3/api-docs
 
 ### Endpoint Summary
 
-| Method   | Path  | Description |
-|----------|-------|-------------|
-| `methos` | `url` | description |
+| Method | Path                  | Description                                            |
+|--------|-----------------------|--------------------------------------------------------|
+| `POST` | `/api/users/register` | Creates a new user account in the SwissRoute platform. |
 
 
 ---
@@ -197,3 +197,7 @@ Apply code formatter before pushing:
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for branch conventions, commit format, linting requirements, and the PR process before opening your first pull request.
+
+## Documentation
+
+The complete documentation of the API can be found at the following location: [doc/SwissRouteApi.md](doc/SwissRouteApi.md)
