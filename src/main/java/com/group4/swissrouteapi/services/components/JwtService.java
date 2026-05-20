@@ -2,8 +2,6 @@ package com.group4.swissrouteapi.services.components;
 
 import com.group4.swissrouteapi.config.SecurityConfig;
 import com.group4.swissrouteapi.config.properties.JwtProperties;
-import com.group4.swissrouteapi.dtos.responses.TokenValidationResponse;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,34 +35,5 @@ public class JwtService {
                 .expiration(Date.from(now.plusSeconds(jwtProperties.getExpiration())))
                 .signWith(config.getSigningKey())
                 .compact();
-    }
-
-    /**
-     * Validates a JWT token and extracts its claims.
-     *
-     * @param token the JWT token to validate
-     * @return the claims contained in the token
-     */
-    public Claims validateAndExtract(String token) {
-        return Jwts.parser()
-                .verifyWith(config.getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-    }
-
-    /**
-     * Extracts user information from a JWT token.
-     *
-     * @param token the JWT token to parse
-     * @return a TokenValidationResponse containing user details and validation result
-     */
-    public TokenValidationResponse extractUserInfo(String token) {
-        Claims claims = validateAndExtract(token);
-        return TokenValidationResponse.builder()
-                .valid(true)
-                .userId(UUID.fromString(claims.getSubject()))
-                .email(claims.get("email", String.class))
-                .build();
     }
 }

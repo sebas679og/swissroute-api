@@ -1,8 +1,10 @@
 package com.group4.swissrouteapi.controllers;
 
 import com.group4.swissrouteapi.config.constants.ApiPaths;
+import com.group4.swissrouteapi.dtos.requests.LoginRequest;
 import com.group4.swissrouteapi.dtos.requests.RegisterRequest;
 import com.group4.swissrouteapi.dtos.responses.ErrorResponse;
+import com.group4.swissrouteapi.dtos.responses.LoginResponse;
 import com.group4.swissrouteapi.dtos.responses.RegisterResponse;
 import com.group4.swissrouteapi.services.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -87,5 +89,10 @@ public class AuthController {
   public ResponseEntity<RegisterResponse> registerUser(
       @RequestBody @Valid RegisterRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED).body(authService.registerUser(request));
+  }
+
+  @PostMapping(ApiPaths.Auth.LOGIN)
+    public ResponseEntity<LoginResponse> loginUser(@RequestBody @Valid LoginRequest request){
+      return ResponseEntity.status(HttpStatus.OK).body(authService.loginUser(request));
   }
 }
