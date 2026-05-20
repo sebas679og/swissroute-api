@@ -13,7 +13,7 @@ import com.group4.swissrouteapi.dtos.responses.RegisterResponse;
 import com.group4.swissrouteapi.exceptions.ResourceConflictException;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.repositories.UserRepository;
-import com.group4.swissrouteapi.services.processors.ProcessorRegisterUser;
+import com.group4.swissrouteapi.services.processors.UserRegistrationProcessor;
 import com.group4.swissrouteapi.utils.mappers.AuthMapper;
 import java.time.Instant;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * Unit tests for {@link AuthServiceImpl}.
  *
  * <p>Verifies the full registration flow: duplicate-email guard, password encoding, delegation to
- * {@link ProcessorRegisterUser}, and mapping to {@link RegisterResponse}. All collaborators are
+ * {@link UserRegistrationProcessor}, and mapping to {@link RegisterResponse}. All collaborators are
  * mocked so no Spring context or database is required.
  */
 @ExtendWith(MockitoExtension.class)
@@ -37,7 +37,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 class AuthServiceImplTest {
 
   @Mock private UserRepository userRepository;
-  @Mock private ProcessorRegisterUser processorRegisterUser;
+  @Mock private UserRegistrationProcessor userRegistrationProcessor;
   @Mock private PasswordEncoder passwordEncoder;
   @Mock private AuthMapper authMapper;
 
@@ -88,7 +88,7 @@ class AuthServiceImplTest {
       when(userRepository.existsByEmail(UserDataProvider.VALID_EMAIL)).thenReturn(false);
       when(passwordEncoder.encode(UserDataProvider.VALID_PASSWORD))
           .thenReturn(UserDataProvider.ENCODED_PASSWORD);
-      when(processorRegisterUser.userRegister(
+      when(userRegistrationProcessor.userRegister(
               UserDataProvider.VALID_NAME,
               UserDataProvider.VALID_EMAIL,
               UserDataProvider.ENCODED_PASSWORD,
@@ -112,7 +112,7 @@ class AuthServiceImplTest {
       when(passwordEncoder.encode(UserDataProvider.VALID_PASSWORD))
           .thenReturn(UserDataProvider.ENCODED_PASSWORD);
 
-      when(processorRegisterUser.userRegister(
+      when(userRegistrationProcessor.userRegister(
               UserDataProvider.VALID_NAME,
               UserDataProvider.VALID_EMAIL,
               UserDataProvider.ENCODED_PASSWORD,
@@ -135,7 +135,7 @@ class AuthServiceImplTest {
       when(userRepository.existsByEmail(UserDataProvider.VALID_EMAIL)).thenReturn(false);
       when(passwordEncoder.encode(UserDataProvider.VALID_PASSWORD))
           .thenReturn(UserDataProvider.ENCODED_PASSWORD);
-      when(processorRegisterUser.userRegister(
+      when(userRegistrationProcessor.userRegister(
               UserDataProvider.VALID_NAME,
               UserDataProvider.VALID_EMAIL,
               UserDataProvider.ENCODED_PASSWORD,
@@ -145,7 +145,7 @@ class AuthServiceImplTest {
 
       authServiceImpl.registerUser(request);
 
-      verify(processorRegisterUser)
+      verify(userRegistrationProcessor)
           .userRegister(
               UserDataProvider.VALID_NAME,
               UserDataProvider.VALID_EMAIL,
@@ -162,7 +162,7 @@ class AuthServiceImplTest {
       when(userRepository.existsByEmail(UserDataProvider.VALID_EMAIL)).thenReturn(false);
       when(passwordEncoder.encode(UserDataProvider.VALID_PASSWORD))
           .thenReturn(UserDataProvider.ENCODED_PASSWORD);
-      when(processorRegisterUser.userRegister(
+      when(userRegistrationProcessor.userRegister(
               UserDataProvider.VALID_NAME,
               UserDataProvider.VALID_EMAIL,
               UserDataProvider.ENCODED_PASSWORD,
@@ -184,7 +184,7 @@ class AuthServiceImplTest {
       when(userRepository.existsByEmail(UserDataProvider.VALID_EMAIL)).thenReturn(false);
       when(passwordEncoder.encode(UserDataProvider.VALID_PASSWORD))
           .thenReturn(UserDataProvider.ENCODED_PASSWORD);
-      when(processorRegisterUser.userRegister(
+      when(userRegistrationProcessor.userRegister(
               UserDataProvider.VALID_NAME,
               UserDataProvider.VALID_EMAIL,
               UserDataProvider.ENCODED_PASSWORD,
@@ -238,7 +238,7 @@ class AuthServiceImplTest {
       assertThatThrownBy(() -> authServiceImpl.registerUser(request))
           .isInstanceOf(ResourceConflictException.class);
 
-      verify(processorRegisterUser, never())
+      verify(userRegistrationProcessor, never())
           .userRegister(anyString(), anyString(), anyString(), anyString());
     }
 

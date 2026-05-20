@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @RequiredArgsConstructor
-public class ProcessorRegisterUser {
+public class UserRegistrationProcessor {
 
   private final UserRepository userRepository;
 
