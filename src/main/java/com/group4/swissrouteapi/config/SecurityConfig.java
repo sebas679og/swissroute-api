@@ -4,6 +4,10 @@ import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.config.constants.InternalHeaders;
 import com.group4.swissrouteapi.config.properties.CorsConfigurationProperties;
 import java.util.List;
+
+import com.group4.swissrouteapi.config.properties.JwtProperties;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +22,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import javax.crypto.SecretKey;
 
 /**
  * SecurityConfig
@@ -35,6 +41,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+  private final JwtProperties jwtProperties;
 
   /**
    * Configures the application's security filter chain.
@@ -99,5 +107,11 @@ public class SecurityConfig {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public SecretKey getSigningKey() {
+    byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
+    return Keys.hmacShaKeyFor(keyBytes);
   }
 }
