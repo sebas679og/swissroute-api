@@ -58,7 +58,11 @@ public class FavoriteRouteEntity {
   @Column(name = "transport_type")
   private String transportType;
 
-  @Column(name = "created_at", nullable = false, updatable = false)
+  @Column(
+      name = "created_at",
+      nullable = false,
+      updatable = false,
+      columnDefinition = "TIMESTAMP WITH TIME ZONE")
   private Instant createdAt;
 
   @PrePersist
