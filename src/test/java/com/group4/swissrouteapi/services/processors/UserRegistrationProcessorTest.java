@@ -143,7 +143,8 @@ class UserRegistrationProcessorTest {
       when(userRepository.save(org.mockito.ArgumentMatchers.any(UserEntity.class)))
           .thenThrow(new RuntimeException("DB unavailable"));
 
-      assertThatThrownBy(() -> userRegistrationProcessor.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY))
+      assertThatThrownBy(
+              () -> userRegistrationProcessor.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY))
           .isInstanceOf(RuntimeException.class)
           .hasMessage("DB unavailable");
     }

@@ -63,13 +63,12 @@ public class AuthServiceImpl implements AuthService {
   @Override
   public LoginResponse loginUser(LoginRequest request) {
     UserEntity user = userLoginProcessor.authenticate(request.getEmail(), request.getPassword());
-    String token =
-            jwtComponent.generateToken(user.getId(), user.getEmail());
+    String token = jwtComponent.generateToken(user.getId(), user.getEmail());
     return LoginResponse.builder()
-            .token(token)
-            .tokenType(jwtProperties.getTokenType())
-            .expiresIn(jwtProperties.getExpiration())
-            .userId(user.getId())
-            .build();
+        .token(token)
+        .tokenType(jwtProperties.getTokenType())
+        .expiresIn(jwtProperties.getExpiration())
+        .userId(user.getId())
+        .build();
   }
 }

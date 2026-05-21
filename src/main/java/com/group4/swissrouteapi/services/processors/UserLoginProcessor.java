@@ -13,30 +13,30 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserLoginProcessor {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
-    /**
-     * Authenticates a user by email and password.
-     *
-     * @param email the user's email address
-     * @param rawPassword the plain text password provided
-     * @return the authenticated UserEntity
-     */
-    @Transactional(readOnly = true)
-    public UserEntity authenticate(String email, String rawPassword) {
-        UserEntity user = findUserByEmail(email);
-        validatePasswordAndUser(user, rawPassword);
-        return user;
-    }
+  /**
+   * Authenticates a user by email and password.
+   *
+   * @param email the user's email address
+   * @param rawPassword the plain text password provided
+   * @return the authenticated UserEntity
+   */
+  @Transactional(readOnly = true)
+  public UserEntity authenticate(String email, String rawPassword) {
+    UserEntity user = findUserByEmail(email);
+    validatePasswordAndUser(user, rawPassword);
+    return user;
+  }
 
-    private UserEntity findUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
-    }
+  private UserEntity findUserByEmail(String email) {
+    return userRepository.findByEmail(email).orElse(null);
+  }
 
-    private void validatePasswordAndUser(UserEntity user, String rawPassword) {
-        if (user == null || !passwordEncoder.matches(rawPassword, user.getPassword())) {
-            throw new UnauthorizedException("Invalid credentials");
-        }
+  private void validatePasswordAndUser(UserEntity user, String rawPassword) {
+    if (user == null || !passwordEncoder.matches(rawPassword, user.getPassword())) {
+      throw new UnauthorizedException("Invalid credentials");
     }
+  }
 }

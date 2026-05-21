@@ -9,6 +9,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpHeaders;
@@ -20,58 +22,55 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.List;
-
 @Component
 @RequiredArgsConstructor
 public class BearerAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtKeyProvider provider;
-    private final JsonWriter jsonWriter;
+  private final JwtKeyProvider provider;
+  private final JsonWriter jsonWriter;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+  @Override
+  protected void doFilterInternal(
+      HttpServletRequest request,
+      @NonNull HttpServletResponse response,
+      @NonNull FilterChain filterChain)
+      throws ServletException, IOException {
 
-        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+    String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String token = authHeader.substring(7);
-
-        try {
-            Claims claims = Jwts.parser()
-                    .verifyWith(provider.getSigningKey())
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
-
-            String userId = claims.getSubject();
-            String email  = claims.get("email", String.class);
-
-            if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                List<SimpleGrantedAuthority> authorities =
-                        List.of(new SimpleGrantedAuthority("AUTH_JWT"));
-
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                email, null, authorities);
-
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-
-        } catch (JwtException ex) {
-            jsonWriter.sendError(response, HttpStatus.UNAUTHORIZED, "Invalid or expired token");
-        }
-
-        filterChain.doFilter(request, response);
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      filterChain.doFilter(request, response);
+      return;
     }
+
+    String token = authHeader.substring(7);
+
+    try {
+      Claims claims =
+          Jwts.parser()
+              .verifyWith(provider.getSigningKey())
+              .build()
+              .parseSignedClaims(token)
+              .getPayload();
+
+      String userId = claims.getSubject();
+      String email = claims.get("email", String.class);
+
+      if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("AUTH_JWT"));
+
+        UsernamePasswordAuthenticationToken authentication =
+            new UsernamePasswordAuthenticationToken(email, null, authorities);
+
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+      }
+
+    } catch (JwtException ex) {
+      jsonWriter.sendError(response, HttpStatus.UNAUTHORIZED, "Invalid or expired token");
+    }
+
+    filterChain.doFilter(request, response);
+  }
 }

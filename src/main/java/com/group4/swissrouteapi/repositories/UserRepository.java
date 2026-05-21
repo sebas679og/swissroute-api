@@ -1,7 +1,6 @@
 package com.group4.swissrouteapi.repositories;
 
 import com.group4.swissrouteapi.models.UserEntity;
-
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;

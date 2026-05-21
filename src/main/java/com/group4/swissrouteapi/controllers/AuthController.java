@@ -92,7 +92,7 @@ public class AuthController {
   }
 
   @PostMapping(ApiPaths.Auth.LOGIN)
-    public ResponseEntity<LoginResponse> loginUser(@RequestBody @Valid LoginRequest request){
-      return ResponseEntity.status(HttpStatus.OK).body(authService.loginUser(request));
+  public ResponseEntity<LoginResponse> loginUser(@RequestBody @Valid LoginRequest request) {
+    return ResponseEntity.status(HttpStatus.OK).body(authService.loginUser(request));
   }
 }

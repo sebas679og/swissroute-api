@@ -2,9 +2,8 @@ package com.group4.swissrouteapi.config;
 
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.config.properties.CorsConfigurationProperties;
-import java.util.List;
-
 import com.group4.swissrouteapi.services.components.BearerAuthenticationFilter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,9 +52,10 @@ public class SecurityConfig {
    */
   @Bean
   public SecurityFilterChain securityFilterChain(
-          HttpSecurity http,
-          CorsConfigurationSource corsConfigurationSource,
-          BearerAuthenticationFilter bearerAuthenticationFilter) throws Exception {
+      HttpSecurity http,
+      CorsConfigurationSource corsConfigurationSource,
+      BearerAuthenticationFilter bearerAuthenticationFilter)
+      throws Exception {
     return http.cors(cors -> cors.configurationSource(corsConfigurationSource))
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(
