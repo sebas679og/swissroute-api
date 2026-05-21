@@ -18,7 +18,10 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "swissroute.transport.api")
+@ConfigurationProperties(prefix = "swissroute.app.transport.api")
 public class ApiTransportProperties {
   private String baseUrl;
+  private Integer connectTimeoutMs;
+  private Integer readTimeoutMs;
+  private Integer writeTimeoutMs;
 }
