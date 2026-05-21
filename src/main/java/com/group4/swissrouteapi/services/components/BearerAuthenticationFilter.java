@@ -22,6 +22,21 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * BearerAuthenticationFilter
+ *
+ * <p>Custom security filter that processes incoming HTTP requests to validate and authenticate JWT
+ * bearer tokens.
+ *
+ * <p>Extends {@link org.springframework.web.filter.OncePerRequestFilter} to ensure execution once
+ * per request within the filter chain.
+ *
+ * <p>Annotated with {@link org.springframework.stereotype.Component} for Spring component scanning
+ * and {@link lombok.RequiredArgsConstructor} to enable constructor-based dependency injection.
+ *
+ * <p>Relies on {@link JwtKeyProvider} to obtain the signing key for token verification and {@link
+ * JsonWriter} to send standardized error responses when authentication fails.
+ */
 @Component
 @RequiredArgsConstructor
 public class BearerAuthenticationFilter extends OncePerRequestFilter {
