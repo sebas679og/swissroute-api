@@ -8,7 +8,7 @@ import com.group4.swissrouteapi.dtos.responses.RegisterResponse;
 import com.group4.swissrouteapi.exceptions.ResourceConflictException;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.repositories.UserRepository;
-import com.group4.swissrouteapi.services.components.JwtService;
+import com.group4.swissrouteapi.services.components.JwtComponent;
 import com.group4.swissrouteapi.services.processors.UserLoginProcessor;
 import com.group4.swissrouteapi.services.processors.UserRegistrationProcessor;
 import com.group4.swissrouteapi.utils.mappers.AuthMapper;
@@ -41,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
   private final UserRepository userRepository;
   private final UserRegistrationProcessor userRegistrationProcessor;
   private final UserLoginProcessor userLoginProcessor;
-  private final JwtService jwtService;
+  private final JwtComponent jwtComponent;
   private final JwtProperties jwtProperties;
   private final PasswordEncoder passwordEncoder;
   private final AuthMapper authMapper;
@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
   public LoginResponse loginUser(LoginRequest request) {
     UserEntity user = userLoginProcessor.authenticate(request.getEmail(), request.getPassword());
     String token =
-            jwtService.generateToken(user.getId(), user.getEmail());
+            jwtComponent.generateToken(user.getId(), user.getEmail());
     return LoginResponse.builder()
             .token(token)
             .tokenType(jwtProperties.getTokenType())

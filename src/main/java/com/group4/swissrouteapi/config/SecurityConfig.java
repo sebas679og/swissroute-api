@@ -1,16 +1,14 @@
 package com.group4.swissrouteapi.config;
 
 import com.group4.swissrouteapi.config.constants.ApiPaths;
-import com.group4.swissrouteapi.config.constants.InternalHeaders;
 import com.group4.swissrouteapi.config.properties.CorsConfigurationProperties;
 import java.util.List;
 
-import com.group4.swissrouteapi.config.properties.JwtProperties;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import com.group4.swissrouteapi.services.components.BearerAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,11 +17,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import javax.crypto.SecretKey;
 
 /**
  * SecurityConfig
@@ -42,8 +39,6 @@ import javax.crypto.SecretKey;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final JwtProperties jwtProperties;
-
   /**
    * Configures the application's security filter chain.
    *
@@ -58,7 +53,9 @@ public class SecurityConfig {
    */
   @Bean
   public SecurityFilterChain securityFilterChain(
-      HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
+          HttpSecurity http,
+          CorsConfigurationSource corsConfigurationSource,
+          BearerAuthenticationFilter bearerAuthenticationFilter) throws Exception {
     return http.cors(cors -> cors.configurationSource(corsConfigurationSource))
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(
@@ -73,6 +70,7 @@ public class SecurityConfig {
                     .permitAll()
                     .anyRequest()
                     .authenticated())
+        .addFilterBefore(bearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
   }
 
@@ -91,7 +89,7 @@ public class SecurityConfig {
     CorsConfiguration config = new CorsConfiguration();
     config.setAllowedOrigins(corsProperties.getAllowedOrigins());
     config.setAllowedMethods(corsProperties.getAllowedMethods());
-    config.setAllowedHeaders(List.of(InternalHeaders.AUTHORIZATION, InternalHeaders.CONTENT_TYPE));
+    config.setAllowedHeaders(List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE));
     config.setMaxAge(corsProperties.getMaxAge());
     config.setAllowCredentials(true);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -109,11 +107,5 @@ public class SecurityConfig {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
-  }
-
-  @Bean
-  public SecretKey getSigningKey() {
-    byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
-    return Keys.hmacShaKeyFor(keyBytes);
   }
 }

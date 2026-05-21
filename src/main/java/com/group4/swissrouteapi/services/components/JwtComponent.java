@@ -1,24 +1,22 @@
 package com.group4.swissrouteapi.services.components;
 
-import com.group4.swissrouteapi.config.SecurityConfig;
+import com.group4.swissrouteapi.config.JwtKeyProvider;
 import com.group4.swissrouteapi.config.properties.JwtProperties;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
+import org.springframework.stereotype.Component;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
 
 /** JwtService Provides operations for generating and validating JWT tokens. */
-@Service
+@Component
 @RequiredArgsConstructor
-public class JwtService {
+public class JwtComponent {
 
     private final JwtProperties jwtProperties;
-    private final SecurityConfig config;
-
+    private final JwtKeyProvider provider;
     /**
      * Generates a JWT token for a given user.
      *
@@ -33,7 +31,7 @@ public class JwtService {
                 .claim("email", email)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusSeconds(jwtProperties.getExpiration())))
-                .signWith(config.getSigningKey())
+                .signWith(provider.getSigningKey())
                 .compact();
     }
 }
