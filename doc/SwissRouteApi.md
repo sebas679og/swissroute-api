@@ -10,6 +10,7 @@
 - [Technology Stack](#technology-stack)
 - [Authentication Service](#authentication-service)
   - [Register User](#register-user)
+  - [Login User](#login-user)
 
 ---
 
@@ -56,7 +57,7 @@ The project also provides a strong foundation for future enhancements such as re
 ## Technology Stack
 
 | Layer                | Technology                  |
-| -------------------- | --------------------------- |
+|----------------------|-----------------------------|
 | Programming Language | Java 21+                    |
 | Framework            | Spring Boot 3.5.x           |
 | Database             | PostgreSQL                  |
@@ -99,7 +100,7 @@ Public
 #### Request Fields
 
 | Field      | Type   | Required | Description                               |
-| ---------- | ------ | -------- | ----------------------------------------- |
+|------------|--------|----------|-------------------------------------------|
 | `name`     | String | Yes      | Full name of the user                     |
 | `email`    | String | Yes      | Unique user email address                 |
 | `password` | String | Yes      | User password following security rules    |
@@ -189,7 +190,7 @@ Occurs when one or more required fields are missing or invalid.
 #### Validation Rules
 
 | Field      | Validation                                         |
-| ---------- | -------------------------------------------------- |
+|------------|----------------------------------------------------|
 | `name`     | Must not be empty                                  |
 | `email`    | Must not be empty and must be a valid email format |
 | `password` | Must comply with all password security rules       |
@@ -203,4 +204,141 @@ Occurs when one or more required fields are missing or invalid.
 * Passwords are encrypted using BCrypt before database persistence.
 * Validation errors are aggregated into a single response message for better client-side handling.
 * Timestamps are returned in ISO-8601 UTC format.
+
+---
+
+### Login User
+
+Authenticates an existing user and generates a JWT access token for authorized requests.
+
+##### Endpoint
+
+```http
+POST /api/users/login
+```
+
+#### Access
+
+Public
+
+---
+
+#### Request Body
+
+```json
+{
+  "email": "joedoe@email.com",
+  "password": "Password123!"
+}
+```
+
+---
+
+##### Request Fields
+
+| Field      | Type   | Required | Description                    |
+|------------|--------|----------|--------------------------------|
+| `email`    | String | Yes      | Registered user email address  |
+| `password` | String | Yes      | User account password          |
+
+---
+
+#### Authentication Process
+
+During authentication:
+
+1. The system validates the request payload.
+2. The user is searched by email address.
+3. The provided password is compared against the encrypted password stored in the database using BCrypt.
+4. If authentication succeeds, a JWT token is generated and returned to the client.
+
+---
+
+##### Successful Response
+
+##### 200 — OK
+
+```json id="x2c7nr"
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNTIxOGNiNC1iYjU3LTRlYTktYjAwMi1mMmU3MzUwNWQwNDEiLCJlbWFpbCI6ImpvZWRvZUBlbWFpbC5jb20iLCJpYXQiOjE3NzkzMjI2OTQsImV4cCI6MTc3OTMyNjI5NH0.GOV38Fwa9xDDNjqsFILinGixmLg2qLYi-_8J_ymTFrc",
+  "tokenType": "Bearer",
+  "expiresIn": 3600,
+  "userId": "d5218cb4-bb57-4ea9-b002-f2e73505d041"
+}
+```
+
+---
+
+###### Response Fields
+
+| Field       | Type   | Description                                 |
+|-------------|--------|---------------------------------------------|
+| `token`     | String | JWT access token                            |
+| `tokenType` | String | Authentication scheme used                  |
+| `expiresIn` | Number | Token expiration time in seconds            |
+| `userId`    | UUID   | Unique identifier of the authenticated user |
+
+---
+
+###### JWT Security
+
+The generated JWT token contains authenticated user information and is digitally signed to guarantee integrity and authenticity.
+
+The token is required for accessing protected endpoints and must be sent using the following header format:
+
+```http
+Authorization: Bearer <token>
+```
+
+---
+
+##### Error Responses
+
+##### 400 — Bad Request
+
+Occurs when required fields are missing, empty, or null.
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "password: Password is required; email: Email is required",
+  "timestamp": "2026-05-21T00:18:38.544Z"
+}
+```
+
+---
+
+##### 401 — Unauthorized
+
+Occurs when the provided credentials are invalid.
+
+```json id="b7yt3f"
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Invalid credentials",
+  "timestamp": "2026-05-21T00:19:05.308Z"
+}
+```
+
+---
+
+#### Validation Rules
+
+| Field      | Validation                                                |
+|------------|-----------------------------------------------------------|
+| `email`    | Must not be null, empty, and must be a valid email format |
+| `password` | Must not be null or empty                                 |
+
+---
+
+##### Notes
+
+* All request fields are mandatory.
+* Empty strings and null values are not accepted.
+* Password verification is performed using BCrypt password matching.
+* JWT tokens are time-limited and expire automatically after the configured duration.
+* Timestamps are returned in ISO-8601 UTC format.
+
 
