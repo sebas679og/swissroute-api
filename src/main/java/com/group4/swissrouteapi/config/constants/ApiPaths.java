@@ -24,6 +24,10 @@ public final class ApiPaths {
     public static final String LOGIN = "/api/users/login";
   }
 
+  public static final class Station {
+    public static final String STATIONS = "/api/stations";
+  }
+
   /**
    * Docs
    *
