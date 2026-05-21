@@ -35,4 +35,16 @@ public final class ApiPaths {
     public static final String SWAGGER_UI = "/swagger-ui/**";
     public static final String API_DOCS = "/v3/api-docs/**";
   }
+
+  /**
+   * TransportApi
+   *
+   * <p>Defines API path constants related to transport operations.
+   *
+   * <p>Serves as a centralized holder for endpoint URIs used by the transport client when
+   * interacting with external services.
+   */
+  public static final class TransportApi {
+    public static final String LOCATIONS = "/locations";
+  }
 }
