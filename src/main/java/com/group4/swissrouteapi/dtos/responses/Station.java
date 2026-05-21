@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class StationResponse {
+public class Station {
     String id;
     String name;
     Double latitude;
