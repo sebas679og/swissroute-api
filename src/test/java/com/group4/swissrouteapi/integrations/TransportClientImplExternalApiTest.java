@@ -62,7 +62,7 @@ class TransportClientImplExternalApiTest {
     ApiLocationsResponse response = transportClient.getLocations("Zurich");
 
     assertThat(response).isNotNull();
-    assertThat(response.apiStations()).isNotEmpty();
+    assertThat(response.stations()).isNotEmpty();
   }
 
   @Test
@@ -70,7 +70,7 @@ class TransportClientImplExternalApiTest {
   void shouldReturnStationsWithIdAndName() {
     ApiLocationsResponse response = transportClient.getLocations("Bern");
 
-    assertThat(response.apiStations())
+    assertThat(response.stations())
         .allSatisfy(
             station -> {
               assertThat(station.id()).isNotBlank();
@@ -83,12 +83,12 @@ class TransportClientImplExternalApiTest {
   void shouldReturnStationsWithValidCoordinates() {
     ApiLocationsResponse response = transportClient.getLocations("Geneva");
 
-    assertThat(response.apiStations())
-        .filteredOn(s -> s.apiCoordinate() != null)
+    assertThat(response.stations())
+        .filteredOn(s -> s.coordinate() != null)
         .allSatisfy(
             station -> {
-              assertThat(station.apiCoordinate().x()).isNotNull();
-              assertThat(station.apiCoordinate().y()).isNotNull();
+              assertThat(station.coordinate().x()).isNotNull();
+              assertThat(station.coordinate().y()).isNotNull();
             });
   }
 
@@ -98,6 +98,6 @@ class TransportClientImplExternalApiTest {
     ApiLocationsResponse response = transportClient.getLocations("xqzwvpqzwvpqzwvp");
 
     assertThat(response).isNotNull();
-    assertThat(response.apiStations()).isEmpty();
+    assertThat(response.stations()).isEmpty();
   }
 }

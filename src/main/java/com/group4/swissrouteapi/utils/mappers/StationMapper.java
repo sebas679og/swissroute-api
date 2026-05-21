@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface StationMapper {
 
-    @Mapping(target = "latitude", source = "apiCoordinate.x")
-    @Mapping(target = "longitude", source = "apiCoordinate.y")
+    @Mapping(target = "latitude", source = "coordinate.x")
+    @Mapping(target = "longitude", source = "coordinate.y")
     Station toStations(ApiStation apiStation);
 }

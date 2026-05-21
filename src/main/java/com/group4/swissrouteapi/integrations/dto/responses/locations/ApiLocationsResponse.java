@@ -12,4 +12,4 @@ import java.util.List;
  * <p>Implemented as a Java {@code record}, providing concise syntax, immutability, and built-in
  * methods such as {@code equals}, {@code hashCode}, and {@code toString}.
  */
-public record ApiLocationsResponse(List<ApiStation> apiStations) {}
+public record ApiLocationsResponse(List<ApiStation> stations) {}

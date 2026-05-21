@@ -22,7 +22,7 @@ public class StationServiceImpl implements StationService{
     @Override
     public StationsResponse getStationsByName(StationsQueryParams requestParams) {
         ApiLocationsResponse api = transportClient.getLocations(requestParams.getQuery());
-        List<ApiStation> apiStations = api.apiStations();
+        List<ApiStation> apiStations = api.stations();
 
         if (apiStations == null || apiStations.isEmpty()){
             throw new NotFoundException("No stations found with the name: " + requestParams.getQuery());

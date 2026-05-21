@@ -103,9 +103,9 @@ class TransportClientImplTest {
       ApiLocationsResponse result = transportClient.getLocations("Zurich");
 
       assertThat(result).isNotNull();
-      assertThat(result.apiStations()).hasSize(1);
-      assertThat(result.apiStations().getFirst().id()).isEqualTo("8503000");
-      assertThat(result.apiStations().getFirst().name()).isEqualTo("Zurich HB");
+      assertThat(result.stations()).hasSize(1);
+      assertThat(result.stations().getFirst().id()).isEqualTo("8503000");
+      assertThat(result.stations().getFirst().name()).isEqualTo("Zurich HB");
     }
 
     @Test
@@ -116,7 +116,7 @@ class TransportClientImplTest {
 
       ApiLocationsResponse result = transportClient.getLocations("Zurich");
 
-      ApiCoordinate coord = result.apiStations().getFirst().apiCoordinate();
+      ApiCoordinate coord = result.stations().getFirst().coordinate();
       assertThat(coord.type()).isEqualTo("Point");
       assertThat(coord.x()).isEqualTo(8.540192);
       assertThat(coord.y()).isEqualTo(47.378177);
@@ -130,7 +130,7 @@ class TransportClientImplTest {
 
       ApiLocationsResponse result = transportClient.getLocations("Zurich");
 
-      ApiStation apiStation = result.apiStations().getFirst();
+      ApiStation apiStation = result.stations().getFirst();
       assertThat(apiStation.score()).isEqualTo(0.9);
       assertThat(apiStation.distance()).isEqualTo(120.5);
     }
@@ -143,7 +143,7 @@ class TransportClientImplTest {
 
       ApiLocationsResponse result = transportClient.getLocations("unknown-place");
 
-      assertThat(result.apiStations()).isEmpty();
+      assertThat(result.stations()).isEmpty();
     }
 
     @Test
