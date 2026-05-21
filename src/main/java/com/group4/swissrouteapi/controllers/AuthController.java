@@ -1,8 +1,10 @@
 package com.group4.swissrouteapi.controllers;
 
 import com.group4.swissrouteapi.config.constants.ApiPaths;
+import com.group4.swissrouteapi.dtos.requests.LoginRequest;
 import com.group4.swissrouteapi.dtos.requests.RegisterRequest;
 import com.group4.swissrouteapi.dtos.responses.ErrorResponse;
+import com.group4.swissrouteapi.dtos.responses.LoginResponse;
 import com.group4.swissrouteapi.dtos.responses.RegisterResponse;
 import com.group4.swissrouteapi.services.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,11 +49,11 @@ public class AuthController {
       summary = "Register a new user",
       description =
           """
-                   Endpoint to register a new user account.
-                   This endpoint accepts user registration data and creates
-                   a new account if the provided information is valid and does
-                   not conflict with existing accounts.
-                   """)
+           Endpoint to register a new user account.
+           This endpoint accepts user registration data and creates
+           a new account if the provided information is valid and does
+           not conflict with existing accounts.
+           """)
   @io.swagger.v3.oas.annotations.parameters.RequestBody(
       description = "User registration data. All fields are required.",
       required = true,
@@ -87,5 +89,50 @@ public class AuthController {
   public ResponseEntity<RegisterResponse> registerUser(
       @RequestBody @Valid RegisterRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED).body(authService.registerUser(request));
+  }
+
+  @Operation(
+      summary = "User authentication",
+      description =
+          """
+           Endpoint to authenticate a registered user.
+           This endpoint accepts the user's authentication data,
+           generates a token with a custom expiration, and validates
+           their registration in the system.
+           """)
+  @io.swagger.v3.oas.annotations.parameters.RequestBody(
+      description = "User authentication data. All fields are mandatory.",
+      required = true,
+      content =
+          @Content(
+              mediaType = MediaType.APPLICATION_JSON_VALUE,
+              schema = @Schema(implementation = LoginRequest.class)))
+  @ApiResponses({
+    @ApiResponse(
+        responseCode = "200",
+        description =
+            "User successfully authenticated - Returns the details of the generated token.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = LoginResponse.class))),
+    @ApiResponse(
+        responseCode = "400",
+        description = "Validation error - Invalid input fields",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized - Incorrect credentials.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+  })
+  @PostMapping(ApiPaths.Auth.LOGIN)
+  public ResponseEntity<LoginResponse> loginUser(@RequestBody @Valid LoginRequest request) {
+    return ResponseEntity.status(HttpStatus.OK).body(authService.loginUser(request));
   }
 }

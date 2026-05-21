@@ -1,11 +1,16 @@
 package com.group4.swissrouteapi.services;
 
+import com.group4.swissrouteapi.config.properties.JwtProperties;
+import com.group4.swissrouteapi.dtos.requests.LoginRequest;
 import com.group4.swissrouteapi.dtos.requests.RegisterRequest;
+import com.group4.swissrouteapi.dtos.responses.LoginResponse;
 import com.group4.swissrouteapi.dtos.responses.RegisterResponse;
 import com.group4.swissrouteapi.exceptions.ResourceConflictException;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.repositories.UserRepository;
-import com.group4.swissrouteapi.services.processors.ProcessorRegisterUser;
+import com.group4.swissrouteapi.services.components.JwtComponent;
+import com.group4.swissrouteapi.services.processors.UserLoginProcessor;
+import com.group4.swissrouteapi.services.processors.UserRegistrationProcessor;
 import com.group4.swissrouteapi.utils.mappers.AuthMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,10 +24,13 @@ import org.springframework.stereotype.Service;
  * <p>Provides user registration functionality by coordinating validation, persistence, password
  * encoding, and response mapping.
  *
+ * <p>Handles user login by authenticating credentials, generating JWT tokens, and constructing
+ * appropriate responses.
+ *
  * <p>Annotated with {@link Service} for Spring component scanning and {@link
  * RequiredArgsConstructor} to enable constructor-based dependency injection.
  *
- * <p>Relies on {@link UserRepository} for persistence, {@link ProcessorRegisterUser} for user
+ * <p>Relies on {@link UserRepository} for persistence, {@link UserRegistrationProcessor} for user
  * creation logic, {@link PasswordEncoder} for secure password handling, and {@link AuthMapper} for
  * mapping entities to response DTOs.
  */
@@ -31,7 +39,10 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
   private final UserRepository userRepository;
-  private final ProcessorRegisterUser processorRegisterUser;
+  private final UserRegistrationProcessor userRegistrationProcessor;
+  private final UserLoginProcessor userLoginProcessor;
+  private final JwtComponent jwtComponent;
+  private final JwtProperties jwtProperties;
   private final PasswordEncoder passwordEncoder;
   private final AuthMapper authMapper;
 
@@ -41,11 +52,23 @@ public class AuthServiceImpl implements AuthService {
       throw new ResourceConflictException("Email is already in use.");
     }
     UserEntity user =
-        processorRegisterUser.userRegister(
+        userRegistrationProcessor.userRegister(
             request.getName(),
             request.getEmail(),
             passwordEncoder.encode(request.getPassword()),
             request.getBaseCity());
     return authMapper.toRegisterResponse(user);
+  }
+
+  @Override
+  public LoginResponse loginUser(LoginRequest request) {
+    UserEntity user = userLoginProcessor.authenticate(request.getEmail(), request.getPassword());
+    String token = jwtComponent.generateToken(user.getId(), user.getEmail());
+    return LoginResponse.builder()
+        .token(token)
+        .tokenType(jwtProperties.getTokenType())
+        .expiresIn(jwtProperties.getExpiration())
+        .userId(user.getId())
+        .build();
   }
 }

@@ -21,6 +21,7 @@ public final class ApiPaths {
    */
   public static final class Auth {
     public static final String REGISTER = "/api/users/register";
+    public static final String LOGIN = "/api/users/login";
   }
 
   /**

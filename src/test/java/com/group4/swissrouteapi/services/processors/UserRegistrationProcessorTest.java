@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * Unit tests for {@link ProcessorRegisterUser}.
+ * Unit tests for {@link UserRegistrationProcessor}.
  *
  * <p>Verifies that {@code userRegister} correctly builds a {@link UserEntity} from the provided
  * arguments and delegates persistence to {@link UserRepository#save}. The repository is mocked so
@@ -26,11 +26,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ProcessorRegisterUser")
-class ProcessorRegisterUserTest {
+class UserRegistrationProcessorTest {
 
   @Mock private UserRepository userRepository;
 
-  @InjectMocks private ProcessorRegisterUser processorRegisterUser;
+  @InjectMocks private UserRegistrationProcessor userRegistrationProcessor;
 
   // ---------------------------------------------------------------------------
   // Shared fixtures
@@ -65,7 +65,7 @@ class ProcessorRegisterUserTest {
       when(userRepository.save(org.mockito.ArgumentMatchers.any(UserEntity.class)))
           .thenReturn(persisted);
 
-      UserEntity result = processorRegisterUser.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY);
+      UserEntity result = userRegistrationProcessor.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY);
 
       assertThat(result).isSameAs(persisted);
     }
@@ -76,7 +76,7 @@ class ProcessorRegisterUserTest {
       when(userRepository.save(org.mockito.ArgumentMatchers.any(UserEntity.class)))
           .thenReturn(savedEntity());
 
-      processorRegisterUser.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY);
+      userRegistrationProcessor.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY);
 
       verify(userRepository).save(org.mockito.ArgumentMatchers.any(UserEntity.class));
     }
@@ -89,7 +89,7 @@ class ProcessorRegisterUserTest {
 
       ArgumentCaptor<UserEntity> captor = forClass(UserEntity.class);
 
-      processorRegisterUser.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY);
+      userRegistrationProcessor.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY);
       verify(userRepository).save(captor.capture());
 
       assertThat(captor.getValue().getName()).isEqualTo(NAME);
@@ -103,7 +103,7 @@ class ProcessorRegisterUserTest {
 
       ArgumentCaptor<UserEntity> captor = forClass(UserEntity.class);
 
-      processorRegisterUser.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY);
+      userRegistrationProcessor.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY);
       verify(userRepository).save(captor.capture());
 
       assertThat(captor.getValue().getEmail()).isEqualTo(EMAIL);
@@ -117,7 +117,7 @@ class ProcessorRegisterUserTest {
 
       ArgumentCaptor<UserEntity> captor = forClass(UserEntity.class);
 
-      processorRegisterUser.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY);
+      userRegistrationProcessor.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY);
       verify(userRepository).save(captor.capture());
 
       assertThat(captor.getValue().getPassword()).isEqualTo(PASSWORD);
@@ -131,7 +131,7 @@ class ProcessorRegisterUserTest {
 
       ArgumentCaptor<UserEntity> captor = forClass(UserEntity.class);
 
-      processorRegisterUser.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY);
+      userRegistrationProcessor.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY);
       verify(userRepository).save(captor.capture());
 
       assertThat(captor.getValue().getBaseCity()).isEqualTo(BASE_CITY);
@@ -143,7 +143,8 @@ class ProcessorRegisterUserTest {
       when(userRepository.save(org.mockito.ArgumentMatchers.any(UserEntity.class)))
           .thenThrow(new RuntimeException("DB unavailable"));
 
-      assertThatThrownBy(() -> processorRegisterUser.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY))
+      assertThatThrownBy(
+              () -> userRegistrationProcessor.userRegister(NAME, EMAIL, PASSWORD, BASE_CITY))
           .isInstanceOf(RuntimeException.class)
           .hasMessage("DB unavailable");
     }

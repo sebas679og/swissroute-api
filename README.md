@@ -148,10 +148,11 @@ http://localhost:8080/v3/api-docs
 
 ### Endpoint Summary
 
+
 | Method | Path                  | Description                                            |
 |--------|-----------------------|--------------------------------------------------------|
 | `POST` | `/api/users/register` | Creates a new user account in the SwissRoute platform. |
-
+| `POST` | `/api/users/login`    | Authenticates a user and returns a JWT token.          |
 
 ---
 
