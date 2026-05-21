@@ -3,7 +3,7 @@ package com.group4.swissrouteapi.integrations;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.exceptions.BadGatewayException;
 import com.group4.swissrouteapi.exceptions.ServiceUnavailableException;
-import com.group4.swissrouteapi.integrations.dto.responses.locations.LocationsResponse;
+import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
@@ -32,7 +32,7 @@ public class TransportClientImpl implements TransportClient {
   private final WebClient transportWebClient;
 
   @Override
-  public LocationsResponse getLocations(String query) {
+  public ApiLocationsResponse getLocations(String query) {
     WebClient.RequestHeadersSpec<?> request =
         transportWebClient
             .get()
@@ -44,7 +44,7 @@ public class TransportClientImpl implements TransportClient {
                         .build());
     return executeRequest(
         request,
-        LocationsResponse.class,
+        ApiLocationsResponse.class,
         String.join("", ApiPaths.TransportApi.LOCATIONS, "?query=", query));
   }
 

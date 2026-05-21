@@ -2,7 +2,7 @@ package com.group4.swissrouteapi.integrations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.group4.swissrouteapi.integrations.dto.responses.locations.LocationsResponse;
+import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,18 +59,18 @@ class TransportClientImplExternalApiTest {
   @Test
   @DisplayName("should return 200 with stations when querying a known location")
   void shouldReturnStationsForKnownQuery() {
-    LocationsResponse response = transportClient.getLocations("Zurich");
+    ApiLocationsResponse response = transportClient.getLocations("Zurich");
 
     assertThat(response).isNotNull();
-    assertThat(response.stations()).isNotEmpty();
+    assertThat(response.apiStations()).isNotEmpty();
   }
 
   @Test
   @DisplayName("should return stations with non-blank id and name")
   void shouldReturnStationsWithIdAndName() {
-    LocationsResponse response = transportClient.getLocations("Bern");
+    ApiLocationsResponse response = transportClient.getLocations("Bern");
 
-    assertThat(response.stations())
+    assertThat(response.apiStations())
         .allSatisfy(
             station -> {
               assertThat(station.id()).isNotBlank();
@@ -81,23 +81,23 @@ class TransportClientImplExternalApiTest {
   @Test
   @DisplayName("should return stations with valid coordinates")
   void shouldReturnStationsWithValidCoordinates() {
-    LocationsResponse response = transportClient.getLocations("Geneva");
+    ApiLocationsResponse response = transportClient.getLocations("Geneva");
 
-    assertThat(response.stations())
-        .filteredOn(s -> s.coordinate() != null)
+    assertThat(response.apiStations())
+        .filteredOn(s -> s.apiCoordinate() != null)
         .allSatisfy(
             station -> {
-              assertThat(station.coordinate().x()).isNotNull();
-              assertThat(station.coordinate().y()).isNotNull();
+              assertThat(station.apiCoordinate().x()).isNotNull();
+              assertThat(station.apiCoordinate().y()).isNotNull();
             });
   }
 
   @Test
   @DisplayName("should return an empty stations list for a nonsense query")
   void shouldReturnEmptyListForNonsenseQuery() {
-    LocationsResponse response = transportClient.getLocations("xqzwvpqzwvpqzwvp");
+    ApiLocationsResponse response = transportClient.getLocations("xqzwvpqzwvpqzwvp");
 
     assertThat(response).isNotNull();
-    assertThat(response.stations()).isEmpty();
+    assertThat(response.apiStations()).isEmpty();
   }
 }
