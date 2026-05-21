@@ -70,6 +70,17 @@ public class GlobalExceptionHandler {
     return buildErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
   }
 
+  @ExceptionHandler(BadGatewayException.class)
+  public ResponseEntity<ErrorResponse> handleBadGatewayException(BadGatewayException ex) {
+    return buildErrorResponse(HttpStatus.BAD_GATEWAY, ex.getMessage());
+  }
+
+  @ExceptionHandler(ServiceUnavailableException.class)
+  public ResponseEntity<ErrorResponse> handleServiceUnavailableException(
+      ServiceUnavailableException ex) {
+    return buildErrorResponse(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+  }
+
   private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status, String description) {
     return ResponseEntity.status(status)
         .body(
