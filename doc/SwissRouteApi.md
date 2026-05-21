@@ -8,6 +8,7 @@
 - [Proposed Solution](#proposed-solution)
 - [Project Justification](#project-justification)
 - [Technology Stack](#technology-stack)
+- [External API Integration](#external-api-integration)
 - [Authentication Service](#authentication-service)
   - [Register User](#register-user)
   - [Login User](#login-user)
@@ -20,7 +21,9 @@ Modern public transportation systems generate a large amount of route, schedule,
 
 Additionally, most public transport APIs provide raw transportation data but lack personalized features such as favorite route management, travel history tracking, and centralized trip planning. This creates an opportunity to build a backend system capable of transforming public transportation data into a structured, scalable, and user-oriented service.
 
-SwissRoute addresses this problem by providing a robust backend API that integrates with the Swiss Public Transport API and offers advanced functionalities for authenticated users, including connection searches, favorite route storage, timetable consultation, and travel history management.
+SwissRoute addresses this problem by providing a robust backend API that integrates with the **Swiss Public Transport API** (`https://transport.opendata.ch`) and offers advanced functionalities for authenticated users, including connection searches, favorite route storage, timetable consultation, and travel history management.
+
+> **Important geographic constraint:** The Swiss Public Transport API exclusively covers the Swiss public transport network — trains, buses, trams, boats, and cable cars operating within Switzerland. SwissRoute therefore only supports travel planning for Swiss destinations. International routes or stations outside Switzerland are not supported by the underlying data source.
 
 ---
 
@@ -65,6 +68,43 @@ The project also provides a strong foundation for future enhancements such as re
 | HTTP Client          | WebClient                   |
 | Documentation        | Swagger / OpenAPI           |
 | Build Tool           | Maven                       |
+
+---
+
+## External API Integration
+
+SwissRoute is built on top of the **Swiss Public Transport API**, an open and free data source provided by the Swiss transport community.
+
+| Property       | Value                                      |
+|----------------|--------------------------------------------|
+| Base URL       | `https://transport.opendata.ch/v1`         |
+| Authentication | None required (public API)                 |
+| Documentation  | https://transport.opendata.ch/docs.html    |
+| Coverage       | Switzerland only                           |
+
+### Endpoints Used
+
+| Endpoint            | Purpose in SwissRoute       |
+|---------------------|-----------------------------|
+| `GET /locations`    | Search stations by name     |
+| `GET /connections`  | Find connections between stations |
+| `GET /stationboard` | Get departures from a station |
+
+### Geographic Scope
+
+> **This API only covers public transport within Switzerland.**
+
+The Swiss Public Transport API provides data for the Swiss national transport network, including:
+
+- 🚆 Trains (SBB/CFF/FFS, regional railways)
+- 🚌 Buses (intercity and local lines)
+- 🚋 Trams and urban transit
+- ⛵ Lake boats
+- 🚠 Cable cars and funiculars
+
+**Stations, routes, and connections outside Switzerland are not available.** Queries for international destinations (e.g., Paris, Milan, Munich) will return no results or may partially match border stations. SwissRoute does not attempt to bridge this limitation — it is an intentional constraint of the underlying data source.
+
+---
 
 ## Authentication Service
 
