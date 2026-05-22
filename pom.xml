@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.group4</groupId>
     <artifactId>swissroute-api</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
     <name>swissroute-api</name>
     <description>Public transport trip planning REST API built with Spring Boot and PostgreSQL. Integrates external transport APIs to manage stations, connections, favorite routes, and travel history.</description>
     <url/>
