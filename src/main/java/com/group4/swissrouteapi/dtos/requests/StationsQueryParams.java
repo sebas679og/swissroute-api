@@ -16,9 +16,6 @@ import lombok.NoArgsConstructor;
  *
  * <p>Annotated with {@link lombok.Data} to generate boilerplate methods, {@link lombok.Builder} to
  * provide a fluent builder API, and Lombok constructors for flexibility in instantiation.
- *
- * <p>Includes validation with {@link jakarta.validation.constraints.NotBlank} to ensure the query
- * string is not empty.
  */
 @Data
 @Builder
