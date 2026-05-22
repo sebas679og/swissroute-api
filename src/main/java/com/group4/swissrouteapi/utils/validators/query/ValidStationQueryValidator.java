@@ -36,6 +36,14 @@ public class ValidStationQueryValidator
     boolean hasLatitude = value.getLatitude() != null;
     boolean hasLongitude = value.getLongitude() != null;
 
+    if (hasQuery && hasLatitude && hasLongitude) {
+      buildCustomMessage(
+          context,
+          "Cannot provide both text search ('query') and coordinates ('latitude'/'longitude') "
+              + "at the same time. Choose one method.");
+      return false;
+    }
+
     if (!hasQuery && !hasLatitude && !hasLongitude) {
       buildCustomMessage(
           context,

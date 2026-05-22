@@ -82,10 +82,10 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
       }
 
+      filterChain.doFilter(request, response);
+
     } catch (JwtException ex) {
       jsonWriter.sendError(response, HttpStatus.UNAUTHORIZED, "Invalid or expired token");
     }
-
-    filterChain.doFilter(request, response);
   }
 }

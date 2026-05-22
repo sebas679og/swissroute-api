@@ -28,9 +28,13 @@ public class StationsQueryParams {
   @Schema(description = "query", example = "Basel")
   private String query;
 
-  @Schema(description = "Coordinate Latitude", example = "47.5596")
+  @Schema(description = "Coordinate Latitude", example = "47.5596", minLength = -90, maxLength = 90)
   private Double latitude;
 
-  @Schema(description = "Coordinate Longitude", example = "7.5886")
+  @Schema(
+      description = "Coordinate Longitude",
+      example = "7.5886",
+      minLength = -180,
+      maxLength = 180)
   private Double longitude;
 }
