@@ -59,7 +59,7 @@ class TransportClientImplExternalApiTest {
   @Test
   @DisplayName("should return 200 with stations when querying a known location")
   void shouldReturnStationsForKnownQuery() {
-    ApiLocationsResponse response = transportClient.getLocations("Zurich");
+    ApiLocationsResponse response = transportClient.getLocationsByQuery("Zurich");
 
     assertThat(response).isNotNull();
     assertThat(response.stations()).isNotEmpty();
@@ -68,7 +68,7 @@ class TransportClientImplExternalApiTest {
   @Test
   @DisplayName("should return stations with non-blank id and name")
   void shouldReturnStationsWithIdAndName() {
-    ApiLocationsResponse response = transportClient.getLocations("Bern");
+    ApiLocationsResponse response = transportClient.getLocationsByQuery("Bern");
 
     assertThat(response.stations())
         .allSatisfy(
@@ -81,7 +81,7 @@ class TransportClientImplExternalApiTest {
   @Test
   @DisplayName("should return stations with valid coordinates")
   void shouldReturnStationsWithValidCoordinates() {
-    ApiLocationsResponse response = transportClient.getLocations("Geneva");
+    ApiLocationsResponse response = transportClient.getLocationsByQuery("Geneva");
 
     assertThat(response.stations())
         .filteredOn(s -> s.coordinate() != null)
@@ -95,7 +95,7 @@ class TransportClientImplExternalApiTest {
   @Test
   @DisplayName("should return an empty stations list for a nonsense query")
   void shouldReturnEmptyListForNonsenseQuery() {
-    ApiLocationsResponse response = transportClient.getLocations("xqzwvpqzwvpqzwvp");
+    ApiLocationsResponse response = transportClient.getLocationsByQuery("xqzwvpqzwvpqzwvp");
 
     assertThat(response).isNotNull();
     assertThat(response.stations()).isEmpty();

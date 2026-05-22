@@ -13,5 +13,5 @@ import com.group4.swissrouteapi.dtos.responses.StationsResponse;
  */
 public interface StationService {
 
-  StationsResponse getStationsByName(StationsQueryParams requestParams);
+  StationsResponse getStations(StationsQueryParams requestParams);
 }

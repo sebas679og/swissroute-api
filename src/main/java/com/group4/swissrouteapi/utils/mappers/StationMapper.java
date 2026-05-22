@@ -30,5 +30,6 @@ public interface StationMapper {
    */
   @Mapping(target = "latitude", source = "coordinate.x")
   @Mapping(target = "longitude", source = "coordinate.y")
+  @Mapping(target = "distance", source = "distance")
   Station toStations(ApiStation apiStation);
 }

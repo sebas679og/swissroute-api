@@ -99,7 +99,7 @@ class TransportClientImplTest {
       String body = buildLocationsJson("8503000", "Zurich HB");
       mockWebServer.enqueue(jsonResponse(200, body));
 
-      ApiLocationsResponse result = transportClient.getLocations("Zurich");
+      ApiLocationsResponse result = transportClient.getLocationsByQuery("Zurich");
 
       assertThat(result).isNotNull();
       assertThat(result.stations()).hasSize(1);
@@ -113,7 +113,7 @@ class TransportClientImplTest {
       String body = buildLocationsJson("8503000", "Zurich HB");
       mockWebServer.enqueue(jsonResponse(200, body));
 
-      ApiLocationsResponse result = transportClient.getLocations("Zurich");
+      ApiLocationsResponse result = transportClient.getLocationsByQuery("Zurich");
 
       ApiCoordinate coord = result.stations().getFirst().coordinate();
       assertThat(coord.type()).isEqualTo("Point");
@@ -127,7 +127,7 @@ class TransportClientImplTest {
       String body = buildLocationsJson("8503000", "Zurich HB");
       mockWebServer.enqueue(jsonResponse(200, body));
 
-      ApiLocationsResponse result = transportClient.getLocations("Zurich");
+      ApiLocationsResponse result = transportClient.getLocationsByQuery("Zurich");
 
       ApiStation apiStation = result.stations().getFirst();
       assertThat(apiStation.score()).isEqualTo(0.9);
@@ -140,7 +140,7 @@ class TransportClientImplTest {
       String body = objectMapper.writeValueAsString(new ApiLocationsResponse(List.of()));
       mockWebServer.enqueue(jsonResponse(200, body));
 
-      ApiLocationsResponse result = transportClient.getLocations("unknown-place");
+      ApiLocationsResponse result = transportClient.getLocationsByQuery("unknown-place");
 
       assertThat(result.stations()).isEmpty();
     }
@@ -151,7 +151,7 @@ class TransportClientImplTest {
       String body = buildLocationsJson("8503000", "Zurich HB");
       mockWebServer.enqueue(jsonResponse(200, body));
 
-      transportClient.getLocations("Zurich");
+      transportClient.getLocationsByQuery("Zurich");
 
       RecordedRequest recorded = mockWebServer.takeRequest();
       assertThat(recorded.getPath()).contains("query=Zurich");
@@ -163,7 +163,7 @@ class TransportClientImplTest {
       String body = buildLocationsJson("8503000", "Zurich HB");
       mockWebServer.enqueue(jsonResponse(200, body));
 
-      transportClient.getLocations("Zurich");
+      transportClient.getLocationsByQuery("Zurich");
 
       RecordedRequest recorded = mockWebServer.takeRequest();
       assertThat(recorded.getMethod()).isEqualTo("GET");
@@ -176,7 +176,7 @@ class TransportClientImplTest {
       String body = buildLocationsJson("8503000", "Zürich HB");
       mockWebServer.enqueue(jsonResponse(200, body));
 
-      transportClient.getLocations("Zürich HB");
+      transportClient.getLocationsByQuery("Zürich HB");
 
       RecordedRequest recorded = mockWebServer.takeRequest();
       // URL-encoded space = '+' or '%20', ü = '%C3%BC'
@@ -197,7 +197,7 @@ class TransportClientImplTest {
     void shouldThrowBadGatewayOnBadRequest() {
       mockWebServer.enqueue(jsonResponse(400, "{\"error\":\"bad request\"}"));
 
-      assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
+      assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
           .isInstanceOf(BadGatewayException.class)
           .hasMessage("Api Transport rejected the request");
     }
@@ -207,7 +207,7 @@ class TransportClientImplTest {
     void shouldThrowBadGatewayOnUnauthorized() {
       mockWebServer.enqueue(jsonResponse(401, "{\"error\":\"unauthorized\"}"));
 
-      assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
+      assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
           .isInstanceOf(BadGatewayException.class)
           .hasMessage("Api Transport rejected the request");
     }
@@ -217,7 +217,7 @@ class TransportClientImplTest {
     void shouldThrowBadGatewayOnNotFound() {
       mockWebServer.enqueue(jsonResponse(404, "{\"error\":\"not found\"}"));
 
-      assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
+      assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
           .isInstanceOf(BadGatewayException.class)
           .hasMessage("Api Transport rejected the request");
     }
@@ -230,7 +230,7 @@ class TransportClientImplTest {
               .setResponseCode(422)
               .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
 
-      assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
+      assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
           .isInstanceOf(BadGatewayException.class)
           .hasMessage("Api Transport rejected the request");
     }
@@ -249,7 +249,7 @@ class TransportClientImplTest {
     void shouldThrowServiceUnavailableOnInternalServerError() {
       mockWebServer.enqueue(jsonResponse(500, "{\"error\":\"internal error\"}"));
 
-      assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
+      assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
           .isInstanceOf(ServiceUnavailableException.class)
           .hasMessage("Api Transport is unavailable");
     }
@@ -259,7 +259,7 @@ class TransportClientImplTest {
     void shouldThrowServiceUnavailableOnBadGateway() {
       mockWebServer.enqueue(jsonResponse(502, "{\"error\":\"bad gateway\"}"));
 
-      assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
+      assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
           .isInstanceOf(ServiceUnavailableException.class)
           .hasMessage("Api Transport is unavailable");
     }
@@ -269,7 +269,7 @@ class TransportClientImplTest {
     void shouldThrowServiceUnavailableOnServiceUnavailable() {
       mockWebServer.enqueue(jsonResponse(503, "{\"error\":\"service unavailable\"}"));
 
-      assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
+      assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
           .isInstanceOf(ServiceUnavailableException.class)
           .hasMessage("Api Transport is unavailable");
     }
@@ -282,7 +282,7 @@ class TransportClientImplTest {
               .setResponseCode(500)
               .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
 
-      assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
+      assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
           .isInstanceOf(ServiceUnavailableException.class)
           .hasMessage("Api Transport is unavailable");
     }
@@ -302,7 +302,7 @@ class TransportClientImplTest {
       // Shut down the server before the request so the connection is refused
       mockWebServer.shutdown();
 
-      assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
+      assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
           .isInstanceOf(BadGatewayException.class)
           .hasMessage("Api Transport is unreachable");
 
@@ -328,7 +328,7 @@ class TransportClientImplTest {
               .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
               .setBody(""));
 
-      assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
+      assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
           .isInstanceOf(BadGatewayException.class);
     }
   }

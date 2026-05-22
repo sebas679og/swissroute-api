@@ -100,6 +100,6 @@ public class StationController {
   @GetMapping(ApiPaths.Station.STATIONS)
   public ResponseEntity<StationsResponse> getStations(
       @ParameterObject @Valid @ModelAttribute StationsQueryParams queryParams) {
-    return ResponseEntity.status(HttpStatus.OK).body(stationService.getStationsByName(queryParams));
+    return ResponseEntity.status(HttpStatus.OK).body(stationService.getStations(queryParams));
   }
 }

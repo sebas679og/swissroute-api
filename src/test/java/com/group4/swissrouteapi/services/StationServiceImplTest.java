@@ -77,7 +77,7 @@ class StationServiceImplTest {
               .longitude(-74.0060)
               .build();
 
-      when(transportClient.getLocations(QUERY)).thenReturn(apiResponse);
+      when(transportClient.getLocationsByQuery(QUERY)).thenReturn(apiResponse);
       when(stationMapper.toStations(apiStation)).thenReturn(mappedStation);
 
       // Act
@@ -87,7 +87,7 @@ class StationServiceImplTest {
       assertThat(result).isNotNull();
       assertThat(result.getStations()).hasSize(1).containsExactly(mappedStation);
 
-      verify(transportClient).getLocations(QUERY);
+      verify(transportClient).getLocationsByQuery(QUERY);
       verify(stationMapper).toStations(apiStation);
     }
 
@@ -105,7 +105,7 @@ class StationServiceImplTest {
       Station stationB = buildStation("2", "Station B", 30.0, 40.0);
       Station stationC = buildStation("3", "Station C", 50.0, 60.0);
 
-      when(transportClient.getLocations(QUERY)).thenReturn(apiResponse);
+      when(transportClient.getLocationsByQuery(QUERY)).thenReturn(apiResponse);
       when(stationMapper.toStations(first)).thenReturn(stationA);
       when(stationMapper.toStations(second)).thenReturn(stationB);
       when(stationMapper.toStations(third)).thenReturn(stationC);
@@ -126,7 +126,7 @@ class StationServiceImplTest {
       ApiStation first = buildApiStation("10", "Alpha", 1.0, 1.0);
       ApiStation second = buildApiStation("20", "Beta", 2.0, 2.0);
 
-      when(transportClient.getLocations(QUERY))
+      when(transportClient.getLocationsByQuery(QUERY))
           .thenReturn(new ApiLocationsResponse(List.of(first, second)));
 
       Station alpha = buildStation("10", "Alpha", 1.0, 1.0);
@@ -150,7 +150,7 @@ class StationServiceImplTest {
       StationsQueryParams params = StationsQueryParams.builder().query(specificQuery).build();
 
       ApiStation apiStation = buildApiStation("99", "Gare du Nord", 48.88, 2.35);
-      when(transportClient.getLocations(specificQuery))
+      when(transportClient.getLocationsByQuery(specificQuery))
           .thenReturn(new ApiLocationsResponse(List.of(apiStation)));
       when(stationMapper.toStations(apiStation))
           .thenReturn(buildStation("99", "Gare du Nord", 48.88, 2.35));
@@ -159,8 +159,8 @@ class StationServiceImplTest {
       stationService.getStationsByName(params);
 
       // Assert
-      verify(transportClient).getLocations(specificQuery);
-      verify(transportClient, never()).getLocations(argThat(q -> !q.equals(specificQuery)));
+      verify(transportClient).getLocationsByQuery(specificQuery);
+      verify(transportClient, never()).getLocationsByQuery(argThat(q -> !q.equals(specificQuery)));
     }
   }
 
@@ -176,7 +176,7 @@ class StationServiceImplTest {
     @DisplayName("should throw NotFoundException when the station list is null")
     void shouldThrowNotFoundExceptionWhenStationListIsNull() {
       // Arrange
-      when(transportClient.getLocations(QUERY)).thenReturn(new ApiLocationsResponse(null));
+      when(transportClient.getLocationsByQuery(QUERY)).thenReturn(new ApiLocationsResponse(null));
 
       // Act & Assert
       assertThatThrownBy(() -> stationService.getStationsByName(queryParams))
@@ -190,7 +190,7 @@ class StationServiceImplTest {
     @DisplayName("should throw NotFoundException when the station list is empty")
     void shouldThrowNotFoundExceptionWhenStationListIsEmpty() {
       // Arrange
-      when(transportClient.getLocations(QUERY))
+      when(transportClient.getLocationsByQuery(QUERY))
           .thenReturn(new ApiLocationsResponse(Collections.emptyList()));
 
       // Act & Assert
@@ -208,7 +208,7 @@ class StationServiceImplTest {
       String query = "UnknownPlace";
       StationsQueryParams params = StationsQueryParams.builder().query(query).build();
 
-      when(transportClient.getLocations(query))
+      when(transportClient.getLocationsByQuery(query))
           .thenReturn(new ApiLocationsResponse(Collections.emptyList()));
 
       // Act & Assert
@@ -221,7 +221,7 @@ class StationServiceImplTest {
     @DisplayName("should never invoke the mapper when stations are absent")
     void shouldNotInvokeMapperWhenNoStationsFound() {
       // Arrange
-      when(transportClient.getLocations(anyString()))
+      when(transportClient.getLocationsByQuery(anyString()))
           .thenReturn(new ApiLocationsResponse(Collections.emptyList()));
 
       // Act & Assert
@@ -245,7 +245,7 @@ class StationServiceImplTest {
     void shouldCallTransportClientExactlyOnce() {
       // Arrange
       ApiStation apiStation = buildApiStation("1", "Main St", 0.0, 0.0);
-      when(transportClient.getLocations(QUERY))
+      when(transportClient.getLocationsByQuery(QUERY))
           .thenReturn(new ApiLocationsResponse(List.of(apiStation)));
       when(stationMapper.toStations(apiStation)).thenReturn(buildStation("1", "Main St", 0.0, 0.0));
 
@@ -253,7 +253,7 @@ class StationServiceImplTest {
       stationService.getStationsByName(queryParams);
 
       // Assert
-      verify(transportClient, times(1)).getLocations(QUERY);
+      verify(transportClient, times(1)).getLocationsByQuery(QUERY);
     }
 
     @Test
@@ -262,7 +262,7 @@ class StationServiceImplTest {
       // Arrange
       List<ApiStation> apiStations =
           List.of(buildApiStation("1", "A", 1.0, 1.0), buildApiStation("2", "B", 2.0, 2.0));
-      when(transportClient.getLocations(QUERY)).thenReturn(new ApiLocationsResponse(apiStations));
+      when(transportClient.getLocationsByQuery(QUERY)).thenReturn(new ApiLocationsResponse(apiStations));
       when(stationMapper.toStations(any())).thenReturn(buildStation("x", "X", 0.0, 0.0));
 
       // Act
