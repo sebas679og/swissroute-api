@@ -3,7 +3,7 @@ package com.group4.swissrouteapi.integrations;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.exceptions.BadGatewayException;
 import com.group4.swissrouteapi.exceptions.ServiceUnavailableException;
-import com.group4.swissrouteapi.integrations.dto.responses.locations.LocationsResponse;
+import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
@@ -32,7 +32,7 @@ public class TransportClientImpl implements TransportClient {
   private final WebClient transportWebClient;
 
   @Override
-  public LocationsResponse getLocations(String query) {
+  public ApiLocationsResponse getLocations(String query) {
     WebClient.RequestHeadersSpec<?> request =
         transportWebClient
             .get()
@@ -44,7 +44,7 @@ public class TransportClientImpl implements TransportClient {
                         .build());
     return executeRequest(
         request,
-        LocationsResponse.class,
+        ApiLocationsResponse.class,
         String.join("", ApiPaths.TransportApi.LOCATIONS, "?query=", query));
   }
 
@@ -62,13 +62,13 @@ public class TransportClientImpl implements TransportClient {
                         body -> {
                           if (log.isErrorEnabled()) {
                             log.error(
-                                "Customer Service 4xx error. Uri: {}, Status: {}, Body: {}",
+                                "Api Transport 4xx error. Uri: {}, Status: {}, Body: {}",
                                 uri,
                                 response.statusCode(),
                                 body);
                           }
                           return Mono.error(
-                              new BadGatewayException("Customer Service rejected the request"));
+                              new BadGatewayException("Api Transport rejected the request"));
                         }))
         .onStatus(
             HttpStatusCode::is5xxServerError,
@@ -80,13 +80,13 @@ public class TransportClientImpl implements TransportClient {
                         body -> {
                           if (log.isErrorEnabled()) {
                             log.error(
-                                "Customer Service 5xx error. Uri: {}, Status: {}, Body: {}",
+                                "Api Transport 5xx error. Uri: {}, Status: {}, Body: {}",
                                 uri,
                                 response.statusCode(),
                                 body);
                           }
                           return Mono.error(
-                              new ServiceUnavailableException("Customer Service is unavailable"));
+                              new ServiceUnavailableException("Api Transport is unavailable"));
                         }))
         .bodyToMono(responseType)
         .onErrorMap(
@@ -94,17 +94,17 @@ public class TransportClientImpl implements TransportClient {
             ex -> {
               if (log.isErrorEnabled()) {
                 log.error(
-                    "Auth Service is unreachable. Cause: {} - {}",
+                    "Api Transport is unreachable. Cause: {} - {}",
                     ex.getClass().getSimpleName(),
                     ex.getMessage());
               }
-              return new BadGatewayException("Session validation service is unreachable");
+              return new BadGatewayException("Api Transport is unreachable");
             })
         .blockOptional()
         .orElseThrow(
             () -> {
-              log.error("Customer Service returned empty body. ID: {}", uri);
-              return new BadGatewayException("Empty response from Customer Service");
+              log.error("Api Transport returned empty body. ID: {}", uri);
+              return new BadGatewayException("Empty response from Api Transport");
             });
   }
 }

@@ -7,9 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.exceptions.BadGatewayException;
 import com.group4.swissrouteapi.exceptions.ServiceUnavailableException;
-import com.group4.swissrouteapi.integrations.dto.responses.locations.Coordinate;
-import com.group4.swissrouteapi.integrations.dto.responses.locations.LocationsResponse;
-import com.group4.swissrouteapi.integrations.dto.responses.locations.Station;
+import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiCoordinate;
+import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
+import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiStation;
 import java.util.List;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -65,14 +65,14 @@ class TransportClientImplTest {
   // ---------------------------------------------------------------------------
 
   private String buildLocationsJson(String stationId, String stationName) throws Exception {
-    LocationsResponse response =
-        new LocationsResponse(
+    ApiLocationsResponse response =
+        new ApiLocationsResponse(
             List.of(
-                new Station(
+                new ApiStation(
                     stationId,
                     stationName,
                     0.9,
-                    new Coordinate("Point", 8.540192, 47.378177),
+                    new ApiCoordinate("Point", 8.540192, 47.378177),
                     120.5,
                     "train")));
     return objectMapper.writeValueAsString(response);
@@ -99,7 +99,7 @@ class TransportClientImplTest {
       String body = buildLocationsJson("8503000", "Zurich HB");
       mockWebServer.enqueue(jsonResponse(200, body));
 
-      LocationsResponse result = transportClient.getLocations("Zurich");
+      ApiLocationsResponse result = transportClient.getLocations("Zurich");
 
       assertThat(result).isNotNull();
       assertThat(result.stations()).hasSize(1);
@@ -113,9 +113,9 @@ class TransportClientImplTest {
       String body = buildLocationsJson("8503000", "Zurich HB");
       mockWebServer.enqueue(jsonResponse(200, body));
 
-      LocationsResponse result = transportClient.getLocations("Zurich");
+      ApiLocationsResponse result = transportClient.getLocations("Zurich");
 
-      Coordinate coord = result.stations().getFirst().coordinate();
+      ApiCoordinate coord = result.stations().getFirst().coordinate();
       assertThat(coord.type()).isEqualTo("Point");
       assertThat(coord.x()).isEqualTo(8.540192);
       assertThat(coord.y()).isEqualTo(47.378177);
@@ -127,20 +127,20 @@ class TransportClientImplTest {
       String body = buildLocationsJson("8503000", "Zurich HB");
       mockWebServer.enqueue(jsonResponse(200, body));
 
-      LocationsResponse result = transportClient.getLocations("Zurich");
+      ApiLocationsResponse result = transportClient.getLocations("Zurich");
 
-      Station station = result.stations().getFirst();
-      assertThat(station.score()).isEqualTo(0.9);
-      assertThat(station.distance()).isEqualTo(120.5);
+      ApiStation apiStation = result.stations().getFirst();
+      assertThat(apiStation.score()).isEqualTo(0.9);
+      assertThat(apiStation.distance()).isEqualTo(120.5);
     }
 
     @Test
     @DisplayName("should return an empty stations list when the response contains no stations")
     void shouldReturnEmptyStationsListWhenNoStations() throws Exception {
-      String body = objectMapper.writeValueAsString(new LocationsResponse(List.of()));
+      String body = objectMapper.writeValueAsString(new ApiLocationsResponse(List.of()));
       mockWebServer.enqueue(jsonResponse(200, body));
 
-      LocationsResponse result = transportClient.getLocations("unknown-place");
+      ApiLocationsResponse result = transportClient.getLocations("unknown-place");
 
       assertThat(result.stations()).isEmpty();
     }
@@ -199,7 +199,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(BadGatewayException.class)
-          .hasMessage("Customer Service rejected the request");
+          .hasMessage("Api Transport rejected the request");
     }
 
     @Test
@@ -209,7 +209,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(BadGatewayException.class)
-          .hasMessage("Customer Service rejected the request");
+          .hasMessage("Api Transport rejected the request");
     }
 
     @Test
@@ -219,7 +219,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(BadGatewayException.class)
-          .hasMessage("Customer Service rejected the request");
+          .hasMessage("Api Transport rejected the request");
     }
 
     @Test
@@ -232,7 +232,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(BadGatewayException.class)
-          .hasMessage("Customer Service rejected the request");
+          .hasMessage("Api Transport rejected the request");
     }
   }
 
@@ -251,7 +251,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(ServiceUnavailableException.class)
-          .hasMessage("Customer Service is unavailable");
+          .hasMessage("Api Transport is unavailable");
     }
 
     @Test
@@ -261,7 +261,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(ServiceUnavailableException.class)
-          .hasMessage("Customer Service is unavailable");
+          .hasMessage("Api Transport is unavailable");
     }
 
     @Test
@@ -271,7 +271,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(ServiceUnavailableException.class)
-          .hasMessage("Customer Service is unavailable");
+          .hasMessage("Api Transport is unavailable");
     }
 
     @Test
@@ -284,7 +284,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(ServiceUnavailableException.class)
-          .hasMessage("Customer Service is unavailable");
+          .hasMessage("Api Transport is unavailable");
     }
   }
 
@@ -304,7 +304,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(BadGatewayException.class)
-          .hasMessage("Session validation service is unreachable");
+          .hasMessage("Api Transport is unreachable");
 
       // Prevent @AfterEach from shutting down an already-closed server
       mockWebServer = new MockWebServer();

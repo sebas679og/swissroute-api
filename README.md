@@ -155,6 +155,7 @@ http://localhost:8080/v3/api-docs
 |--------|-----------------------|--------------------------------------------------------|
 | `POST` | `/api/users/register` | Creates a new user account in the SwissRoute platform. |
 | `POST` | `/api/users/login`    | Authenticates a user and returns a JWT token.          |
+| `GET`  | `/api/stations`       | Searches for stations based on a query string.         |
 
 ---
 
@@ -192,10 +193,10 @@ Run tests only (skipping linters):
 ./mvnw -B clean verify "-Dspotless.check.skip=true" "-Dcheckstyle.skip=true" "-Dpmd.skip=true"
 ```
 
-Run integration test with the external Transport API (requires internet connection):
+Run all integration test with the external Transport API (requires internet connection):
 
 ```bash
-./mvnw verify -Dtransport.integration.tests=true
+./mvnw -B verify "-Dspotless.check.skip=true" "-Dcheckstyle.skip=true" "-Dpmd.skip=true" "-Dtransport.integration.tests=true"
 ````
 
 Apply code formatter before pushing:

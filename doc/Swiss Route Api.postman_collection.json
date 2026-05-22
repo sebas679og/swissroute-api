@@ -70,6 +70,46 @@
         }
       ],
       "description": "Registration and access to the platform"
+    },
+    {
+      "name": "Stations",
+      "item": [
+        {
+          "name": "Stations by Name",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/stations?query=sagmade",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "stations"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "sagmade"
+                }
+              ]
+            },
+            "description": "# 🚉 Search Stations by Name\n\n## 📌 Endpoint\n\n**GET**  \n`/api/stations?query={station}`\n\n---\n\n## 📖 Description\n\nSearches for train or transport stations by name.\n\nThis endpoint queries the external transport service and returns a list of matching stations including:\n\n- Station identifier\n    \n- Station name\n    \n- Geographic coordinates\n    \n\nThe search is based on a partial or full station name provided in the `query` parameter.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Query Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| query | String | ✅ Yes | Station name to search |\n\n---\n\n### Example Request\n\n``` http\nGET /api/stations?query=Basel\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nStations were successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"stations\": [\n        {\n            \"id\": \"8500010\",\n            \"name\": \"Basel SBB\",\n            \"latitude\": 47.547403,\n            \"longitude\": 7.589564\n        },\n        {\n            \"id\": \"8500090\",\n            \"name\": \"Basel Bad Bf\",\n            \"latitude\": 47.567301,\n            \"longitude\": 7.606922\n        },\n        {\n            \"id\": \"8578143\",\n            \"name\": \"Basel, Bahnhof SBB\",\n            \"latitude\": 47.548284,\n            \"longitude\": 7.590297\n        },\n        {\n            \"id\": \"8588780\",\n            \"name\": \"Basel, Schifflände\",\n            \"latitude\": 47.559197,\n            \"longitude\": 7.587166\n        },\n        {\n            \"id\": \"8500237\",\n            \"name\": \"Basel, Bankverein\",\n            \"latitude\": 47.553606,\n            \"longitude\": 7.592251\n        },\n        {\n            \"id\": \"8500073\",\n            \"name\": \"Basel, Aeschenplatz\",\n            \"latitude\": 47.5513,\n            \"longitude\": 7.594862\n        },\n        {\n            \"id\": \"8500897\",\n            \"name\": \"Basel, Barfüsserplatz\",\n            \"latitude\": 47.55459,\n            \"longitude\": 7.589066\n        },\n        {\n            \"id\": \"8500193\",\n            \"name\": \"Basel, Markthalle\",\n            \"latitude\": 47.548874,\n            \"longitude\": 7.586008\n        },\n        {\n            \"id\": \"8589360\",\n            \"name\": \"Basel, Schützenhaus\",\n            \"latitude\": 47.553202,\n            \"longitude\": 7.577105\n        },\n        {\n            \"id\": \"8588775\",\n            \"name\": \"Basel, Marktplatz\",\n            \"latitude\": 47.558108,\n            \"longitude\": 7.587614\n        }\n    ]\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid query parameters.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"query: Query cannot be blank\",\n    \"timestamp\": \"2026-05-22T00:25:20.152Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing `query` parameter\n    \n- Empty or blank query value\n    \n- Malformed request\n    \n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-22T00:33:35.539Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nNo stations were found matching the provided query.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"No stations found with the name: sagmade\",\n    \"timestamp\": \"2026-05-22T00:34:33.657Z\"\n}\n\n ```\n\n---\n\n## 🔌 502 Bad Gateway\n\nError while communicating with the external transport service.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 502,\n    \"name\": \"BAD_GATEWAY\",\n    \"description\": \"Api Transport rejected the request\",\n    \"timestamp\": \"2026-05-22T00:34:33.657Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Invalid response from transport API\n    \n- External API processing error\n    \n- Request rejected by provider\n    \n\n---\n\n## 🚨 503 Service Unavailable\n\nThe external transport service is currently unavailable.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 503,\n    \"name\": \"SERVICE_UNAVAILABLE\",\n    \"description\": \"Api Transport is unavailable\",\n    \"timestamp\": \"2026-05-22T00:34:33.657Z\"\n}\n\n ```\n\n### Possible Causes\n\n- External API downtime\n    \n- Network connectivity issues\n    \n- Timeout while contacting the provider\n    \n\n---\n\n💡 **Tip (architecture level 🔥):**  \nThis endpoint acts as a transport search gateway, abstracting the external provider and exposing a simplified and secure contract for authenticated users.\n\nIt also centralizes:\n\n- Authentication\n    \n- Error handling\n    \n- Response normalization\n    \n- External API integration\n    \n\n---"
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "event": [
@@ -99,6 +139,10 @@
   "variable": [
     {
       "key": "BASE_URL",
+      "value": ""
+    },
+    {
+      "key": "JWT",
       "value": ""
     }
   ]

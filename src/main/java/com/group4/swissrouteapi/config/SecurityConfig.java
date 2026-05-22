@@ -2,6 +2,7 @@ package com.group4.swissrouteapi.config;
 
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.config.properties.CorsConfigurationProperties;
+import com.group4.swissrouteapi.exceptions.JsonWriter;
 import com.group4.swissrouteapi.services.components.BearerAuthenticationFilter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -38,6 +40,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+  private final JsonWriter jsonWriter;
+
   /**
    * Configures the application's security filter chain.
    *
@@ -60,6 +64,13 @@ public class SecurityConfig {
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .exceptionHandling(
+            exception ->
+                exception.authenticationEntryPoint(
+                    (request, response, authException) -> {
+                      jsonWriter.sendError(
+                          response, HttpStatus.UNAUTHORIZED, "Authentication required");
+                    }))
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(ApiPaths.Docs.SWAGGER_UI, ApiPaths.Docs.API_DOCS)
@@ -68,6 +79,8 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, ApiPaths.Auth.LOGIN)
                     .permitAll()
+                    .requestMatchers(HttpMethod.GET, ApiPaths.Station.STATIONS)
+                    .hasAuthority("AUTH_JWT")
                     .anyRequest()
                     .authenticated())
         .addFilterBefore(bearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

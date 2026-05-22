@@ -12,6 +12,8 @@
 - [Authentication Service](#authentication-service)
   - [Register User](#register-user)
   - [Login User](#login-user)
+- [Stations Service](#stations-service)
+  - [Search Stations By Name](#search-stations-by-name)
 
 ---
 
@@ -84,11 +86,11 @@ SwissRoute is built on top of the **Swiss Public Transport API**, an open and fr
 
 ### Endpoints Used
 
-| Endpoint            | Purpose in SwissRoute       |
-|---------------------|-----------------------------|
-| `GET /locations`    | Search stations by name     |
+| Endpoint            | Purpose in SwissRoute             |
+|---------------------|-----------------------------------|
+| `GET /locations`    | Search stations by name           |
 | `GET /connections`  | Find connections between stations |
-| `GET /stationboard` | Get departures from a station |
+| `GET /stationboard` | Get departures from a station     |
 
 ### Geographic Scope
 
@@ -380,5 +382,230 @@ Occurs when the provided credentials are invalid.
 * Password verification is performed using BCrypt password matching.
 * JWT tokens are time-limited and expire automatically after the configured duration.
 * Timestamps are returned in ISO-8601 UTC format.
+
+---
+
+## Stations Service
+
+### Search Stations By Name
+
+Returns a list of public transport stations matching the provided search query.
+
+#### Endpoint
+
+```http
+GET /api/stations?query={station}
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+The endpoint requires a valid JWT token in the request header.
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+#### Query Parameters
+
+| Parameter | Type   | Required | Description                                    |
+|-----------|--------|----------|------------------------------------------------|
+| `query`   | String | Yes      | Station name or partial station name to search |
+
+---
+
+#### Example Request
+
+```http
+GET /api/stations?query=Basel
+```
+
+---
+
+#### Successful Response
+
+##### 200 — OK
+
+```json
+{
+  "stations": [
+    {
+      "id": "8500010",
+      "name": "Basel SBB",
+      "latitude": 47.547403,
+      "longitude": 7.589564
+    },
+    {
+      "id": "8500090",
+      "name": "Basel Bad Bf",
+      "latitude": 47.567301,
+      "longitude": 7.606922
+    },
+    {
+      "id": "8578143",
+      "name": "Basel, Bahnhof SBB",
+      "latitude": 47.548284,
+      "longitude": 7.590297
+    },
+    {
+      "id": "8588780",
+      "name": "Basel, Schifflände",
+      "latitude": 47.559197,
+      "longitude": 7.587166
+    },
+    {
+      "id": "8500237",
+      "name": "Basel, Bankverein",
+      "latitude": 47.553606,
+      "longitude": 7.592251
+    },
+    {
+      "id": "8500073",
+      "name": "Basel, Aeschenplatz",
+      "latitude": 47.5513,
+      "longitude": 7.594862
+    },
+    {
+      "id": "8500897",
+      "name": "Basel, Barfüsserplatz",
+      "latitude": 47.55459,
+      "longitude": 7.589066
+    },
+    {
+      "id": "8500193",
+      "name": "Basel, Markthalle",
+      "latitude": 47.548874,
+      "longitude": 7.586008
+    },
+    {
+      "id": "8589360",
+      "name": "Basel, Schützenhaus",
+      "latitude": 47.553202,
+      "longitude": 7.577105
+    },
+    {
+      "id": "8588775",
+      "name": "Basel, Marktplatz",
+      "latitude": 47.558108,
+      "longitude": 7.587614
+    }
+  ]
+}
+```
+
+---
+
+##### Response Fields
+
+| Field       | Type   | Description                  |
+|-------------|--------|------------------------------|
+| `id`        | String | Unique station identifier    |
+| `name`      | String | Official station name        |
+| `latitude`  | Number | Station latitude coordinate  |
+| `longitude` | Number | Station longitude coordinate |
+
+---
+
+#### Error Responses
+
+##### 400 — Bad Request
+
+Occurs when the query parameter is missing, empty, or blank.
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "query: Query cannot be blank",
+  "timestamp": "2026-05-22T00:25:20.152Z"
+}
+```
+
+---
+
+##### 401 — Unauthorized
+
+Occurs when the request does not contain a valid JWT token or the token has expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-22T00:33:35.539Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when no stations match the provided query.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "No stations found with the name: sagmade",
+  "timestamp": "2026-05-22T00:34:33.657Z"
+}
+```
+
+---
+
+##### 502 — Bad Gateway
+
+Occurs when the external Transport API rejects the request.
+
+```json
+{
+  "code": 502,
+  "name": "BAD_GATEWAY",
+  "description": "Api Transport rejected the request",
+  "timestamp": "2026-05-22T00:34:33.657Z"
+}
+```
+
+---
+
+##### 503 — Service Unavailable
+
+Occurs when the external Transport API is unavailable or temporarily unreachable.
+
+```json
+{
+  "code": 503,
+  "name": "SERVICE_UNAVAILABLE",
+  "description": "Api Transport is unavailable",
+  "timestamp": "2026-05-22T00:34:33.657Z"
+}
+```
+
+---
+
+#### Validation Rules
+
+| Parameter | Validation                        |
+|-----------|-----------------------------------|
+| `query`   | Must not be null, empty, or blank |
+
+---
+
+#### Notes
+
+* This endpoint integrates with the external Swiss Public Transport API.
+* Authentication is mandatory for accessing station search functionality.
+* Results may include stations, stops, terminals, and transport hubs matching the query text.
+* Coordinates are returned using standard latitude and longitude values.
+* Error handling includes external API availability and gateway validation.
+* Timestamps are returned in ISO-8601 UTC format.
+
 
 

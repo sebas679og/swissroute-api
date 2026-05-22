@@ -11,4 +11,4 @@ package com.group4.swissrouteapi.integrations.dto.responses.locations;
  * <p>Implemented as a Java {@code record}, providing concise syntax, immutability, and built-in
  * methods such as {@code equals}, {@code hashCode}, and {@code toString}.
  */
-public record Coordinate(String type, Double x, Double y) {}
+public record ApiCoordinate(String type, Double x, Double y) {}

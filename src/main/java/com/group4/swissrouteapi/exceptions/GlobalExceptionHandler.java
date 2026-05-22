@@ -70,6 +70,11 @@ public class GlobalExceptionHandler {
     return buildErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
   }
 
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
+    return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+  }
+
   @ExceptionHandler(BadGatewayException.class)
   public ResponseEntity<ErrorResponse> handleBadGatewayException(BadGatewayException ex) {
     return buildErrorResponse(HttpStatus.BAD_GATEWAY, ex.getMessage());
