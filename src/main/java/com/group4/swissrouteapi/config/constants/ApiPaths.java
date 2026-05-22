@@ -24,6 +24,16 @@ public final class ApiPaths {
     public static final String LOGIN = "/api/users/login";
   }
 
+  /**
+   * Station
+   *
+   * <p>Defines API path constants related to station operations.
+   *
+   * <p>Serves as a centralized holder for endpoint URIs used by the application when interacting
+   * with station-related resources.
+   *
+   * <p>Currently provides a constant for the stations endpoint.
+   */
   public static final class Station {
     public static final String STATIONS = "/api/stations";
   }

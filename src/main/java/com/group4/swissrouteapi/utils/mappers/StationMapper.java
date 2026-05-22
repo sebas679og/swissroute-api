@@ -5,10 +5,30 @@ import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiStation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+/**
+ * StationMapper
+ *
+ * <p>MapStruct mapper interface for converting external API station representations into internal
+ * domain models.
+ *
+ * <p>Configured as a Spring component via {@code componentModel = "spring"} to enable dependency
+ * injection.
+ *
+ * <p>Provides mapping logic to transform {@link ApiStation} objects into immutable {@link Station}
+ * instances, including extraction of geographic coordinates.
+ */
 @Mapper(componentModel = "spring")
 public interface StationMapper {
 
-    @Mapping(target = "latitude", source = "coordinate.x")
-    @Mapping(target = "longitude", source = "coordinate.y")
-    Station toStations(ApiStation apiStation);
+  /**
+   * Maps an {@link ApiStation} object to a {@link Station} domain model.
+   *
+   * <p>Extracts latitude and longitude values from the nested {@code coordinate} object.
+   *
+   * @param apiStation the source API station object
+   * @return the mapped {@link Station} domain model
+   */
+  @Mapping(target = "latitude", source = "coordinate.x")
+  @Mapping(target = "longitude", source = "coordinate.y")
+  Station toStations(ApiStation apiStation);
 }

@@ -10,7 +10,6 @@ import com.group4.swissrouteapi.exceptions.ServiceUnavailableException;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiCoordinate;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiStation;
-
 import java.util.List;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;

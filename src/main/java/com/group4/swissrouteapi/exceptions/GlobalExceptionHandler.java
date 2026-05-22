@@ -71,8 +71,8 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(NotFoundException.class)
-  public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex){
-      return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+  public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
+    return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
   }
 
   @ExceptionHandler(BadGatewayException.class)
