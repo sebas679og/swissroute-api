@@ -155,6 +155,7 @@ http://localhost:8080/v3/api-docs
 |--------|-----------------------|--------------------------------------------------------|
 | `POST` | `/api/users/register` | Creates a new user account in the SwissRoute platform. |
 | `POST` | `/api/users/login`    | Authenticates a user and returns a JWT token.          |
+| `GET`  | `/api/stations`       | Searches for stations based on a query string.         |
 
 ---
 
