@@ -1,0 +1,124 @@
+{
+  "stations": [
+    {
+      "id": "8500010",
+      "name": "Basel SBB",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.547403,
+        "y": 7.589564
+      },
+      "distance": null,
+      "icon": "train"
+    },
+    {
+      "id": "8500090",
+      "name": "Basel Bad Bf",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.567301,
+        "y": 7.606922
+      },
+      "distance": null,
+      "icon": "train"
+    },
+    {
+      "id": "8578143",
+      "name": "Basel, Bahnhof SBB",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.548284,
+        "y": 7.590297
+      },
+      "distance": null,
+      "icon": "tram"
+    },
+    {
+      "id": "8588780",
+      "name": "Basel, Schifflände",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.559197,
+        "y": 7.587166
+      },
+      "distance": null,
+      "icon": "tram"
+    },
+    {
+      "id": "8500237",
+      "name": "Basel, Bankverein",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.553606,
+        "y": 7.592251
+      },
+      "distance": null,
+      "icon": "tram"
+    },
+    {
+      "id": "8500073",
+      "name": "Basel, Aeschenplatz",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.5513,
+        "y": 7.594862
+      },
+      "distance": null,
+      "icon": "tram"
+    },
+    {
+      "id": "8500897",
+      "name": "Basel, Barfüsserplatz",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.55459,
+        "y": 7.589066
+      },
+      "distance": null,
+      "icon": "tram"
+    },
+    {
+      "id": "8500193",
+      "name": "Basel, Markthalle",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.548874,
+        "y": 7.586008
+      },
+      "distance": null,
+      "icon": "tram"
+    },
+    {
+      "id": "8589360",
+      "name": "Basel, Schützenhaus",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.553202,
+        "y": 7.577105
+      },
+      "distance": null,
+      "icon": "tram"
+    },
+    {
+      "id": "8588775",
+      "name": "Basel, Marktplatz",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.558108,
+        "y": 7.587614
+      },
+      "distance": null,
+      "icon": "tram"
+    }
+  ]
+}
