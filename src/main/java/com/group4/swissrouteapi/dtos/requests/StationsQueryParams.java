@@ -1,7 +1,7 @@
 package com.group4.swissrouteapi.dtos.requests;
 
+import com.group4.swissrouteapi.utils.validators.query.ValidStationQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,10 +24,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ValidStationQuery
 @Schema(description = "Query parameters for searching transport stations")
 public class StationsQueryParams {
 
-  @NotBlank(message = "Query cannot be blank")
-  @Schema(description = "query", example = "Basel", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(description = "query", example = "Basel")
   private String query;
+
+  @Schema(description = "Coordinate Latitude", example = "47.5596")
+  private Double latitude;
+
+  @Schema(description = "Coordinate Longitude", example = "7.5886")
+  private Double longitude;
 }
