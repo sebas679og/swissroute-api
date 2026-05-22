@@ -41,7 +41,7 @@ public class StationServiceImpl implements StationService {
     return getStationsByName(requestParams.getQuery());
   }
 
-  private StationsResponse getStationsByName(String name){
+  private StationsResponse getStationsByName(String name) {
     ApiLocationsResponse api = transportClient.getLocationsByQuery(name);
     List<ApiStation> apiStations = api.stations();
 
@@ -50,8 +50,8 @@ public class StationServiceImpl implements StationService {
     }
 
     return StationsResponse.builder()
-            .stations(apiStations.stream().map(stationMapper::toStations).toList())
-            .build();
+        .stations(apiStations.stream().map(stationMapper::toStations).toList())
+        .build();
   }
 
   private StationsResponse getStationsByCoordinates(double latitude, double longitude) {
@@ -59,11 +59,12 @@ public class StationServiceImpl implements StationService {
     List<ApiStation> apiStations = api.stations();
 
     if (apiStations == null || apiStations.isEmpty()) {
-      throw new NotFoundException("No stations found at the coordinates: (" + latitude + ", " + longitude + ")");
+      throw new NotFoundException(
+          "No stations found at the coordinates: (" + latitude + ", " + longitude + ")");
     }
 
     return StationsResponse.builder()
-            .stations(apiStations.stream().map(stationMapper::toStations).toList())
-            .build();
+        .stations(apiStations.stream().map(stationMapper::toStations).toList())
+        .build();
   }
 }

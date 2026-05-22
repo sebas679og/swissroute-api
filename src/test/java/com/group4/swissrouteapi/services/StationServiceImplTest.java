@@ -262,7 +262,8 @@ class StationServiceImplTest {
       // Arrange
       List<ApiStation> apiStations =
           List.of(buildApiStation("1", "A", 1.0, 1.0), buildApiStation("2", "B", 2.0, 2.0));
-      when(transportClient.getLocationsByQuery(QUERY)).thenReturn(new ApiLocationsResponse(apiStations));
+      when(transportClient.getLocationsByQuery(QUERY))
+          .thenReturn(new ApiLocationsResponse(apiStations));
       when(stationMapper.toStations(any())).thenReturn(buildStation("x", "X", 0.0, 0.0));
 
       // Act

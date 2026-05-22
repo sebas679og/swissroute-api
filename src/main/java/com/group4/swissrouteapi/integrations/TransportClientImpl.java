@@ -48,25 +48,25 @@ public class TransportClientImpl implements TransportClient {
         String.join("", ApiPaths.TransportApi.LOCATIONS, "?query=", query));
   }
 
-    @Override
-    public ApiLocationsResponse getLocationsByCoordinates(double latitude, double longitude) {
-        WebClient.RequestHeadersSpec<?> request =
-                transportWebClient
-                        .get()
-                        .uri(
-                                uriBuilder ->
-                                        uriBuilder
-                                                .path(ApiPaths.TransportApi.LOCATIONS)
-                                                .queryParam("x", latitude)
-                                                .queryParam("y", longitude)
-                                                .build());
-        return executeRequest(
-                request,
-                ApiLocationsResponse.class,
-                String.join("", ApiPaths.TransportApi.LOCATIONS, "?x=", latitude + "&y=" + longitude));
-    }
+  @Override
+  public ApiLocationsResponse getLocationsByCoordinates(double latitude, double longitude) {
+    WebClient.RequestHeadersSpec<?> request =
+        transportWebClient
+            .get()
+            .uri(
+                uriBuilder ->
+                    uriBuilder
+                        .path(ApiPaths.TransportApi.LOCATIONS)
+                        .queryParam("x", latitude)
+                        .queryParam("y", longitude)
+                        .build());
+    return executeRequest(
+        request,
+        ApiLocationsResponse.class,
+        String.join("", ApiPaths.TransportApi.LOCATIONS, "?x=", latitude + "&y=" + longitude));
+  }
 
-    private <T> T executeRequest(
+  private <T> T executeRequest(
       WebClient.RequestHeadersSpec<?> request, Class<T> responseType, String uri) {
     return request
         .retrieve()
