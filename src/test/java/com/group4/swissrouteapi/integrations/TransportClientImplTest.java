@@ -199,7 +199,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(BadGatewayException.class)
-          .hasMessage("Customer Service rejected the request");
+          .hasMessage("Api Transport rejected the request");
     }
 
     @Test
@@ -209,7 +209,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(BadGatewayException.class)
-          .hasMessage("Customer Service rejected the request");
+          .hasMessage("Api Transport rejected the request");
     }
 
     @Test
@@ -219,7 +219,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(BadGatewayException.class)
-          .hasMessage("Customer Service rejected the request");
+          .hasMessage("Api Transport rejected the request");
     }
 
     @Test
@@ -232,7 +232,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(BadGatewayException.class)
-          .hasMessage("Customer Service rejected the request");
+          .hasMessage("Api Transport rejected the request");
     }
   }
 
@@ -251,7 +251,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(ServiceUnavailableException.class)
-          .hasMessage("Customer Service is unavailable");
+          .hasMessage("Api Transport is unavailable");
     }
 
     @Test
@@ -261,7 +261,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(ServiceUnavailableException.class)
-          .hasMessage("Customer Service is unavailable");
+          .hasMessage("Api Transport is unavailable");
     }
 
     @Test
@@ -271,7 +271,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(ServiceUnavailableException.class)
-          .hasMessage("Customer Service is unavailable");
+          .hasMessage("Api Transport is unavailable");
     }
 
     @Test
@@ -284,7 +284,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(ServiceUnavailableException.class)
-          .hasMessage("Customer Service is unavailable");
+          .hasMessage("Api Transport is unavailable");
     }
   }
 
@@ -304,7 +304,7 @@ class TransportClientImplTest {
 
       assertThatThrownBy(() -> transportClient.getLocations("Zurich"))
           .isInstanceOf(BadGatewayException.class)
-          .hasMessage("Session validation service is unreachable");
+          .hasMessage("Api Transport is unreachable");
 
       // Prevent @AfterEach from shutting down an already-closed server
       mockWebServer = new MockWebServer();
