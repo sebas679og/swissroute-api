@@ -73,7 +73,7 @@ class TransportClientImplTest {
                     stationName,
                     0.9,
                     new ApiCoordinate("Point", 8.540192, 47.378177),
-                    120.5,
+                    120,
                     "train")));
     return objectMapper.writeValueAsString(response);
   }
@@ -90,8 +90,8 @@ class TransportClientImplTest {
   // ===========================================================================
 
   @Nested
-  @DisplayName("getLocations() - successful response")
-  class SuccessfulResponseTest {
+  @DisplayName("getLocations() - successful response by Query")
+  class SuccessfulResponseByQueryTest {
 
     @Test
     @DisplayName("should return a LocationsResponse with the deserialized stations")
@@ -131,7 +131,7 @@ class TransportClientImplTest {
 
       ApiStation apiStation = result.stations().getFirst();
       assertThat(apiStation.score()).isEqualTo(0.9);
-      assertThat(apiStation.distance()).isEqualTo(120.5);
+      assertThat(apiStation.distance()).isEqualTo(120);
     }
 
     @Test
@@ -184,6 +184,96 @@ class TransportClientImplTest {
     }
   }
 
+  @Nested
+  @DisplayName("getLocations() - successful response by Coordinates")
+  class SuccessfulResponseByCoordinatesTest {
+    private static final double LATITUDE = 47.5596;
+    private static final double LONGITUDE = 7.5886;
+
+    @Test
+    @DisplayName("should return a deserialized ApiLocationsResponse")
+    void shouldReturnDeserializedResponse() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildLocationsJson("8503000", "Basel SBB")));
+
+      ApiLocationsResponse result = transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE);
+
+      assertThat(result).isNotNull();
+      assertThat(result.stations()).hasSize(1);
+      assertThat(result.stations().getFirst().id()).isEqualTo("8503000");
+      assertThat(result.stations().getFirst().name()).isEqualTo("Basel SBB");
+    }
+
+    @Test
+    @DisplayName("should deserialize station score and distance")
+    void shouldDeserializeStationScoreAndDistance() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildLocationsJson("8503000", "Basel SBB")));
+
+      ApiLocationsResponse result = transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE);
+
+      ApiStation station = result.stations().getFirst();
+      assertThat(station.score()).isEqualTo(0.9);
+      assertThat(station.distance()).isEqualTo(120);
+    }
+
+    @Test
+    @DisplayName("should deserialize station coordinates")
+    void shouldDeserializeStationCoordinates() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildLocationsJson("8503000", "Basel SBB")));
+
+      ApiLocationsResponse result = transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE);
+
+      ApiCoordinate coord = result.stations().getFirst().coordinate();
+      assertThat(coord.type()).isEqualTo("Point");
+      assertThat(coord.x()).isEqualTo(8.540192);
+      assertThat(coord.y()).isEqualTo(47.378177);
+    }
+
+    @Test
+    @DisplayName("should send latitude as query param 'x'")
+    void shouldSendLatitudeAsLatitudeParam() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildLocationsJson("8503000", "Basel SBB")));
+
+      transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).contains("x=" + LATITUDE);
+    }
+
+    @Test
+    @DisplayName("should send longitude as query param 'y'")
+    void shouldSendLongitudeAsLongitudeParam() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildLocationsJson("8503000", "Basel SBB")));
+
+      transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).contains("y=" + LONGITUDE);
+    }
+
+    @Test
+    @DisplayName("should send a GET request to the locations path")
+    void shouldSendGetRequestToLocationsPath() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildLocationsJson("8503000", "Basel SBB")));
+
+      transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getMethod()).isEqualTo("GET");
+      assertThat(recorded.getPath()).contains(ApiPaths.TransportApi.LOCATIONS);
+    }
+
+    @Test
+    @DisplayName("should return an empty stations list when no stations are nearby")
+    void shouldReturnEmptyStationsListWhenNoStationsNearby() throws Exception {
+      String body = objectMapper.writeValueAsString(new ApiLocationsResponse(List.of()));
+      mockWebServer.enqueue(jsonResponse(200, body));
+
+      ApiLocationsResponse result = transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE);
+
+      assertThat(result.stations()).isEmpty();
+    }
+  }
+
   // ===========================================================================
   // 4xx error handling
   // ===========================================================================
@@ -193,8 +283,8 @@ class TransportClientImplTest {
   class ClientErrorTest {
 
     @Test
-    @DisplayName("should throw BadGatewayException on 400 Bad Request")
-    void shouldThrowBadGatewayOnBadRequest() {
+    @DisplayName("should throw BadGatewayException on 400 Bad Request by query")
+    void shouldThrowBadGatewayOnBadRequestByQuery() {
       mockWebServer.enqueue(jsonResponse(400, "{\"error\":\"bad request\"}"));
 
       assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
@@ -203,8 +293,8 @@ class TransportClientImplTest {
     }
 
     @Test
-    @DisplayName("should throw BadGatewayException on 401 Unauthorized")
-    void shouldThrowBadGatewayOnUnauthorized() {
+    @DisplayName("should throw BadGatewayException on 401 Unauthorized by query")
+    void shouldThrowBadGatewayOnUnauthorizedByQuery() {
       mockWebServer.enqueue(jsonResponse(401, "{\"error\":\"unauthorized\"}"));
 
       assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
@@ -213,8 +303,8 @@ class TransportClientImplTest {
     }
 
     @Test
-    @DisplayName("should throw BadGatewayException on 404 Not Found")
-    void shouldThrowBadGatewayOnNotFound() {
+    @DisplayName("should throw BadGatewayException on 404 Not Found by query")
+    void shouldThrowBadGatewayOnNotFoundByQuery() {
       mockWebServer.enqueue(jsonResponse(404, "{\"error\":\"not found\"}"));
 
       assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
@@ -223,14 +313,57 @@ class TransportClientImplTest {
     }
 
     @Test
-    @DisplayName("should throw BadGatewayException on 4xx with empty body")
-    void shouldThrowBadGatewayOn4xxWithEmptyBody() {
+    @DisplayName("should throw BadGatewayException on 4xx with empty body by query")
+    void shouldThrowBadGatewayOn4xxWithEmptyBodyByQuery() {
       mockWebServer.enqueue(
           new MockResponse()
               .setResponseCode(422)
               .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
 
       assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
+          .isInstanceOf(BadGatewayException.class)
+          .hasMessage("Api Transport rejected the request");
+    }
+
+    @Test
+    @DisplayName("should throw BadGatewayException on 400 Bad Request by coordinates")
+    void shouldThrowBadGatewayOnBadRequestByCoordinates() {
+      mockWebServer.enqueue(jsonResponse(400, "{\"error\":\"bad request\"}"));
+
+      assertThatThrownBy(() -> transportClient.getLocationsByCoordinates(47.5596, 7.5886))
+          .isInstanceOf(BadGatewayException.class)
+          .hasMessage("Api Transport rejected the request");
+    }
+
+    @Test
+    @DisplayName("should throw BadGatewayException on 401 Unauthorized by coordinates")
+    void shouldThrowBadGatewayOnUnauthorizedByCoordinates() {
+      mockWebServer.enqueue(jsonResponse(401, "{\"error\":\"unauthorized\"}"));
+
+      assertThatThrownBy(() -> transportClient.getLocationsByCoordinates(47.5596, 7.5886))
+          .isInstanceOf(BadGatewayException.class)
+          .hasMessage("Api Transport rejected the request");
+    }
+
+    @Test
+    @DisplayName("should throw BadGatewayException on 404 Not Found by coordinates")
+    void shouldThrowBadGatewayOnNotFoundByCoordinates() {
+      mockWebServer.enqueue(jsonResponse(404, "{\"error\":\"not found\"}"));
+
+      assertThatThrownBy(() -> transportClient.getLocationsByCoordinates(47.5596, 7.5886))
+          .isInstanceOf(BadGatewayException.class)
+          .hasMessage("Api Transport rejected the request");
+    }
+
+    @Test
+    @DisplayName("should throw BadGatewayException on 4xx with empty body by coordinates")
+    void shouldThrowBadGatewayOn4xxWithEmptyBodyByCoordinates() {
+      mockWebServer.enqueue(
+          new MockResponse()
+              .setResponseCode(422)
+              .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
+
+      assertThatThrownBy(() -> transportClient.getLocationsByCoordinates(47.5596, 7.5886))
           .isInstanceOf(BadGatewayException.class)
           .hasMessage("Api Transport rejected the request");
     }
@@ -245,8 +378,8 @@ class TransportClientImplTest {
   class ServerErrorTest {
 
     @Test
-    @DisplayName("should throw ServiceUnavailableException on 500 Internal Server Error")
-    void shouldThrowServiceUnavailableOnInternalServerError() {
+    @DisplayName("should throw ServiceUnavailableException on 500 Internal Server Error by query")
+    void shouldThrowServiceUnavailableOnInternalServerErrorByQuery() {
       mockWebServer.enqueue(jsonResponse(500, "{\"error\":\"internal error\"}"));
 
       assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
@@ -255,8 +388,8 @@ class TransportClientImplTest {
     }
 
     @Test
-    @DisplayName("should throw ServiceUnavailableException on 502 Bad Gateway")
-    void shouldThrowServiceUnavailableOnBadGateway() {
+    @DisplayName("should throw ServiceUnavailableException on 502 Bad Gateway by query")
+    void shouldThrowServiceUnavailableOnBadGatewayByQuery() {
       mockWebServer.enqueue(jsonResponse(502, "{\"error\":\"bad gateway\"}"));
 
       assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
@@ -265,8 +398,8 @@ class TransportClientImplTest {
     }
 
     @Test
-    @DisplayName("should throw ServiceUnavailableException on 503 Service Unavailable")
-    void shouldThrowServiceUnavailableOnServiceUnavailable() {
+    @DisplayName("should throw ServiceUnavailableException on 503 Service Unavailable by query")
+    void shouldThrowServiceUnavailableOnServiceUnavailableByQuery() {
       mockWebServer.enqueue(jsonResponse(503, "{\"error\":\"service unavailable\"}"));
 
       assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
@@ -275,14 +408,59 @@ class TransportClientImplTest {
     }
 
     @Test
-    @DisplayName("should throw ServiceUnavailableException on 5xx with empty body")
-    void shouldThrowServiceUnavailableOn5xxWithEmptyBody() {
+    @DisplayName("should throw ServiceUnavailableException on 5xx with empty body by query")
+    void shouldThrowServiceUnavailableOn5xxWithEmptyBodyByQuery() {
       mockWebServer.enqueue(
           new MockResponse()
               .setResponseCode(500)
               .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
 
       assertThatThrownBy(() -> transportClient.getLocationsByQuery("Zurich"))
+          .isInstanceOf(ServiceUnavailableException.class)
+          .hasMessage("Api Transport is unavailable");
+    }
+
+    @Test
+    @DisplayName(
+        "should throw ServiceUnavailableException on 500 Internal Server Error by coordinates")
+    void shouldThrowServiceUnavailableOnInternalServerErrorByCoordinates() {
+      mockWebServer.enqueue(jsonResponse(500, "{\"error\":\"internal error\"}"));
+
+      assertThatThrownBy(() -> transportClient.getLocationsByCoordinates(47.5596, 7.5886))
+          .isInstanceOf(ServiceUnavailableException.class)
+          .hasMessage("Api Transport is unavailable");
+    }
+
+    @Test
+    @DisplayName("should throw ServiceUnavailableException on 502 Bad Gateway by coordinates")
+    void shouldThrowServiceUnavailableOnBadGatewayByCoordinates() {
+      mockWebServer.enqueue(jsonResponse(502, "{\"error\":\"bad gateway\"}"));
+
+      assertThatThrownBy(() -> transportClient.getLocationsByCoordinates(47.5596, 7.5886))
+          .isInstanceOf(ServiceUnavailableException.class)
+          .hasMessage("Api Transport is unavailable");
+    }
+
+    @Test
+    @DisplayName(
+        "should throw ServiceUnavailableException on 503 Service Unavailable by coordinates")
+    void shouldThrowServiceUnavailableOnServiceUnavailableByCoordinates() {
+      mockWebServer.enqueue(jsonResponse(503, "{\"error\":\"service unavailable\"}"));
+
+      assertThatThrownBy(() -> transportClient.getLocationsByCoordinates(47.5596, 7.5886))
+          .isInstanceOf(ServiceUnavailableException.class)
+          .hasMessage("Api Transport is unavailable");
+    }
+
+    @Test
+    @DisplayName("should throw ServiceUnavailableException on 5xx with empty body by coordinates")
+    void shouldThrowServiceUnavailableOn5xxWithEmptyBodyByCoordinates() {
+      mockWebServer.enqueue(
+          new MockResponse()
+              .setResponseCode(500)
+              .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE));
+
+      assertThatThrownBy(() -> transportClient.getLocationsByCoordinates(47.5596, 7.5886))
           .isInstanceOf(ServiceUnavailableException.class)
           .hasMessage("Api Transport is unavailable");
     }

@@ -2,13 +2,8 @@ package com.group4.swissrouteapi.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.group4.swissrouteapi.dtos.requests.StationsQueryParams;
@@ -22,7 +17,6 @@ import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiStation;
 import com.group4.swissrouteapi.utils.mappers.StationMapper;
 import java.util.Collections;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -36,253 +30,330 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class StationServiceImplTest {
 
   @Mock private TransportClient transportClient;
-
   @Mock private StationMapper stationMapper;
 
   @InjectMocks private StationServiceImpl stationService;
 
-  // -------------------------------------------------------------------------
-  // Shared test fixtures
-  // -------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // Shared fixtures
+  // ---------------------------------------------------------------------------
 
-  private static final String QUERY = "Central";
+  private static final String QUERY = "Basel";
+  private static final double LATITUDE = 47.5596;
+  private static final double LONGITUDE = 7.5886;
 
-  private StationsQueryParams queryParams;
-
-  @BeforeEach
-  void setUp() {
-    queryParams = StationsQueryParams.builder().query(QUERY).build();
+  private ApiStation buildApiStation(String id, String name, Integer distance) {
+    return new ApiStation(
+        id, name, 0.9, new ApiCoordinate("Point", LONGITUDE, LATITUDE), distance, "train");
   }
 
-  // =========================================================================
-  // getStationsByName — happy path
-  // =========================================================================
+  private Station buildStation(String id, String name, Integer distance) {
+    return Station.builder()
+        .id(id)
+        .name(name)
+        .latitude(LATITUDE)
+        .longitude(LONGITUDE)
+        .distance(distance)
+        .build();
+  }
+
+  private StationsQueryParams queryParams() {
+    return StationsQueryParams.builder().query(QUERY).build();
+  }
+
+  private StationsQueryParams coordParams() {
+    return StationsQueryParams.builder().latitude(LATITUDE).longitude(LONGITUDE).build();
+  }
+
+  private StationsQueryParams coordParams(double lat, double lon) {
+    return StationsQueryParams.builder().latitude(lat).longitude(lon).build();
+  }
+
+  // ===========================================================================
+  // Routing — getStations delegates based on params
+  // ===========================================================================
 
   @Nested
-  @DisplayName("Given valid stations are returned by the transport client")
-  class WhenStationsExist {
+  @DisplayName("getStations() - routing")
+  class RoutingTest {
 
     @Test
-    @DisplayName("should return a StationsResponse with the mapped stations")
-    void shouldReturnMappedStations() {
-      // Arrange
-      ApiStation apiStation = buildApiStation("1", "Central Station", 40.7128, -74.0060);
-      ApiLocationsResponse apiResponse = new ApiLocationsResponse(List.of(apiStation));
+    @DisplayName("should call getLocationsByQuery when only query is set")
+    void shouldCallGetLocationsByQueryWhenQueryOnly() {
+      ApiStation api = buildApiStation("8503000", "Basel SBB", null);
+      when(transportClient.getLocationsByQuery(QUERY))
+          .thenReturn(new ApiLocationsResponse(List.of(api)));
+      when(stationMapper.toStations(api)).thenReturn(buildStation("8503000", "Basel SBB", null));
 
-      Station mappedStation =
-          Station.builder()
-              .id("1")
-              .name("Central Station")
-              .latitude(40.7128)
-              .longitude(-74.0060)
-              .build();
-
-      when(transportClient.getLocationsByQuery(QUERY)).thenReturn(apiResponse);
-      when(stationMapper.toStations(apiStation)).thenReturn(mappedStation);
-
-      // Act
-      StationsResponse result = stationService.getStationsByName(queryParams);
-
-      // Assert
-      assertThat(result).isNotNull();
-      assertThat(result.getStations()).hasSize(1).containsExactly(mappedStation);
+      stationService.getStations(queryParams());
 
       verify(transportClient).getLocationsByQuery(QUERY);
-      verify(stationMapper).toStations(apiStation);
+      verify(transportClient, never()).getLocationsByCoordinates(LATITUDE, LONGITUDE);
     }
 
     @Test
-    @DisplayName("should map every station returned by the API")
-    void shouldMapAllStations() {
-      // Arrange
-      ApiStation first = buildApiStation("1", "Station A", 10.0, 20.0);
-      ApiStation second = buildApiStation("2", "Station B", 30.0, 40.0);
-      ApiStation third = buildApiStation("3", "Station C", 50.0, 60.0);
+    @DisplayName("should call getLocationsByCoordinates when latitude and longitude are set")
+    void shouldCallGetLocationsByCoordinatesWhenCoordsSet() {
+      ApiStation api = buildApiStation("8503000", "Basel SBB", 120);
+      when(transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE))
+          .thenReturn(new ApiLocationsResponse(List.of(api)));
+      when(stationMapper.toStations(api)).thenReturn(buildStation("8503000", "Basel SBB", 120));
 
-      ApiLocationsResponse apiResponse = new ApiLocationsResponse(List.of(first, second, third));
+      stationService.getStations(coordParams());
 
-      Station stationA = buildStation("1", "Station A", 10.0, 20.0);
-      Station stationB = buildStation("2", "Station B", 30.0, 40.0);
-      Station stationC = buildStation("3", "Station C", 50.0, 60.0);
-
-      when(transportClient.getLocationsByQuery(QUERY)).thenReturn(apiResponse);
-      when(stationMapper.toStations(first)).thenReturn(stationA);
-      when(stationMapper.toStations(second)).thenReturn(stationB);
-      when(stationMapper.toStations(third)).thenReturn(stationC);
-
-      // Act
-      StationsResponse result = stationService.getStationsByName(queryParams);
-
-      // Assert
-      assertThat(result.getStations()).hasSize(3).containsExactly(stationA, stationB, stationC);
-
-      verify(stationMapper, times(3)).toStations(any(ApiStation.class));
-    }
-
-    @Test
-    @DisplayName("should preserve the order of stations as returned by the API")
-    void shouldPreserveStationOrder() {
-      // Arrange
-      ApiStation first = buildApiStation("10", "Alpha", 1.0, 1.0);
-      ApiStation second = buildApiStation("20", "Beta", 2.0, 2.0);
-
-      when(transportClient.getLocationsByQuery(QUERY))
-          .thenReturn(new ApiLocationsResponse(List.of(first, second)));
-
-      Station alpha = buildStation("10", "Alpha", 1.0, 1.0);
-      Station beta = buildStation("20", "Beta", 2.0, 2.0);
-
-      when(stationMapper.toStations(first)).thenReturn(alpha);
-      when(stationMapper.toStations(second)).thenReturn(beta);
-
-      // Act
-      StationsResponse result = stationService.getStationsByName(queryParams);
-
-      // Assert
-      assertThat(result.getStations()).containsExactly(alpha, beta);
-    }
-
-    @Test
-    @DisplayName("should delegate the query string to the transport client unchanged")
-    void shouldForwardQueryToTransportClient() {
-      // Arrange
-      String specificQuery = "Gare du Nord";
-      StationsQueryParams params = StationsQueryParams.builder().query(specificQuery).build();
-
-      ApiStation apiStation = buildApiStation("99", "Gare du Nord", 48.88, 2.35);
-      when(transportClient.getLocationsByQuery(specificQuery))
-          .thenReturn(new ApiLocationsResponse(List.of(apiStation)));
-      when(stationMapper.toStations(apiStation))
-          .thenReturn(buildStation("99", "Gare du Nord", 48.88, 2.35));
-
-      // Act
-      stationService.getStationsByName(params);
-
-      // Assert
-      verify(transportClient).getLocationsByQuery(specificQuery);
-      verify(transportClient, never()).getLocationsByQuery(argThat(q -> !q.equals(specificQuery)));
+      verify(transportClient).getLocationsByCoordinates(LATITUDE, LONGITUDE);
+      verify(transportClient, never()).getLocationsByQuery(QUERY);
     }
   }
 
-  // =========================================================================
-  // getStationsByName — NotFoundException scenarios
-  // =========================================================================
+  // ===========================================================================
+  // getStationsByName (via query param)
+  // ===========================================================================
 
   @Nested
-  @DisplayName("Given no stations are returned by the transport client")
-  class WhenStationsAreAbsent {
+  @DisplayName("getStations() - search by name")
+  class GetStationsByNameTest {
 
     @Test
-    @DisplayName("should throw NotFoundException when the station list is null")
-    void shouldThrowNotFoundExceptionWhenStationListIsNull() {
-      // Arrange
+    @DisplayName("should return a mapped StationsResponse for a valid query")
+    void shouldReturnMappedResponseForValidQuery() {
+      ApiStation api = buildApiStation("8503000", "Basel SBB", null);
+      Station mapped = buildStation("8503000", "Basel SBB", null);
+
+      when(transportClient.getLocationsByQuery(QUERY))
+          .thenReturn(new ApiLocationsResponse(List.of(api)));
+      when(stationMapper.toStations(api)).thenReturn(mapped);
+
+      StationsResponse result = stationService.getStations(queryParams());
+
+      assertThat(result.getStations()).containsExactly(mapped);
+    }
+
+    @Test
+    @DisplayName("should map every station returned by the client")
+    void shouldMapEveryStation() {
+      ApiStation api1 = buildApiStation("8503000", "Basel SBB", null);
+      ApiStation api2 = buildApiStation("8503001", "Basel Bad Bf", null);
+      Station s1 = buildStation("8503000", "Basel SBB", null);
+      Station s2 = buildStation("8503001", "Basel Bad Bf", null);
+
+      when(transportClient.getLocationsByQuery(QUERY))
+          .thenReturn(new ApiLocationsResponse(List.of(api1, api2)));
+      when(stationMapper.toStations(api1)).thenReturn(s1);
+      when(stationMapper.toStations(api2)).thenReturn(s2);
+
+      StationsResponse result = stationService.getStations(queryParams());
+
+      assertThat(result.getStations()).containsExactly(s1, s2);
+    }
+
+    @Test
+    @DisplayName("should delegate mapping to stationMapper for each station")
+    void shouldDelegateMappingToMapper() {
+      ApiStation api = buildApiStation("8503000", "Basel SBB", null);
+
+      when(transportClient.getLocationsByQuery(QUERY))
+          .thenReturn(new ApiLocationsResponse(List.of(api)));
+      when(stationMapper.toStations(api)).thenReturn(buildStation("8503000", "Basel SBB", null));
+
+      stationService.getStations(queryParams());
+
+      verify(stationMapper).toStations(api);
+    }
+
+    @Test
+    @DisplayName("should throw NotFoundException when the API returns an empty list")
+    void shouldThrowNotFoundWhenApiReturnsEmptyList() {
+      when(transportClient.getLocationsByQuery(QUERY))
+          .thenReturn(new ApiLocationsResponse(Collections.emptyList()));
+
+      assertThatThrownBy(() -> stationService.getStations(queryParams()))
+          .isInstanceOf(NotFoundException.class)
+          .hasMessage("No stations found with the name: " + QUERY);
+    }
+
+    @Test
+    @DisplayName("should throw NotFoundException when the API returns a null stations list")
+    void shouldThrowNotFoundWhenApiReturnsNullList() {
       when(transportClient.getLocationsByQuery(QUERY)).thenReturn(new ApiLocationsResponse(null));
 
-      // Act & Assert
-      assertThatThrownBy(() -> stationService.getStationsByName(queryParams))
+      assertThatThrownBy(() -> stationService.getStations(queryParams()))
           .isInstanceOf(NotFoundException.class)
-          .hasMessageContaining(QUERY);
-
-      verifyNoInteractions(stationMapper);
+          .hasMessage("No stations found with the name: " + QUERY);
     }
 
     @Test
-    @DisplayName("should throw NotFoundException when the station list is empty")
-    void shouldThrowNotFoundExceptionWhenStationListIsEmpty() {
-      // Arrange
+    @DisplayName("should not call the mapper when no stations are found")
+    void shouldNotCallMapperWhenNoStationsFound() {
       when(transportClient.getLocationsByQuery(QUERY))
           .thenReturn(new ApiLocationsResponse(Collections.emptyList()));
 
-      // Act & Assert
-      assertThatThrownBy(() -> stationService.getStationsByName(queryParams))
-          .isInstanceOf(NotFoundException.class)
-          .hasMessageContaining(QUERY);
-
-      verifyNoInteractions(stationMapper);
-    }
-
-    @Test
-    @DisplayName("should include the query name in the NotFoundException message")
-    void shouldIncludeQueryInExceptionMessage() {
-      // Arrange
-      String query = "UnknownPlace";
-      StationsQueryParams params = StationsQueryParams.builder().query(query).build();
-
-      when(transportClient.getLocationsByQuery(query))
-          .thenReturn(new ApiLocationsResponse(Collections.emptyList()));
-
-      // Act & Assert
-      assertThatThrownBy(() -> stationService.getStationsByName(params))
-          .isInstanceOf(NotFoundException.class)
-          .hasMessageContaining("No stations found with the name: " + query);
-    }
-
-    @Test
-    @DisplayName("should never invoke the mapper when stations are absent")
-    void shouldNotInvokeMapperWhenNoStationsFound() {
-      // Arrange
-      when(transportClient.getLocationsByQuery(anyString()))
-          .thenReturn(new ApiLocationsResponse(Collections.emptyList()));
-
-      // Act & Assert
-      assertThatThrownBy(() -> stationService.getStationsByName(queryParams))
+      assertThatThrownBy(() -> stationService.getStations(queryParams()))
           .isInstanceOf(NotFoundException.class);
 
-      verifyNoInteractions(stationMapper);
+      verify(stationMapper, never()).toStations(org.mockito.ArgumentMatchers.any());
     }
   }
 
-  // =========================================================================
-  // getStationsByName — interaction verifications
-  // =========================================================================
+  // ===========================================================================
+  // getStationsByCoordinates (via latitude + longitude params)
+  // ===========================================================================
 
   @Nested
-  @DisplayName("Interaction verifications")
-  class InteractionVerifications {
+  @DisplayName("getStations() - search by coordinates")
+  class GetStationsByCoordinatesTest {
 
     @Test
-    @DisplayName("should call the transport client exactly once per invocation")
-    void shouldCallTransportClientExactlyOnce() {
-      // Arrange
-      ApiStation apiStation = buildApiStation("1", "Main St", 0.0, 0.0);
-      when(transportClient.getLocationsByQuery(QUERY))
-          .thenReturn(new ApiLocationsResponse(List.of(apiStation)));
-      when(stationMapper.toStations(apiStation)).thenReturn(buildStation("1", "Main St", 0.0, 0.0));
+    @DisplayName("should return a mapped StationsResponse for valid coordinates")
+    void shouldReturnMappedResponseForValidCoordinates() {
+      ApiStation api = buildApiStation("8503000", "Basel SBB", 120);
+      Station mapped = buildStation("8503000", "Basel SBB", 120);
 
-      // Act
-      stationService.getStationsByName(queryParams);
+      when(transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE))
+          .thenReturn(new ApiLocationsResponse(List.of(api)));
+      when(stationMapper.toStations(api)).thenReturn(mapped);
 
-      // Assert
-      verify(transportClient, times(1)).getLocationsByQuery(QUERY);
+      StationsResponse result = stationService.getStations(coordParams());
+
+      assertThat(result.getStations()).containsExactly(mapped);
     }
 
     @Test
-    @DisplayName("should call stationMapper once per ApiStation in the response")
-    void shouldCallMapperOncePerApiStation() {
-      // Arrange
-      List<ApiStation> apiStations =
-          List.of(buildApiStation("1", "A", 1.0, 1.0), buildApiStation("2", "B", 2.0, 2.0));
-      when(transportClient.getLocationsByQuery(QUERY))
-          .thenReturn(new ApiLocationsResponse(apiStations));
-      when(stationMapper.toStations(any())).thenReturn(buildStation("x", "X", 0.0, 0.0));
+    @DisplayName("should include distance in the mapped station")
+    void shouldIncludeDistanceInMappedStation() {
+      ApiStation api = buildApiStation("8503000", "Basel SBB", 250);
+      Station mapped = buildStation("8503000", "Basel SBB", 250);
 
-      // Act
-      stationService.getStationsByName(queryParams);
+      when(transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE))
+          .thenReturn(new ApiLocationsResponse(List.of(api)));
+      when(stationMapper.toStations(api)).thenReturn(mapped);
 
-      // Assert
-      verify(stationMapper, times(apiStations.size())).toStations(any(ApiStation.class));
+      StationsResponse result = stationService.getStations(coordParams());
+
+      assertThat(result.getStations().getFirst().getDistance()).isEqualTo(250);
+    }
+
+    @Test
+    @DisplayName("should map every station returned by the client")
+    void shouldMapEveryStation() {
+      ApiStation api1 = buildApiStation("8503000", "Basel SBB", 120);
+      ApiStation api2 = buildApiStation("8503001", "Basel Bad Bf", 340);
+      Station s1 = buildStation("8503000", "Basel SBB", 120);
+      Station s2 = buildStation("8503001", "Basel Bad Bf", 340);
+
+      when(transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE))
+          .thenReturn(new ApiLocationsResponse(List.of(api1, api2)));
+      when(stationMapper.toStations(api1)).thenReturn(s1);
+      when(stationMapper.toStations(api2)).thenReturn(s2);
+
+      StationsResponse result = stationService.getStations(coordParams());
+
+      assertThat(result.getStations()).containsExactly(s1, s2);
+    }
+
+    @Test
+    @DisplayName("should delegate mapping to stationMapper for each station")
+    void shouldDelegateMappingToMapper() {
+      ApiStation api = buildApiStation("8503000", "Basel SBB", 120);
+
+      when(transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE))
+          .thenReturn(new ApiLocationsResponse(List.of(api)));
+      when(stationMapper.toStations(api)).thenReturn(buildStation("8503000", "Basel SBB", 120));
+
+      stationService.getStations(coordParams());
+
+      verify(stationMapper).toStations(api);
+    }
+
+    @Test
+    @DisplayName("should throw NotFoundException when the API returns an empty list")
+    void shouldThrowNotFoundWhenApiReturnsEmptyList() {
+      when(transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE))
+          .thenReturn(new ApiLocationsResponse(Collections.emptyList()));
+
+      assertThatThrownBy(() -> stationService.getStations(coordParams()))
+          .isInstanceOf(NotFoundException.class)
+          .hasMessage(
+              "No stations found at the coordinates: (" + LATITUDE + ", " + LONGITUDE + ")");
+    }
+
+    @Test
+    @DisplayName("should throw NotFoundException when the API returns a null stations list")
+    void shouldThrowNotFoundWhenApiReturnsNullList() {
+      when(transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE))
+          .thenReturn(new ApiLocationsResponse(null));
+
+      assertThatThrownBy(() -> stationService.getStations(coordParams()))
+          .isInstanceOf(NotFoundException.class)
+          .hasMessage(
+              "No stations found at the coordinates: (" + LATITUDE + ", " + LONGITUDE + ")");
+    }
+
+    @Test
+    @DisplayName("should not call the mapper when no stations are found")
+    void shouldNotCallMapperWhenNoStationsFound() {
+      when(transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE))
+          .thenReturn(new ApiLocationsResponse(Collections.emptyList()));
+
+      assertThatThrownBy(() -> stationService.getStations(coordParams()))
+          .isInstanceOf(NotFoundException.class);
+
+      verify(stationMapper, never()).toStations(org.mockito.ArgumentMatchers.any());
+    }
+
+    @Test
+    @DisplayName("should pass the exact coordinates to the client")
+    void shouldPassExactCoordinatesToClient() {
+      double lat = 46.9481;
+      double lon = 7.4474;
+      ApiStation api = buildApiStation("8507000", "Bern", 50);
+
+      when(transportClient.getLocationsByCoordinates(lat, lon))
+          .thenReturn(new ApiLocationsResponse(List.of(api)));
+      when(stationMapper.toStations(api)).thenReturn(buildStation("8507000", "Bern", 50));
+
+      stationService.getStations(coordParams(lat, lon));
+
+      verify(transportClient).getLocationsByCoordinates(lat, lon);
     }
   }
 
-  // =========================================================================
-  // Private helpers
-  // =========================================================================
+  // ===========================================================================
+  // distance field — name search returns null, coordinates search returns value
+  // ===========================================================================
 
-  private ApiStation buildApiStation(String id, String name, Double x, Double y) {
-    return new ApiStation(id, name, 1.0, new ApiCoordinate("WGS84", x, y), 0.0, "icon");
-  }
+  @Nested
+  @DisplayName("distance field behaviour")
+  class DistanceFieldTest {
 
-  private Station buildStation(String id, String name, Double latitude, Double longitude) {
-    return Station.builder().id(id).name(name).latitude(latitude).longitude(longitude).build();
+    @Test
+    @DisplayName("should return null distance when searching by name")
+    void shouldReturnNullDistanceForNameSearch() {
+      ApiStation api = buildApiStation("8503000", "Basel SBB", null);
+      Station mapped = buildStation("8503000", "Basel SBB", null);
+
+      when(transportClient.getLocationsByQuery(QUERY))
+          .thenReturn(new ApiLocationsResponse(List.of(api)));
+      when(stationMapper.toStations(api)).thenReturn(mapped);
+
+      StationsResponse result = stationService.getStations(queryParams());
+
+      assertThat(result.getStations().getFirst().getDistance()).isNull();
+    }
+
+    @Test
+    @DisplayName("should return non-null distance when searching by coordinates")
+    void shouldReturnNonNullDistanceForCoordinatesSearch() {
+      ApiStation api = buildApiStation("8503000", "Basel SBB", 185);
+      Station mapped = buildStation("8503000", "Basel SBB", 185);
+
+      when(transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE))
+          .thenReturn(new ApiLocationsResponse(List.of(api)));
+      when(stationMapper.toStations(api)).thenReturn(mapped);
+
+      StationsResponse result = stationService.getStations(coordParams());
+
+      assertThat(result.getStations().getFirst().getDistance()).isEqualTo(185);
+    }
   }
 }
