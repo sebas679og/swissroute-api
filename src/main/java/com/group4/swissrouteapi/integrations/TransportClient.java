@@ -9,5 +9,7 @@ import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocation
  */
 public interface TransportClient {
 
-  ApiLocationsResponse getLocations(String query);
+  ApiLocationsResponse getLocationsByQuery(String query);
+
+  ApiLocationsResponse getLocationsByCoordinates(double latitude, double longitude);
 }

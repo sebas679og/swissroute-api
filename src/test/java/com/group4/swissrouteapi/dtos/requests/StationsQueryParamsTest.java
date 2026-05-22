@@ -11,8 +11,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Unit tests for {@link StationsQueryParams} bean validation constraints.
@@ -35,144 +33,169 @@ class StationsQueryParamsTest {
   // Helpers
   // ---------------------------------------------------------------------------
 
-  private StationsQueryParams buildRequest(String query) {
-    return StationsQueryParams.builder().query(query).build();
-  }
-
   private Set<ConstraintViolation<StationsQueryParams>> validate(StationsQueryParams params) {
     return validator.validate(params);
   }
 
-  private String singleMessage(Set<ConstraintViolation<StationsQueryParams>> violations) {
-    assertThat(violations).hasSize(1);
-    return violations.iterator().next().getMessage();
-  }
-
-  // ---------------------------------------------------------------------------
-  // Happy path
-  // ---------------------------------------------------------------------------
-
-  @Test
-  @DisplayName("should pass validation when query is a valid non-blank string")
-  void shouldPassWhenQueryIsValid() {
-    assertThat(validate(buildRequest("Basel"))).isEmpty();
-  }
-
-  @Test
-  @DisplayName("should pass validation when query is built via no-args constructor and setter")
-  void shouldPassWhenQuerySetViaNoArgsConstructor() {
-    StationsQueryParams params = new StationsQueryParams();
-    params.setQuery("Zurich");
-
-    assertThat(validate(params)).isEmpty();
-  }
-
-  @ParameterizedTest(name = "valid query: \"{0}\"")
-  @ValueSource(
-      strings = {
-        "Basel",
-        "Zürich HB",
-        "Geneva",
-        "A", // single character
-        "Bern Hauptbahnhof" // multi-word
-      })
-  @DisplayName("should pass for any non-blank query string")
-  void shouldPassForNonBlankQueries(String query) {
-    assertThat(validate(buildRequest(query))).isEmpty();
-  }
-
-  // ---------------------------------------------------------------------------
-  // query field
-  // ---------------------------------------------------------------------------
+  // ===========================================================================
+  // Object construction — all Lombok-generated entry points
+  // ===========================================================================
 
   @Nested
-  @DisplayName("query field")
-  class QueryFieldTest {
+  @DisplayName("construction")
+  class ConstructionTest {
 
     @Test
-    @DisplayName("should fail when query is null")
-    void shouldFailWhenQueryIsNull() {
-      StationsQueryParams params = buildRequest(null);
+    @DisplayName("should build via builder with query only")
+    void shouldBuildWithQueryOnly() {
+      StationsQueryParams params = StationsQueryParams.builder().query("Basel").build();
 
-      String message = singleMessage(validate(params));
-
-      assertThat(message).isEqualTo("Query cannot be blank");
+      assertThat(params.getQuery()).isEqualTo("Basel");
+      assertThat(params.getLatitude()).isNull();
+      assertThat(params.getLongitude()).isNull();
     }
 
     @Test
-    @DisplayName("should fail when query is empty")
-    void shouldFailWhenQueryIsEmpty() {
-      StationsQueryParams params = buildRequest("");
+    @DisplayName("should build via builder with coordinates only")
+    void shouldBuildWithCoordinatesOnly() {
+      StationsQueryParams params =
+          StationsQueryParams.builder().latitude(47.5596).longitude(7.5886).build();
 
-      String message = singleMessage(validate(params));
-
-      assertThat(message).isEqualTo("Query cannot be blank");
+      assertThat(params.getQuery()).isNull();
+      assertThat(params.getLatitude()).isEqualTo(47.5596);
+      assertThat(params.getLongitude()).isEqualTo(7.5886);
     }
 
     @Test
-    @DisplayName("should fail when query is blank")
-    void shouldFailWhenQueryIsBlank() {
-      StationsQueryParams params = buildRequest("   ");
+    @DisplayName("should build via builder with all fields")
+    void shouldBuildWithAllFields() {
+      StationsQueryParams params =
+          StationsQueryParams.builder().query("Basel").latitude(47.5596).longitude(7.5886).build();
 
-      String message = singleMessage(validate(params));
-
-      assertThat(message).isEqualTo("Query cannot be blank");
+      assertThat(params.getQuery()).isEqualTo("Basel");
+      assertThat(params.getLatitude()).isEqualTo(47.5596);
+      assertThat(params.getLongitude()).isEqualTo(7.5886);
     }
 
     @Test
-    @DisplayName("should fail when query is only tab characters")
-    void shouldFailWhenQueryIsOnlyTabs() {
-      StationsQueryParams params = buildRequest("\t\t");
+    @DisplayName("should build via no-args constructor with all fields null")
+    void shouldBuildViaNoArgsConstructorWithNullFields() {
+      StationsQueryParams params = new StationsQueryParams();
 
-      String message = singleMessage(validate(params));
-
-      assertThat(message).isEqualTo("Query cannot be blank");
+      assertThat(params.getQuery()).isNull();
+      assertThat(params.getLatitude()).isNull();
+      assertThat(params.getLongitude()).isNull();
     }
 
     @Test
-    @DisplayName("should fail when query is only newline characters")
-    void shouldFailWhenQueryIsOnlyNewlines() {
-      StationsQueryParams params = buildRequest("\n\n");
+    @DisplayName("should build via no-args constructor and setters")
+    void shouldBuildViaNoArgsConstructorAndSetters() {
+      StationsQueryParams params = new StationsQueryParams();
+      params.setQuery("Geneva");
+      params.setLatitude(46.2044);
+      params.setLongitude(6.1432);
 
-      String message = singleMessage(validate(params));
-
-      assertThat(message).isEqualTo("Query cannot be blank");
+      assertThat(params.getQuery()).isEqualTo("Geneva");
+      assertThat(params.getLatitude()).isEqualTo(46.2044);
+      assertThat(params.getLongitude()).isEqualTo(6.1432);
     }
 
     @Test
-    @DisplayName("should report the violation on the query property path")
-    void shouldReportViolationOnQueryPropertyPath() {
-      StationsQueryParams params = buildRequest(null);
+    @DisplayName("should build via all-args constructor")
+    void shouldBuildViaAllArgsConstructor() {
+      StationsQueryParams params = new StationsQueryParams("Bern", 46.9481, 7.4474);
 
-      ConstraintViolation<StationsQueryParams> violation = validate(params).iterator().next();
+      assertThat(params.getQuery()).isEqualTo("Bern");
+      assertThat(params.getLatitude()).isEqualTo(46.9481);
+      assertThat(params.getLongitude()).isEqualTo(7.4474);
+    }
+  }
 
-      assertThat(violation.getPropertyPath().toString()).isEqualTo("query");
+  // ===========================================================================
+  // Field-level constraints
+  // ===========================================================================
+
+  @Nested
+  @DisplayName("field-level constraints")
+  class FieldLevelConstraintsTest {
+
+    @Test
+    @DisplayName("should have no field-level violations for null query")
+    void shouldHaveNoFieldViolationsForNullQuery() {
+      StationsQueryParams params =
+          StationsQueryParams.builder().query(null).latitude(47.5596).longitude(7.5886).build();
+
+      long fieldViolations =
+          validate(params).stream()
+              .filter(v -> !v.getPropertyPath().toString().isEmpty())
+              .filter(v -> v.getLeafBean() != null)
+              .count();
+
+      assertThat(
+              validate(params).stream()
+                  .map(v -> v.getPropertyPath().toString())
+                  .filter(
+                      path ->
+                          path.equals("query")
+                              || path.equals("latitude")
+                              || path.equals("longitude")))
+          .isEmpty();
     }
 
     @Test
-    @DisplayName("should produce exactly one violation for a blank query")
-    void shouldProduceExactlyOneViolationForBlankQuery() {
-      StationsQueryParams params = buildRequest("   ");
+    @DisplayName("should have no field-level violations for null latitude and longitude")
+    void shouldHaveNoFieldViolationsForNullCoordinates() {
+      StationsQueryParams params = StationsQueryParams.builder().query("Basel").build();
 
-      assertThat(validate(params)).hasSize(1);
+      assertThat(
+              validate(params).stream()
+                  .map(v -> v.getPropertyPath().toString())
+                  .filter(path -> path.equals("latitude") || path.equals("longitude")))
+          .isEmpty();
+    }
+  }
+
+  // ===========================================================================
+  // Equality and toString — @Data contract
+  // ===========================================================================
+
+  @Nested
+  @DisplayName("@Data generated methods")
+  class DataContractTest {
+
+    @Test
+    @DisplayName("should be equal when all fields match")
+    void shouldBeEqualWhenAllFieldsMatch() {
+      StationsQueryParams a = new StationsQueryParams("Basel", 47.5596, 7.5886);
+      StationsQueryParams b = new StationsQueryParams("Basel", 47.5596, 7.5886);
+
+      assertThat(a).isEqualTo(b);
     }
 
     @Test
-    @DisplayName("should pass when query is built via all-args constructor")
-    void shouldPassWhenBuiltWithAllArgsConstructor() {
-      StationsQueryParams params = new StationsQueryParams("Lausanne");
+    @DisplayName("should not be equal when query differs")
+    void shouldNotBeEqualWhenQueryDiffers() {
+      StationsQueryParams a = new StationsQueryParams("Basel", null, null);
+      StationsQueryParams b = new StationsQueryParams("Bern", null, null);
 
-      assertThat(validate(params)).isEmpty();
+      assertThat(a).isNotEqualTo(b);
     }
 
     @Test
-    @DisplayName("should fail when query is null via all-args constructor")
-    void shouldFailWhenNullViaAllArgsConstructor() {
-      StationsQueryParams params = new StationsQueryParams(null);
+    @DisplayName("should have equal hashCode for equal objects")
+    void shouldHaveEqualHashCodeForEqualObjects() {
+      StationsQueryParams a = new StationsQueryParams("Basel", 47.5596, 7.5886);
+      StationsQueryParams b = new StationsQueryParams("Basel", 47.5596, 7.5886);
 
-      String message = singleMessage(validate(params));
+      assertThat(a.hashCode()).isEqualTo(b.hashCode());
+    }
 
-      assertThat(message).isEqualTo("Query cannot be blank");
+    @Test
+    @DisplayName("should include field values in toString")
+    void shouldIncludeFieldValuesInToString() {
+      StationsQueryParams params = new StationsQueryParams("Basel", 47.5596, 7.5886);
+
+      assertThat(params.toString()).contains("Basel").contains("47.5596").contains("7.5886");
     }
   }
 }

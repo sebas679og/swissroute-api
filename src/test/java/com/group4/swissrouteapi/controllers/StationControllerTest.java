@@ -39,6 +39,8 @@ class StationControllerTest extends AbstractIntegrationTest {
   @Autowired private JwtKeyProvider provider;
 
   private static final String TYPE_TOKEN = "Bearer ";
+  private static final double LATITUDE = 47.377921;
+  private static final double LONGITUDE = 8.540192;
 
   private String token;
   private UserEntity user;
@@ -76,144 +78,338 @@ class StationControllerTest extends AbstractIntegrationTest {
   }
 
   @Nested
-  @DisplayName("Get stations using query parameter")
-  class GetStationsUsingQueryParameter {
+  @DisplayName("successful responses")
+  class SuccessTest {
 
-    @Test
-    void shouldReturnStationsWhenSearchingByName() throws Exception {
-      transportsStub.stubLocationsByQuery("Basel");
-      mockMvc
-          .perform(
-              get(ApiPaths.Station.STATIONS)
-                  .param("query", "Basel")
-                  .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$.stations").isArray())
-          .andExpect(jsonPath("$.stations", hasSize(greaterThan(0))));
+    // -------------------------------------------------------------------------
+    // Successful responses by Query
+    // -------------------------------------------------------------------------
+
+    @Nested
+    @DisplayName("Get stations using query parameter")
+    class GetStationsUsingQueryParameter {
+
+      @Test
+      void shouldReturnStationsWhenSearchingByName() throws Exception {
+        transportsStub.stubLocationsByQuery("Basel");
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("query", "Basel")
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.stations").isArray())
+            .andExpect(jsonPath("$.stations", hasSize(greaterThan(0))));
+      }
+
+      @Test
+      void shouldReturnEmptyListWhenStationNotFound() throws Exception {
+        transportsStub.stubLocationsByQueryNotFound("sagmade");
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("query", "sagmade")
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.NOT_FOUND.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
     }
 
-    @Test
-    void shouldReturnEmptyListWhenStationNotFound() throws Exception {
-      transportsStub.stubLocationsByQueryNotFound("sagmade");
-      mockMvc
-          .perform(
-              get(ApiPaths.Station.STATIONS)
-                  .param("query", "sagmade")
-                  .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
-          .andExpect(status().isNotFound())
-          .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
-          .andExpect(jsonPath("$.name").value(HttpStatus.NOT_FOUND.name()))
-          .andExpect(jsonPath("$.description").exists())
-          .andExpect(jsonPath("$.timestamp").exists());
+    // -------------------------------------------------------------------------
+    // Successful responses by Query
+    // -------------------------------------------------------------------------
+
+    @Nested
+    @DisplayName("Get Stations using coordinates query")
+    class GetStationsUsingCoordinatesQuery {
+
+      @Test
+      void shouldReturnStationsWhenSearchingByCoordinates() throws Exception {
+        transportsStub.stubLocationsByCoordinates(LATITUDE, LONGITUDE);
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("latitude", String.valueOf(LATITUDE))
+                    .param("longitude", String.valueOf(LONGITUDE))
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.stations").isArray())
+            .andExpect(jsonPath("$.stations", hasSize(greaterThan(0))))
+            .andExpect(jsonPath("$.stations[0].distance").exists());
+      }
     }
 
-    @Test
-    void shouldThrowExceptionWhenApiReturns502InternalServerError() throws Exception {
-      mockMvc
-          .perform(
-              get(ApiPaths.Station.STATIONS)
-                  .param("query", "sagmade")
-                  .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
-          .andExpect(status().isBadGateway())
-          .andExpect(jsonPath("$.code").value(HttpStatus.BAD_GATEWAY.value()))
-          .andExpect(jsonPath("$.name").value(HttpStatus.BAD_GATEWAY.name()))
-          .andExpect(jsonPath("$.description").exists())
-          .andExpect(jsonPath("$.timestamp").exists());
+    // -------------------------------------------------------------------------
+    // Transport API errors
+    // -------------------------------------------------------------------------
+
+    @Nested
+    @DisplayName("transport API errors")
+    class TransportApiErrorTest {
+
+      @Test
+      void shouldThrowExceptionWhenApiReturns502InternalServerError() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("query", "sagmade")
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadGateway())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_GATEWAY.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_GATEWAY.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldThrowBadGatewayExceptionWhenApiReturns4xxClientError() throws Exception {
+        transportsStub.stubLocationResponse4xx("Basel");
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("query", "Basel")
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadGateway())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_GATEWAY.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_GATEWAY.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldThrowServiceUnavailableExceptionWhenApiReturns5xxServerError() throws Exception {
+        transportsStub.stubLocationResponse5xx("Basel");
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("query", "Basel")
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isServiceUnavailable())
+            .andExpect(jsonPath("$.code").value(HttpStatus.SERVICE_UNAVAILABLE.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.SERVICE_UNAVAILABLE.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
     }
 
-    @Test
-    void shouldThrowBadGatewayExceptionWhenApiReturns4xxClientError() throws Exception {
-      transportsStub.stubLocationResponse4xx("Basel");
-      mockMvc
-          .perform(
-              get(ApiPaths.Station.STATIONS)
-                  .param("query", "Basel")
-                  .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
-          .andExpect(status().isBadGateway())
-          .andExpect(jsonPath("$.code").value(HttpStatus.BAD_GATEWAY.value()))
-          .andExpect(jsonPath("$.name").value(HttpStatus.BAD_GATEWAY.name()))
-          .andExpect(jsonPath("$.description").exists())
-          .andExpect(jsonPath("$.timestamp").exists());
+    // -------------------------------------------------------------------------
+    // Security
+    // -------------------------------------------------------------------------
+
+    @Nested
+    @DisplayName("security")
+    class SecurityTest {
+
+      @Test
+      void shouldReturn401UnauthorizedWhenTokenIsExpired() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("query", "Basel")
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + generateExpiredToken()))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn401UnauthorizedWhenTokenIsMalformed() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("query", "Basel")
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + "malformed.token.here"))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn401UnauthorizedWhenAuthorizationHeaderIsMissing() throws Exception {
+        mockMvc
+            .perform(get(ApiPaths.Station.STATIONS).param("query", "Basel"))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
     }
 
-    @Test
-    void shouldThrowServiceUnavailableExceptionWhenApiReturns5xxServerError() throws Exception {
-      transportsStub.stubLocationResponse5xx("Basel");
-      mockMvc
-          .perform(
-              get(ApiPaths.Station.STATIONS)
-                  .param("query", "Basel")
-                  .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
-          .andExpect(status().isServiceUnavailable())
-          .andExpect(jsonPath("$.code").value(HttpStatus.SERVICE_UNAVAILABLE.value()))
-          .andExpect(jsonPath("$.name").value(HttpStatus.SERVICE_UNAVAILABLE.name()))
-          .andExpect(jsonPath("$.description").exists())
-          .andExpect(jsonPath("$.timestamp").exists());
-    }
+    // -------------------------------------------------------------------------
+    // Request validation
+    // -------------------------------------------------------------------------
 
-    @Test
-    void shouldReturn401UnauthorizedWhenTokenIsExpired() throws Exception {
-      mockMvc
-          .perform(
-              get(ApiPaths.Station.STATIONS)
-                  .param("query", "Basel")
-                  .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + generateExpiredToken()))
-          .andExpect(status().isUnauthorized())
-          .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
-          .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.name()))
-          .andExpect(jsonPath("$.description").exists())
-          .andExpect(jsonPath("$.timestamp").exists());
-    }
+    @Nested
+    @DisplayName("request validation")
+    class RequestValidationTest {
 
-    @Test
-    void shouldReturn401UnauthorizedWhenTokenIsMalformed() throws Exception {
-      mockMvc
-          .perform(
-              get(ApiPaths.Station.STATIONS)
-                  .param("query", "Basel")
-                  .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + "malformed.token.here"))
-          .andExpect(status().isUnauthorized())
-          .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
-          .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.name()))
-          .andExpect(jsonPath("$.description").exists())
-          .andExpect(jsonPath("$.timestamp").exists());
-    }
+      @Test
+      void shouldReturn400BadRequestWhenParameterIsMissing() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
 
-    @Test
-    void shouldReturn401UnauthorizedWhenAuthorizationHeaderIsMissing() throws Exception {
-      mockMvc
-          .perform(get(ApiPaths.Station.STATIONS).param("query", "Basel"))
-          .andExpect(status().isUnauthorized())
-          .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
-          .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.name()))
-          .andExpect(jsonPath("$.description").exists())
-          .andExpect(jsonPath("$.timestamp").exists());
-    }
+      @Test
+      void shouldReturn400BadRequestWhenQueryParameterIsEmpty() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("query", "")
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
 
-    @Test
-    void shouldReturn400BadRequestWhenQueryParameterIsMissing() throws Exception {
-      mockMvc
-          .perform(
-              get(ApiPaths.Station.STATIONS).header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
-          .andExpect(status().isBadRequest())
-          .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
-          .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
-          .andExpect(jsonPath("$.description").exists())
-          .andExpect(jsonPath("$.timestamp").exists());
-    }
+      @Test
+      void shouldReturn400BadRequestWhenLatitudeParameterIsEmpty() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("latitude", "")
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
 
-    @Test
-    void shouldReturn400BadRequestWhenQueryParameterIsEmpty() throws Exception {
-      mockMvc
-          .perform(
-              get(ApiPaths.Station.STATIONS)
-                  .param("query", "")
-                  .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
-          .andExpect(status().isBadRequest())
-          .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
-          .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
-          .andExpect(jsonPath("$.description").exists())
-          .andExpect(jsonPath("$.timestamp").exists());
+      @Test
+      void shouldReturn400BadRequestWhenLongitudeParameterIsEmpty() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("longitude", "")
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn400BadRequestWhenLongitudeIsMissing() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("latitude", String.valueOf(LATITUDE))
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn400BadRequestWhenLatitudeIsMissing() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("longitude", String.valueOf(LONGITUDE))
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn400BadRequestWhenLongitudeIsLessThanMinimum() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("latitude", String.valueOf(LATITUDE))
+                    .param("longitude", String.valueOf(-190.562))
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn400BadRequestWhenLatitudeIsLessThanMinimum() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("latitude", String.valueOf(-100.562))
+                    .param("longitude", String.valueOf(LONGITUDE))
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn400BadRequestWhenLongitudeExceedsMaximum() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("latitude", String.valueOf(LATITUDE))
+                    .param("longitude", String.valueOf(190.562))
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn400BadRequestWhenLatitudeExceedsMaximum() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("latitude", String.valueOf(100.562))
+                    .param("longitude", String.valueOf(LONGITUDE))
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn400BadRequestWhenQueryIsSentAlongsideLatitudeAndLongitude()
+          throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.Station.STATIONS)
+                    .param("query", "Basel")
+                    .param("latitude", String.valueOf(LONGITUDE))
+                    .param("longitude", String.valueOf(LONGITUDE))
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
     }
   }
 }

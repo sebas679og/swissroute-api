@@ -12,4 +12,9 @@ package com.group4.swissrouteapi.integrations.dto.responses.locations;
  * methods such as {@code equals}, {@code hashCode}, and {@code toString}.
  */
 public record ApiStation(
-    String id, String name, Double score, ApiCoordinate coordinate, Double distance, String icon) {}
+    String id,
+    String name,
+    Double score,
+    ApiCoordinate coordinate,
+    Integer distance,
+    String icon) {}

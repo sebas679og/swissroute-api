@@ -34,12 +34,33 @@ public class StationServiceImpl implements StationService {
   private final StationMapper stationMapper;
 
   @Override
-  public StationsResponse getStationsByName(StationsQueryParams requestParams) {
-    ApiLocationsResponse api = transportClient.getLocations(requestParams.getQuery());
+  public StationsResponse getStations(StationsQueryParams requestParams) {
+    if (requestParams.getLatitude() != null && requestParams.getLongitude() != null) {
+      return getStationsByCoordinates(requestParams.getLatitude(), requestParams.getLongitude());
+    }
+    return getStationsByName(requestParams.getQuery());
+  }
+
+  private StationsResponse getStationsByName(String name) {
+    ApiLocationsResponse api = transportClient.getLocationsByQuery(name);
     List<ApiStation> apiStations = api.stations();
 
     if (apiStations == null || apiStations.isEmpty()) {
-      throw new NotFoundException("No stations found with the name: " + requestParams.getQuery());
+      throw new NotFoundException("No stations found with the name: " + name);
+    }
+
+    return StationsResponse.builder()
+        .stations(apiStations.stream().map(stationMapper::toStations).toList())
+        .build();
+  }
+
+  private StationsResponse getStationsByCoordinates(double latitude, double longitude) {
+    ApiLocationsResponse api = transportClient.getLocationsByCoordinates(latitude, longitude);
+    List<ApiStation> apiStations = api.stations();
+
+    if (apiStations == null || apiStations.isEmpty()) {
+      throw new NotFoundException(
+          "No stations found at the coordinates: (" + latitude + ", " + longitude + ")");
     }
 
     return StationsResponse.builder()

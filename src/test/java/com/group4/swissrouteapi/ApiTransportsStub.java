@@ -6,6 +6,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 /**
  * ApiTransportsStub
@@ -38,8 +40,27 @@ public class ApiTransportsStub {
             .willReturn(
                 aResponse()
                     .withStatus(200)
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBodyFile("api-transports/locations/locations-by-query.json")));
+  }
+
+  /**
+   * Stubs a successful response for the `/locations` endpoint when queried with the given
+   * parameter.
+   *
+   * @param latitude the latitude for the location query
+   * @param longitude the longitude for the location query
+   */
+  public void stubLocationsByCoordinates(Double latitude, Double longitude) {
+    wireMock.stubFor(
+        get(urlPathEqualTo("/locations"))
+            .withQueryParam("x", equalTo(latitude.toString()))
+            .withQueryParam("y", equalTo(longitude.toString()))
+            .willReturn(
+                aResponse()
+                    .withStatus(200)
+                    .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .withBodyFile("api-transports/locations/locations-by-coordinates.json")));
   }
 
   /**
@@ -55,7 +76,7 @@ public class ApiTransportsStub {
             .willReturn(
                 aResponse()
                     .withStatus(200)
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBodyFile("api-transports/locations/locations-by-query-not-found.json")));
   }
 
@@ -71,7 +92,7 @@ public class ApiTransportsStub {
             .willReturn(
                 aResponse()
                     .withStatus(423)
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBody("")));
   }
 
@@ -87,7 +108,7 @@ public class ApiTransportsStub {
             .willReturn(
                 aResponse()
                     .withStatus(504)
-                    .withHeader("Content-Type", "application/json")
+                    .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBody("")));
   }
 

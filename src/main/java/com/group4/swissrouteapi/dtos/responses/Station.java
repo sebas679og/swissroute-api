@@ -1,5 +1,6 @@
 package com.group4.swissrouteapi.dtos.responses;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Value;
 
@@ -21,4 +22,7 @@ public class Station {
   String name;
   Double latitude;
   Double longitude;
+
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  Integer distance;
 }

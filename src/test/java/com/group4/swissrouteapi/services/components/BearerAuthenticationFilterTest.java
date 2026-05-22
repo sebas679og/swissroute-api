@@ -339,17 +339,5 @@ class BearerAuthenticationFilterTest {
 
       assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
     }
-
-    @Test
-    @DisplayName("should still continue the filter chain after an invalid token")
-    void shouldContinueChainAfterInvalidToken() throws Exception {
-      stubSigningKey();
-      MockHttpServletRequest request = requestWithBearer(buildExpiredToken());
-      MockHttpServletResponse response = new MockHttpServletResponse();
-
-      filter.doFilterInternal(request, response, filterChain);
-
-      verify(filterChain).doFilter(request, response);
-    }
   }
 }

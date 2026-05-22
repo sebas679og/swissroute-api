@@ -13,7 +13,7 @@
   - [Register User](#register-user)
   - [Login User](#login-user)
 - [Stations Service](#stations-service)
-  - [Search Stations By Name](#search-stations-by-name)
+  - [Search Stations](#search-stations)
 
 ---
 
@@ -387,14 +387,17 @@ Occurs when the provided credentials are invalid.
 
 ## Stations Service
 
-### Search Stations By Name
+### Search Stations
 
-Returns a list of public transport stations matching the provided search query.
+Returns a list of public transport stations using either:
+
+* Station name search
+* Geographic coordinates search
 
 #### Endpoint
 
 ```http
-GET /api/stations?query={station}
+GET /api/stations
 ```
 
 #### Access
@@ -415,13 +418,23 @@ Authorization: Bearer {{JWT}}
 
 #### Query Parameters
 
-| Parameter | Type   | Required | Description                                    |
-|-----------|--------|----------|------------------------------------------------|
-| `query`   | String | Yes      | Station name or partial station name to search |
+| Parameter   | Type   | Required    | Description                          |
+|-------------|--------|-------------|--------------------------------------|
+| `query`     | String | Conditional | Station name or partial station name |
+| `latitude`  | Number | Conditional | Latitude coordinate                  |
+| `longitude` | Number | Conditional | Longitude coordinate                 |
 
 ---
 
-#### Example Request
+#### Search Modes
+
+The endpoint supports two exclusive search modes.
+
+##### 1. Search by Name
+
+Uses the `query` parameter to search stations by name.
+
+###### Example
 
 ```http
 GET /api/stations?query=Basel
@@ -429,9 +442,54 @@ GET /api/stations?query=Basel
 
 ---
 
+##### 2. Search by Coordinates
+
+Uses geographic coordinates to search nearby stations.
+
+###### Example
+
+```http
+GET /api/stations?latitude=47.378177&longitude=8.540192
+```
+
+---
+
+#### Important Validation Rules
+
+##### Allowed Combinations
+
+| Query  | Latitude | Longitude  | Valid |
+|--------|----------|------------|-------|
+| ✅      | ❌        | ❌          | Yes   |
+| ❌      | ✅        | ✅          | Yes   |
+| ✅      | ✅        | ✅          | No    |
+| ❌      | ✅        | ❌          | No    |
+| ❌      | ❌        | ✅          | No    |
+| ❌      | ❌        | ❌          | No    |
+
+---
+
+#### Coordinate Validation Rules
+
+##### Latitude
+
+Must be between:
+
+-90 <= latitude <= 90
+
+##### Longitude
+
+Must be between:
+
+-180 <= longitude <= 180
+
+---
+
 #### Successful Response
 
 ##### 200 — OK
+
+###### Search by Name Response
 
 ```json
 {
@@ -447,54 +505,6 @@ GET /api/stations?query=Basel
       "name": "Basel Bad Bf",
       "latitude": 47.567301,
       "longitude": 7.606922
-    },
-    {
-      "id": "8578143",
-      "name": "Basel, Bahnhof SBB",
-      "latitude": 47.548284,
-      "longitude": 7.590297
-    },
-    {
-      "id": "8588780",
-      "name": "Basel, Schifflände",
-      "latitude": 47.559197,
-      "longitude": 7.587166
-    },
-    {
-      "id": "8500237",
-      "name": "Basel, Bankverein",
-      "latitude": 47.553606,
-      "longitude": 7.592251
-    },
-    {
-      "id": "8500073",
-      "name": "Basel, Aeschenplatz",
-      "latitude": 47.5513,
-      "longitude": 7.594862
-    },
-    {
-      "id": "8500897",
-      "name": "Basel, Barfüsserplatz",
-      "latitude": 47.55459,
-      "longitude": 7.589066
-    },
-    {
-      "id": "8500193",
-      "name": "Basel, Markthalle",
-      "latitude": 47.548874,
-      "longitude": 7.586008
-    },
-    {
-      "id": "8589360",
-      "name": "Basel, Schützenhaus",
-      "latitude": 47.553202,
-      "longitude": 7.577105
-    },
-    {
-      "id": "8588775",
-      "name": "Basel, Marktplatz",
-      "latitude": 47.558108,
-      "longitude": 7.587614
     }
   ]
 }
@@ -502,14 +512,35 @@ GET /api/stations?query=Basel
 
 ---
 
-##### Response Fields
+###### Search by Coordinates Response
 
-| Field       | Type   | Description                  |
-|-------------|--------|------------------------------|
-| `id`        | String | Unique station identifier    |
-| `name`      | String | Official station name        |
-| `latitude`  | Number | Station latitude coordinate  |
-| `longitude` | Number | Station longitude coordinate |
+When searching by coordinates, the response includes an additional `distance` field.
+
+```json
+{
+  "stations": [
+    {
+      "id": null,
+      "name": "Hauptbahnhof Zuerich, Zürich",
+      "latitude": null,
+      "longitude": null,
+      "distance": 11
+    }
+  ]
+}
+```
+
+---
+
+#### Response Fields
+
+| Field       | Type          | Description                                  |
+|-------------|---------------|----------------------------------------------|
+| `id`        | String        | Null / Unique station identifier             |
+| `name`      | String        | Official station name                        |
+| `latitude`  | Number        | Null / Station latitude coordinate           |
+| `longitude` | Number        | Null / Station longitude coordinate          |
+| `distance`  | Number        | Distance from provided coordinates in meters |
 
 ---
 
@@ -517,13 +548,67 @@ GET /api/stations?query=Basel
 
 ##### 400 — Bad Request
 
-Occurs when the query parameter is missing, empty, or blank.
+Occurs when validation rules are violated.
+
+###### Missing Query Parameter
 
 ```json
 {
   "code": 400,
   "name": "BAD_REQUEST",
   "description": "query: Query cannot be blank",
+  "timestamp": "2026-05-22T00:25:20.152Z"
+}
+```
+
+---
+
+###### Missing Coordinate Pair
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "latitude and longitude must be provided together",
+  "timestamp": "2026-05-22T00:25:20.152Z"
+}
+```
+
+---
+
+###### Invalid Coordinate Range
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Coordinates are out of valid range",
+  "timestamp": "2026-05-22T00:25:20.152Z"
+}
+```
+
+---
+
+###### Invalid Parameter Combination
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Search by query or coordinates, but not both",
+  "timestamp": "2026-05-22T00:25:20.152Z"
+}
+```
+
+---
+
+###### Missing Search Parameters
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "At least one search method is required",
   "timestamp": "2026-05-22T00:25:20.152Z"
 }
 ```
@@ -547,7 +632,7 @@ Occurs when the request does not contain a valid JWT token or the token has expi
 
 ##### 404 — Not Found
 
-Occurs when no stations match the provided query.
+Occurs when no stations match the provided search criteria.
 
 ```json
 {
@@ -579,7 +664,7 @@ Occurs when the external Transport API rejects the request.
 
 Occurs when the external Transport API is unavailable or temporarily unreachable.
 
-```json
+```json id="n2u6hx"
 {
   "code": 503,
   "name": "SERVICE_UNAVAILABLE",
@@ -590,22 +675,12 @@ Occurs when the external Transport API is unavailable or temporarily unreachable
 
 ---
 
-#### Validation Rules
-
-| Parameter | Validation                        |
-|-----------|-----------------------------------|
-| `query`   | Must not be null, empty, or blank |
-
----
-
 #### Notes
 
-* This endpoint integrates with the external Swiss Public Transport API.
+* Only one search mode can be used per request.
+* `latitude` and `longitude` must always be provided together.
+* Coordinates outside valid geographic ranges are rejected.
 * Authentication is mandatory for accessing station search functionality.
-* Results may include stations, stops, terminals, and transport hubs matching the query text.
-* Coordinates are returned using standard latitude and longitude values.
-* Error handling includes external API availability and gateway validation.
+* Results may include stations, stops, terminals, and transport hubs.
+* Distance values are returned only when searching by coordinates.
 * Timestamps are returned in ISO-8601 UTC format.
-
-
-
