@@ -62,13 +62,13 @@ public class TransportClientImpl implements TransportClient {
                         body -> {
                           if (log.isErrorEnabled()) {
                             log.error(
-                                "Customer Service 4xx error. Uri: {}, Status: {}, Body: {}",
+                                "Api Transport 4xx error. Uri: {}, Status: {}, Body: {}",
                                 uri,
                                 response.statusCode(),
                                 body);
                           }
                           return Mono.error(
-                              new BadGatewayException("Customer Service rejected the request"));
+                              new BadGatewayException("Api Transport rejected the request"));
                         }))
         .onStatus(
             HttpStatusCode::is5xxServerError,
@@ -80,13 +80,13 @@ public class TransportClientImpl implements TransportClient {
                         body -> {
                           if (log.isErrorEnabled()) {
                             log.error(
-                                "Customer Service 5xx error. Uri: {}, Status: {}, Body: {}",
+                                "Api Transport 5xx error. Uri: {}, Status: {}, Body: {}",
                                 uri,
                                 response.statusCode(),
                                 body);
                           }
                           return Mono.error(
-                              new ServiceUnavailableException("Customer Service is unavailable"));
+                              new ServiceUnavailableException("Api Transport is unavailable"));
                         }))
         .bodyToMono(responseType)
         .onErrorMap(
@@ -94,17 +94,17 @@ public class TransportClientImpl implements TransportClient {
             ex -> {
               if (log.isErrorEnabled()) {
                 log.error(
-                    "Auth Service is unreachable. Cause: {} - {}",
+                    "Api Transport is unreachable. Cause: {} - {}",
                     ex.getClass().getSimpleName(),
                     ex.getMessage());
               }
-              return new BadGatewayException("Session validation service is unreachable");
+              return new BadGatewayException("Api Transport is unreachable");
             })
         .blockOptional()
         .orElseThrow(
             () -> {
-              log.error("Customer Service returned empty body. ID: {}", uri);
-              return new BadGatewayException("Empty response from Customer Service");
+              log.error("Api Transport returned empty body. ID: {}", uri);
+              return new BadGatewayException("Empty response from Api Transport");
             });
   }
 }
