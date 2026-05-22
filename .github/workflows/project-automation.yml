@@ -60,15 +60,15 @@ jobs:
             });
             
             if (openPRs.length > 0) {
-              console.log(`Branch "${branchName}" already has an open PR (#${openPRs[0].number}) — skipping move to In Progress.`);
+              console.log(`Branch "${branchName}" already has an open PR (#${openPRs[0].number}) → skipping move to In Progress.`);
               return;
             }
-            // ────────────────────────────────────────────────────────────────────────────────
             
             const branchMatch = branchName.match(/(?:^|[\/\-_])(\d+)(?:[\/\-_]|$)/);
-            const commitMatches = [...commitMessages.matchAll(/(?:closes?|fixes?|resolves?|refs?)\s+#(\d+)|(?:^|\s)#(\d+)/gim)];
-            
-            const commitIssueNumbers = commitMatches.map(m => m[1] || m[2]);
+            const commitMatches = [...commitMessages.matchAll(
+              /(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s+#(\d+)/gim
+            )];
+            const commitIssueNumbers = commitMatches.map(m => m[1]);
             
             const allIssues = new Set();
             
@@ -81,7 +81,7 @@ jobs:
             });
             
             if (allIssues.size === 0) {
-              console.log('No issue number found in branch name or commits — skipping.');
+              console.log('No issue number found in branch name or commits → skipping.');
               return;
             }
             
@@ -92,10 +92,15 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: parseInt(issueNumber),
-            });
+              });
             
-            console.log(`Moving issue #${issueNumber} to In progress`);
-            await move(github, issue.node_id, 'In progress');
+              if (issue.pull_request) {
+                console.log(`#${issueNumber} is a PR → skipping.`);
+                continue;
+              }
+            
+              console.log(`Moving issue #${issueNumber} to In progress`);
+              await move(github, issue.node_id, 'In progress');
             }
 
   # ─── IN PROGRESS → IN REVIEW ───────────────────────────────────────────────
