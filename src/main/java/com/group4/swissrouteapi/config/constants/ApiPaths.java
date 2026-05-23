@@ -60,5 +60,6 @@ public final class ApiPaths {
    */
   public static final class TransportApi {
     public static final String LOCATIONS = "/locations";
+    public static final String CONNECTIONS = "/connections";
   }
 }
