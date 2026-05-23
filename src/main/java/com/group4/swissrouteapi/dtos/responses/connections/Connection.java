@@ -15,7 +15,7 @@ import lombok.Value;
  */
 @Value
 @Builder
-public class ConnectionResponse {
+public class Connection {
   String origin;
   String destination;
   String duration;
