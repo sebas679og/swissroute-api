@@ -1,4 +1,4 @@
-package com.group4.swissrouteapi.services;
+package com.group4.swissrouteapi.services.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
