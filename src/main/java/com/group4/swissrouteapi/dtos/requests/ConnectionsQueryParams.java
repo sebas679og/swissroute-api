@@ -5,12 +5,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * ConnectionsQueryParams
@@ -57,9 +57,9 @@ public class ConnectionsQueryParams {
   @Schema(description = "Time for the connection search", example = "08:00")
   private LocalTime time;
 
-  @DateTimeFormat(iso = DateTimeFormat.ISO.NONE)
-  @Schema(
-      description = "List of transportation types to filter results",
-      allowableValues = {"train", "tram", "ship", "bus", "cableway"})
-  private List<TransportationType> transportations;
+  @Schema(description = "List of transportation types to filter results")
+  @Builder.Default
+  private List<TransportationType> transportations = new ArrayList<>();
+
+  ;
 }

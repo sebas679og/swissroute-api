@@ -81,6 +81,8 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, ApiPaths.Station.STATIONS)
                     .hasAuthority("AUTH_JWT")
+                    .requestMatchers(HttpMethod.GET, ApiPaths.Connection.CONNECTIONS)
+                    .hasAuthority("AUTH_JWT")
                     .anyRequest()
                     .authenticated())
         .addFilterBefore(bearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
