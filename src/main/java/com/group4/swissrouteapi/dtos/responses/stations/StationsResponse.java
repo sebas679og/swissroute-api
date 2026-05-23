@@ -1,6 +1,7 @@
-package com.group4.swissrouteapi.dtos.responses;
+package com.group4.swissrouteapi.dtos.responses.stations;
 
 import java.util.List;
+
 import lombok.Builder;
 import lombok.Value;
 

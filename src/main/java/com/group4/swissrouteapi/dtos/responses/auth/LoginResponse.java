@@ -1,4 +1,4 @@
-package com.group4.swissrouteapi.dtos.responses;
+package com.group4.swissrouteapi.dtos.responses.auth;
 
 import java.util.UUID;
 import lombok.Builder;

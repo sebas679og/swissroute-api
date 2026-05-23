@@ -3,7 +3,7 @@ package com.group4.swissrouteapi.controllers;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.dtos.requests.StationsQueryParams;
 import com.group4.swissrouteapi.dtos.responses.ErrorResponse;
-import com.group4.swissrouteapi.dtos.responses.StationsResponse;
+import com.group4.swissrouteapi.dtos.responses.stations.StationsResponse;
 import com.group4.swissrouteapi.services.StationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

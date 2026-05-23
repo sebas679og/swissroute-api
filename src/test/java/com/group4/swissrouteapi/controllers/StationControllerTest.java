@@ -11,7 +11,7 @@ import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.config.JwtKeyProvider;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.dtos.requests.LoginRequest;
-import com.group4.swissrouteapi.dtos.responses.LoginResponse;
+import com.group4.swissrouteapi.dtos.responses.auth.LoginResponse;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.repositories.UserRepository;
 import com.group4.swissrouteapi.services.AuthService;

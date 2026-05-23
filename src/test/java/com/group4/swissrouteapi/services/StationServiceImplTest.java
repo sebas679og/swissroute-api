@@ -7,8 +7,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.group4.swissrouteapi.dtos.requests.StationsQueryParams;
-import com.group4.swissrouteapi.dtos.responses.Station;
-import com.group4.swissrouteapi.dtos.responses.StationsResponse;
+import com.group4.swissrouteapi.dtos.responses.stations.Station;
+import com.group4.swissrouteapi.dtos.responses.stations.StationsResponse;
 import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.integrations.TransportClient;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiCoordinate;

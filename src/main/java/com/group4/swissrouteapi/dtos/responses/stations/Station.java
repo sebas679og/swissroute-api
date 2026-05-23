@@ -1,4 +1,4 @@
-package com.group4.swissrouteapi.dtos.responses;
+package com.group4.swissrouteapi.dtos.responses.stations;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

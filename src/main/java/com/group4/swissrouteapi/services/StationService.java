@@ -1,7 +1,7 @@
 package com.group4.swissrouteapi.services;
 
 import com.group4.swissrouteapi.dtos.requests.StationsQueryParams;
-import com.group4.swissrouteapi.dtos.responses.StationsResponse;
+import com.group4.swissrouteapi.dtos.responses.stations.StationsResponse;
 
 /**
  * StationService
