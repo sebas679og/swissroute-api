@@ -77,6 +77,26 @@ public class ApiTransportsConnectionsStub {
   }
 
   /**
+   * Stubs a connections response filtered by time.
+   *
+   * @param from origin station name
+   * @param to destination station name
+   * @param time date of travel (ISO format)
+   */
+  public void stubConnectionsByTime(String from, String to, String time) {
+    wireMock.stubFor(
+        get(urlPathEqualTo(ApiPaths.TransportApi.CONNECTIONS))
+            .withQueryParam("from", equalTo(from))
+            .withQueryParam("to", equalTo(to))
+            .withQueryParam("time", equalTo(time))
+            .willReturn(
+                aResponse()
+                    .withStatus(HttpStatus.OK.value())
+                    .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .withBodyFile("api-transports/connections/connections-by-datetime.json")));
+  }
+
+  /**
    * Stubs a connections response filtered by date and time.
    *
    * @param from origin station name
