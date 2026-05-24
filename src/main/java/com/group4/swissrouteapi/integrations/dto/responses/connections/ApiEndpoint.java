@@ -9,7 +9,7 @@ import java.time.OffsetDateTime;
  * departure times, delay, platform, prognosis, real-time availability, and location data.
  */
 public record ApiEndpoint(
-    ApiStation station,
+    ApiStationConnection station,
     OffsetDateTime arrival,
     Long arrivalTimestamp,
     OffsetDateTime departure,
@@ -18,4 +18,4 @@ public record ApiEndpoint(
     String platform,
     ApiPrognosis prognosis,
     Object realtimeAvailability,
-    ApiStation location) {}
+    ApiStationConnection location) {}

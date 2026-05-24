@@ -9,4 +9,7 @@ import java.util.List;
  * ApiConnection}, origin and destination stations, and related station metadata.
  */
 public record ApiConnectionsResponse(
-    List<ApiConnection> connections, ApiStation from, ApiStation to, ApiStations stations) {}
+    List<ApiConnection> connections,
+    ApiStationConnection from,
+    ApiStationConnection to,
+    ApiStations stations) {}

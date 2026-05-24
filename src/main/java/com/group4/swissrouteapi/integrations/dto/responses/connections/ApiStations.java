@@ -6,6 +6,6 @@ import java.util.List;
  * ApiStations
  *
  * <p>Record representing station lists from the transport API. Holds origin stations ({@link
- * ApiStation} from) and destination stations ({@link ApiStation} to).
+ * ApiStationConnection} from) and destination stations ({@link ApiStationConnection} to).
  */
-public record ApiStations(List<ApiStation> from, List<ApiStation> to) {}
+public record ApiStations(List<ApiStationConnection> from, List<ApiStationConnection> to) {}

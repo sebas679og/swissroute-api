@@ -7,13 +7,27 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.exceptions.BadGatewayException;
 import com.group4.swissrouteapi.exceptions.ServiceUnavailableException;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnection;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnectionsResponse;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiCoordinateConnection;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiEndpoint;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiJourney;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiPrognosis;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiSection;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStationConnection;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStations;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiCoordinate;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiStation;
+import com.group4.swissrouteapi.utils.enums.TransportationType;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +57,10 @@ class TransportClientImplTest {
 
   private MockWebServer mockWebServer;
   private TransportClientImpl transportClient;
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper =
+      new ObjectMapper()
+          .registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule())
+          .disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
   @BeforeEach
   void setUp() throws Exception {
@@ -76,6 +93,73 @@ class TransportClientImplTest {
                     120,
                     "train")));
     return objectMapper.writeValueAsString(response);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Helper — builds a minimal but complete ApiConnectionsResponse JSON string
+  // ---------------------------------------------------------------------------
+
+  private String buildConnectionsResponse() throws Exception {
+    ApiCoordinateConnection coordinate = new ApiCoordinateConnection("Point", 7.5886, 47.5596);
+
+    ApiStationConnection fromStation =
+        new ApiStationConnection("8503000", "Basel SBB", 1.0, coordinate, 34);
+    ApiStationConnection toStation =
+        new ApiStationConnection("8507000", "Bern", 1.0, coordinate, 21);
+
+    ApiPrognosis prognosis = new ApiPrognosis(null, null, null, null, null);
+
+    ApiEndpoint departure =
+        new ApiEndpoint(
+            fromStation,
+            OffsetDateTime.parse("2024-10-10T08:00:00+02:00"),
+            1728547200L,
+            OffsetDateTime.parse("2024-10-10T08:00:00+02:00"),
+            1728547200L,
+            0,
+            "3",
+            prognosis,
+            null,
+            fromStation);
+
+    ApiConnection connection = getApiConnection(toStation, prognosis, departure);
+
+    ApiStations stations = new ApiStations(List.of(fromStation), List.of(toStation));
+
+    ApiConnectionsResponse response =
+        new ApiConnectionsResponse(List.of(connection), fromStation, toStation, stations);
+
+    return objectMapper.writeValueAsString(response);
+  }
+
+  private static @NonNull ApiConnection getApiConnection(
+      ApiStationConnection toStation, ApiPrognosis prognosis, ApiEndpoint departure) {
+    ApiEndpoint arrival =
+        new ApiEndpoint(
+            toStation,
+            OffsetDateTime.parse("2024-10-10T08:57:00+02:00"),
+            1728550620L,
+            OffsetDateTime.parse("2024-10-10T08:57:00+02:00"),
+            1728550620L,
+            0,
+            "7",
+            prognosis,
+            null,
+            toStation);
+
+    return getApiConnection(departure, arrival);
+  }
+
+  private static @NonNull ApiConnection getApiConnection(
+      ApiEndpoint departure, ApiEndpoint arrival) {
+    ApiJourney journey =
+        new ApiJourney(
+            "IC 1", "IC", null, "1", "1", "SBB", "Bern", List.of(departure, arrival), 2, 3);
+
+    ApiSection section = new ApiSection(journey, null, departure, arrival);
+
+    return new ApiConnection(
+        departure, arrival, "00d00:57:00", 0, null, List.of("IC"), 2, 3, List.of(section));
   }
 
   private MockResponse jsonResponse(int status, String body) {
@@ -271,6 +355,181 @@ class TransportClientImplTest {
       ApiLocationsResponse result = transportClient.getLocationsByCoordinates(LATITUDE, LONGITUDE);
 
       assertThat(result.stations()).isEmpty();
+    }
+  }
+
+  // ===========================================================================
+  // getConnections
+  // ===========================================================================
+
+  @Nested
+  @DisplayName("getConnections() - successful response")
+  class GetConnectionsSuccessfulResponseTest {
+    private static final String FROM = "Basel";
+    private static final String TO = "Bern";
+
+    @Test
+    @DisplayName("should return a deserialized ApiConnectionsResponse")
+    void shouldReturnDeserializedResponse() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      ApiConnectionsResponse result =
+          transportClient.getConnections(FROM, TO, null, null, List.of());
+
+      assertThat(result).isNotNull();
+      assertThat(result.connections()).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("should deserialize the from station of the response")
+    void shouldDeserializeFromStation() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      ApiConnectionsResponse result =
+          transportClient.getConnections(FROM, TO, null, null, List.of());
+
+      assertThat(result.from()).isNotNull();
+      assertThat(result.from().id()).isEqualTo("8503000");
+      assertThat(result.from().name()).isEqualTo("Basel SBB");
+    }
+
+    @Test
+    @DisplayName("should deserialize the to station of the response")
+    void shouldDeserializeToStation() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      ApiConnectionsResponse result =
+          transportClient.getConnections(FROM, TO, null, null, List.of());
+
+      assertThat(result.to()).isNotNull();
+      assertThat(result.to().id()).isEqualTo("8507000");
+      assertThat(result.to().name()).isEqualTo("Bern");
+    }
+
+    @Test
+    @DisplayName("should deserialize connection duration and transfers")
+    void shouldDeserializeConnectionDurationAndTransfers() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      ApiConnectionsResponse result =
+          transportClient.getConnections(FROM, TO, null, null, List.of());
+
+      ApiConnection connection = result.connections().getFirst();
+      assertThat(connection.duration()).isEqualTo("00d00:57:00");
+      assertThat(connection.transfers()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("should deserialize connection sections")
+    void shouldDeserializeConnectionSections() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      ApiConnectionsResponse result =
+          transportClient.getConnections(FROM, TO, null, null, List.of());
+
+      assertThat(result.connections().getFirst().sections()).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("should send 'from' and 'to' as query parameters")
+    void shouldSendFromAndToAsQueryParams() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(FROM, TO, null, null, List.of());
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).contains("from=" + FROM).contains("to=" + TO);
+    }
+
+    @Test
+    @DisplayName("should send a GET request to the connections path")
+    void shouldSendGetRequestToConnectionsPath() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(FROM, TO, null, null, List.of());
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getMethod()).isEqualTo("GET");
+      assertThat(recorded.getPath()).contains(ApiPaths.TransportApi.CONNECTIONS);
+    }
+
+    @Test
+    @DisplayName("should include date param when date is provided")
+    void shouldIncludeDateParamWhenProvided() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(FROM, TO, LocalDate.of(2024, 10, 10), null, List.of());
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).contains("date=2024-10-10");
+    }
+
+    @Test
+    @DisplayName("should not include date param when date is null")
+    void shouldNotIncludeDateParamWhenNull() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(FROM, TO, null, null, List.of());
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).doesNotContain("date=");
+    }
+
+    @Test
+    @DisplayName("should include time param when time is provided")
+    void shouldIncludeTimeParamWhenProvided() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(FROM, TO, null, LocalTime.of(8, 0), List.of());
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).contains("time=08:00");
+    }
+
+    @Test
+    @DisplayName("should not include time param when time is null")
+    void shouldNotIncludeTimeParamWhenNull() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(FROM, TO, null, null, List.of());
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).doesNotContain("time=");
+    }
+
+    @Test
+    @DisplayName("should include transportation types when provided")
+    void shouldIncludeTransportationTypesWhenProvided() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(
+          FROM, TO, null, null, List.of(TransportationType.TRAIN, TransportationType.BUS));
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      String path = recorded.getPath();
+      assertThat(path).contains("train").contains("bus");
+    }
+
+    @Test
+    @DisplayName("should not include transportations param when list is empty")
+    void shouldNotIncludeTransportationsWhenListIsEmpty() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(FROM, TO, null, null, List.of());
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).doesNotContain("transportations");
+    }
+
+    @Test
+    @DisplayName("should not include transportations param when list is null")
+    void shouldNotIncludeTransportationsWhenListIsNull() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(FROM, TO, null, null, null);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).doesNotContain("transportations");
     }
   }
 
