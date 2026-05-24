@@ -2,8 +2,11 @@ package com.group4.swissrouteapi.exceptions;
 
 import com.group4.swissrouteapi.dtos.responses.ErrorResponse;
 import java.util.stream.Collectors;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,34 +33,43 @@ public class GlobalExceptionHandler {
     return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage());
   }
 
-  /**
-   * Handles validation errors thrown when request parameters fail to meet defined constraints.
-   *
-   * <p>Extracts error messages from the {@link MethodArgumentNotValidException}, normalizes
-   * whitespace, and formats field-specific errors as {@code field: message}. Concatenates all
-   * messages into a single descriptive string separated by semicolons.
-   *
-   * <p>Returns a {@link ResponseEntity} with an {@link ErrorResponse} body and {@code BAD_REQUEST}
-   * (HTTP 400) status.
-   *
-   * @param ex the exception containing validation errors
-   * @return a response entity with error details and HTTP 400 status
-   */
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorResponse> customMethodArgumentNotValidException(
+  public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(
       MethodArgumentNotValidException ex) {
+    return handleBindingErrors(ex.getBindingResult());
+  }
+
+  @ExceptionHandler(BindException.class)
+  public ResponseEntity<ErrorResponse> handleBindException(BindException ex) {
+    return handleBindingErrors(ex.getBindingResult());
+  }
+
+  private ResponseEntity<ErrorResponse> handleBindingErrors(BindingResult bindingResult) {
     String description =
-        ex.getBindingResult().getAllErrors().stream()
+        bindingResult.getAllErrors().stream()
             .map(
                 error -> {
-                  String message = error.getDefaultMessage();
-                  if (message != null) {
-                    message = message.replaceAll("\\s+", " ").trim();
-                  }
                   if (error instanceof FieldError fieldError) {
-                    return fieldError.getField() + ": " + message;
+                    String field = fieldError.getField();
+                    Object rejectedValue = fieldError.getRejectedValue();
+
+                    if (fieldError.contains(TypeMismatchException.class)) {
+                      TypeMismatchException typeMismatch =
+                          fieldError.unwrap(TypeMismatchException.class);
+                      Throwable cause = typeMismatch.getCause();
+                      if (cause instanceof IllegalArgumentException) {
+                        return cause.getMessage();
+                      }
+                      return "Field '%s': invalid value '%s'".formatted(field, rejectedValue);
+                    }
+
+                    String message = fieldError.getDefaultMessage();
+                    if (message != null) {
+                      message = message.replaceAll("\\s+", " ").trim();
+                    }
+                    return field + ": " + (message != null ? message : "invalid value");
                   }
-                  return message;
+                  return error.getDefaultMessage();
                 })
             .filter(msg -> msg != null && !msg.isBlank())
             .collect(Collectors.joining("; "));

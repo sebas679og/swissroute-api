@@ -6,7 +6,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import com.group4.swissrouteapi.config.constants.ApiPaths;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 /**
@@ -19,11 +21,11 @@ import org.springframework.http.MediaType;
  * during integration testing, including successful queries, not found results, and error responses
  * (4xx and 5xx).
  */
-public class ApiTransportsStub {
+public class ApiTransportsLocationsStub {
 
   private final WireMockExtension wireMock;
 
-  public ApiTransportsStub(WireMockExtension wireMock) {
+  public ApiTransportsLocationsStub(WireMockExtension wireMock) {
     this.wireMock = wireMock;
   }
 
@@ -35,11 +37,11 @@ public class ApiTransportsStub {
    */
   public void stubLocationsByQuery(String query) {
     wireMock.stubFor(
-        get(urlPathEqualTo("/locations"))
+        get(urlPathEqualTo(ApiPaths.TransportApi.LOCATIONS))
             .withQueryParam("query", equalTo(query))
             .willReturn(
                 aResponse()
-                    .withStatus(200)
+                    .withStatus(HttpStatus.OK.value())
                     .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBodyFile("api-transports/locations/locations-by-query.json")));
   }
@@ -53,12 +55,12 @@ public class ApiTransportsStub {
    */
   public void stubLocationsByCoordinates(Double latitude, Double longitude) {
     wireMock.stubFor(
-        get(urlPathEqualTo("/locations"))
+        get(urlPathEqualTo(ApiPaths.TransportApi.LOCATIONS))
             .withQueryParam("x", equalTo(latitude.toString()))
             .withQueryParam("y", equalTo(longitude.toString()))
             .willReturn(
                 aResponse()
-                    .withStatus(200)
+                    .withStatus(HttpStatus.OK.value())
                     .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBodyFile("api-transports/locations/locations-by-coordinates.json")));
   }
@@ -71,11 +73,11 @@ public class ApiTransportsStub {
    */
   public void stubLocationsByQueryNotFound(String query) {
     wireMock.stubFor(
-        get(urlPathEqualTo("/locations"))
+        get(urlPathEqualTo(ApiPaths.TransportApi.LOCATIONS))
             .withQueryParam("query", equalTo(query))
             .willReturn(
                 aResponse()
-                    .withStatus(200)
+                    .withStatus(HttpStatus.OK.value())
                     .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBodyFile("api-transports/locations/locations-by-query-not-found.json")));
   }
@@ -87,11 +89,11 @@ public class ApiTransportsStub {
    */
   public void stubLocationResponse4xx(String query) {
     wireMock.stubFor(
-        get(urlPathEqualTo("/locations"))
+        get(urlPathEqualTo(ApiPaths.TransportApi.LOCATIONS))
             .withQueryParam("query", equalTo(query))
             .willReturn(
                 aResponse()
-                    .withStatus(423)
+                    .withStatus(HttpStatus.BAD_REQUEST.value())
                     .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBody("")));
   }
@@ -103,11 +105,11 @@ public class ApiTransportsStub {
    */
   public void stubLocationResponse5xx(String query) {
     wireMock.stubFor(
-        get(urlPathEqualTo("/locations"))
+        get(urlPathEqualTo(ApiPaths.TransportApi.LOCATIONS))
             .withQueryParam("query", equalTo(query))
             .willReturn(
                 aResponse()
-                    .withStatus(504)
+                    .withStatus(HttpStatus.GATEWAY_TIMEOUT.value())
                     .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBody("")));
   }

@@ -3,7 +3,15 @@ package com.group4.swissrouteapi.integrations;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.exceptions.BadGatewayException;
 import com.group4.swissrouteapi.exceptions.ServiceUnavailableException;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnectionsResponse;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
+import com.group4.swissrouteapi.utils.enums.TransportationType;
+import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
@@ -64,6 +72,46 @@ public class TransportClientImpl implements TransportClient {
         request,
         ApiLocationsResponse.class,
         String.join("", ApiPaths.TransportApi.LOCATIONS, "?x=", latitude + "&y=" + longitude));
+  }
+
+  @Override
+  public ApiConnectionsResponse getConnections(
+      String from,
+      String to,
+      LocalDate date,
+      LocalTime time,
+      List<TransportationType> transportationType) {
+    final AtomicReference<URI> uriTracker = new AtomicReference<>();
+
+    WebClient.RequestHeadersSpec<?> request =
+        transportWebClient
+            .get()
+            .uri(
+                uriBuilder -> {
+                  uriBuilder.path(ApiPaths.TransportApi.CONNECTIONS);
+                  uriBuilder.queryParam("from", from);
+                  uriBuilder.queryParam("to", to);
+                  if (date != null) {
+                    uriBuilder.queryParam("date", date.toString());
+                  }
+                  if (time != null) {
+                    uriBuilder.queryParam("time", time.toString());
+                  }
+                  if (transportationType != null && !transportationType.isEmpty()) {
+                    Object[] types =
+                        transportationType.stream()
+                            .map(type -> type.name().toLowerCase(Locale.ROOT))
+                            .toArray();
+                    uriBuilder.queryParam("transportations[]", types);
+                  }
+                  URI builtUri = uriBuilder.build();
+                  uriTracker.set(builtUri);
+                  return builtUri;
+                });
+
+    String fullUrlPath =
+        uriTracker.get() != null ? uriTracker.get().toString() : ApiPaths.TransportApi.CONNECTIONS;
+    return executeRequest(request, ApiConnectionsResponse.class, fullUrlPath);
   }
 
   private <T> T executeRequest(

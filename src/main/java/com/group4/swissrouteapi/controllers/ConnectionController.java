@@ -1,11 +1,14 @@
 package com.group4.swissrouteapi.controllers;
 
 import com.group4.swissrouteapi.config.constants.ApiPaths;
-import com.group4.swissrouteapi.dtos.requests.StationsQueryParams;
+import com.group4.swissrouteapi.dtos.requests.ConnectionsQueryParams;
 import com.group4.swissrouteapi.dtos.responses.ErrorResponse;
-import com.group4.swissrouteapi.dtos.responses.stations.StationsResponse;
-import com.group4.swissrouteapi.services.StationService;
+import com.group4.swissrouteapi.dtos.responses.connections.ConnectionsResponse;
+import com.group4.swissrouteapi.services.ConnectionsService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.Explode;
+import io.swagger.v3.oas.annotations.enums.ParameterStyle;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,42 +27,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * StationController
+ * ConnectionController
  *
- * <p>REST controller responsible for handling HTTP requests related to transport stations.
- *
- * <p>Exposes endpoints for retrieving station data based on query parameters. Delegates business
- * logic to the {@link StationService}.
- *
- * <p>Annotated with {@link org.springframework.web.bind.annotation.RestController} to mark it as a
- * Spring MVC controller, {@link org.springframework.web.bind.annotation.RequestMapping} for request
- * mapping configuration, and {@link lombok.RequiredArgsConstructor} to enable constructor-based
- * dependency injection.
+ * <p>REST controller for handling transport connection requests. Exposes an endpoint to search for
+ * connections between stations based on query parameters.
  */
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
 @Tag(
-    name = "Stations",
+    name = "Connections",
     description =
-        "Endpoints related to transport stations, allowing clients to retrieve "
-            + "information about stations based on query parameters.")
-public class StationController {
+        "Endpoints related to transport connections, allowing clients to search for "
+            + "connections between stations based on query parameters.")
+public class ConnectionController {
 
-  private final StationService stationService;
+  private final ConnectionsService connectionsService;
 
   @Operation(
-      summary = "Get stations by name",
-      description = "Endpoint responsible for obtaining stations by their name.",
+      summary = "Get connections between stations",
+      description = "Endpoint responsible for obtaining connections between stations.",
       security = {@SecurityRequirement(name = "BearerAuth")})
   @ApiResponses({
     @ApiResponse(
         responseCode = "200",
-        description = "Successful response - List of stations matching the query parameters",
+        description = "Successful response - List of connections matching the query parameters",
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = StationsResponse.class))),
+                schema = @Schema(implementation = ConnectionsResponse.class))),
     @ApiResponse(
         responseCode = "400",
         description = "Validation error - Invalid input fields",
@@ -97,9 +93,22 @@ public class StationController {
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
                 schema = @Schema(implementation = ErrorResponse.class))),
   })
-  @GetMapping(ApiPaths.Station.STATIONS)
-  public ResponseEntity<StationsResponse> getStations(
-      @ParameterObject @Valid @ModelAttribute StationsQueryParams queryParams) {
-    return ResponseEntity.status(HttpStatus.OK).body(stationService.getStations(queryParams));
+  @GetMapping(ApiPaths.Connection.CONNECTIONS)
+  public ResponseEntity<ConnectionsResponse> getConnections(
+      @ParameterObject
+          @Parameter(
+              name = "transportations",
+              description = "List of transportation types to filter results",
+              explode = Explode.TRUE,
+              style = ParameterStyle.FORM,
+              schema =
+                  @Schema(
+                      type = "array",
+                      allowableValues = {"train", "tram", "ship", "bus", "cableway"}))
+          @Valid
+          @ModelAttribute
+          ConnectionsQueryParams queryParams) {
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(connectionsService.getConnections(queryParams));
   }
 }

@@ -1,13 +1,14 @@
-package com.group4.swissrouteapi.services;
+package com.group4.swissrouteapi.services.impl;
 
 import com.group4.swissrouteapi.config.properties.JwtProperties;
 import com.group4.swissrouteapi.dtos.requests.LoginRequest;
 import com.group4.swissrouteapi.dtos.requests.RegisterRequest;
-import com.group4.swissrouteapi.dtos.responses.LoginResponse;
-import com.group4.swissrouteapi.dtos.responses.RegisterResponse;
+import com.group4.swissrouteapi.dtos.responses.auth.LoginResponse;
+import com.group4.swissrouteapi.dtos.responses.auth.RegisterResponse;
 import com.group4.swissrouteapi.exceptions.ResourceConflictException;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.repositories.UserRepository;
+import com.group4.swissrouteapi.services.AuthService;
 import com.group4.swissrouteapi.services.components.JwtComponent;
 import com.group4.swissrouteapi.services.processors.UserLoginProcessor;
 import com.group4.swissrouteapi.services.processors.UserRegistrationProcessor;

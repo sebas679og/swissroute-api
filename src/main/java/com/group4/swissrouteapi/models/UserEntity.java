@@ -62,12 +62,15 @@ public class UserEntity {
       columnDefinition = "TIMESTAMP WITH TIME ZONE")
   private Instant createdAt;
 
+  @Builder.Default
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<FavoriteRouteEntity> favoriteRoutes = new ArrayList<>();
 
+  @Builder.Default
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<SearchHistoryEntity> searchHistory = new ArrayList<>();
 
+  @Builder.Default
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<FavoriteStationEntity> favoriteStations = new ArrayList<>();
 

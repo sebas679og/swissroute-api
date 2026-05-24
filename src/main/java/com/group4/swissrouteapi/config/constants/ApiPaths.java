@@ -39,6 +39,23 @@ public final class ApiPaths {
   }
 
   /**
+   * Connection
+   *
+   * <p>Utility class holding API path constants related to transport connections.
+   *
+   * <p>Provides:
+   *
+   * <ul>
+   *   <li>{@link #CONNECTIONS} → Base path for connections endpoint ({@code /api/connections}).
+   * </ul>
+   *
+   * <p>Declared as {@code static final} to group constants in a type-safe manner.
+   */
+  public static final class Connection {
+    public static final String CONNECTIONS = "/api/connections";
+  }
+
+  /**
    * Docs
    *
    * <p>Defines API paths related to documentation endpoints.
@@ -60,5 +77,6 @@ public final class ApiPaths {
    */
   public static final class TransportApi {
     public static final String LOCATIONS = "/locations";
+    public static final String CONNECTIONS = "/connections";
   }
 }

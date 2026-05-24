@@ -1,0 +1,15 @@
+package com.group4.swissrouteapi.integrations.dto.responses.connections;
+
+import java.util.List;
+
+/**
+ * ApiConnectionsResponse
+ *
+ * <p>Record representing a transport API response for station connections. Holds the list of {@link
+ * ApiConnection}, origin and destination stations, and related station metadata.
+ */
+public record ApiConnectionsResponse(
+    List<ApiConnection> connections,
+    ApiStationConnection from,
+    ApiStationConnection to,
+    ApiStations stations) {}

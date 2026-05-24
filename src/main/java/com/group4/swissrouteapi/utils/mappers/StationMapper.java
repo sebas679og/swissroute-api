@@ -1,6 +1,6 @@
 package com.group4.swissrouteapi.utils.mappers;
 
-import com.group4.swissrouteapi.dtos.responses.Station;
+import com.group4.swissrouteapi.dtos.responses.stations.Station;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiStation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

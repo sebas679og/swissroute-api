@@ -1,4 +1,4 @@
-package com.group4.swissrouteapi.services;
+package com.group4.swissrouteapi.services.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -12,8 +12,8 @@ import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.config.properties.JwtProperties;
 import com.group4.swissrouteapi.dtos.requests.LoginRequest;
 import com.group4.swissrouteapi.dtos.requests.RegisterRequest;
-import com.group4.swissrouteapi.dtos.responses.LoginResponse;
-import com.group4.swissrouteapi.dtos.responses.RegisterResponse;
+import com.group4.swissrouteapi.dtos.responses.auth.LoginResponse;
+import com.group4.swissrouteapi.dtos.responses.auth.RegisterResponse;
 import com.group4.swissrouteapi.exceptions.ResourceConflictException;
 import com.group4.swissrouteapi.exceptions.UnauthorizedException;
 import com.group4.swissrouteapi.models.UserEntity;

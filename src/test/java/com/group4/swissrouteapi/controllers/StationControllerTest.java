@@ -11,7 +11,7 @@ import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.config.JwtKeyProvider;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.dtos.requests.LoginRequest;
-import com.group4.swissrouteapi.dtos.responses.LoginResponse;
+import com.group4.swissrouteapi.dtos.responses.auth.LoginResponse;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.repositories.UserRepository;
 import com.group4.swissrouteapi.services.AuthService;
@@ -91,7 +91,7 @@ class StationControllerTest extends AbstractIntegrationTest {
 
       @Test
       void shouldReturnStationsWhenSearchingByName() throws Exception {
-        transportsStub.stubLocationsByQuery("Basel");
+        transportsStubLocations.stubLocationsByQuery("Basel");
         mockMvc
             .perform(
                 get(ApiPaths.Station.STATIONS)
@@ -104,7 +104,7 @@ class StationControllerTest extends AbstractIntegrationTest {
 
       @Test
       void shouldReturnEmptyListWhenStationNotFound() throws Exception {
-        transportsStub.stubLocationsByQueryNotFound("sagmade");
+        transportsStubLocations.stubLocationsByQueryNotFound("sagmade");
         mockMvc
             .perform(
                 get(ApiPaths.Station.STATIONS)
@@ -128,7 +128,7 @@ class StationControllerTest extends AbstractIntegrationTest {
 
       @Test
       void shouldReturnStationsWhenSearchingByCoordinates() throws Exception {
-        transportsStub.stubLocationsByCoordinates(LATITUDE, LONGITUDE);
+        transportsStubLocations.stubLocationsByCoordinates(LATITUDE, LONGITUDE);
         mockMvc
             .perform(
                 get(ApiPaths.Station.STATIONS)
@@ -166,7 +166,7 @@ class StationControllerTest extends AbstractIntegrationTest {
 
       @Test
       void shouldThrowBadGatewayExceptionWhenApiReturns4xxClientError() throws Exception {
-        transportsStub.stubLocationResponse4xx("Basel");
+        transportsStubLocations.stubLocationResponse4xx("Basel");
         mockMvc
             .perform(
                 get(ApiPaths.Station.STATIONS)
@@ -181,7 +181,7 @@ class StationControllerTest extends AbstractIntegrationTest {
 
       @Test
       void shouldThrowServiceUnavailableExceptionWhenApiReturns5xxServerError() throws Exception {
-        transportsStub.stubLocationResponse5xx("Basel");
+        transportsStubLocations.stubLocationResponse5xx("Basel");
         mockMvc
             .perform(
                 get(ApiPaths.Station.STATIONS)

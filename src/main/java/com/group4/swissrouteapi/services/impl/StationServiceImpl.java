@@ -1,11 +1,12 @@
-package com.group4.swissrouteapi.services;
+package com.group4.swissrouteapi.services.impl;
 
 import com.group4.swissrouteapi.dtos.requests.StationsQueryParams;
-import com.group4.swissrouteapi.dtos.responses.StationsResponse;
+import com.group4.swissrouteapi.dtos.responses.stations.StationsResponse;
 import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.integrations.TransportClient;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiStation;
+import com.group4.swissrouteapi.services.StationService;
 import com.group4.swissrouteapi.utils.mappers.StationMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
