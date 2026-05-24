@@ -1,6 +1,7 @@
 package com.group4.swissrouteapi.dtos.requests;
 
 import com.group4.swissrouteapi.utils.enums.TransportationType;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -57,9 +58,12 @@ public class ConnectionsQueryParams {
   @Schema(description = "Time for the connection search", example = "08:00")
   private LocalTime time;
 
-  @Schema(description = "List of transportation types to filter results")
+  @ArraySchema(
+      schema =
+          @Schema(
+              type = "string",
+              allowableValues = {"train", "tram", "ship", "bus", "cableway"}),
+      arraySchema = @Schema(example = "[\"train\", \"bus\"]"))
   @Builder.Default
   private List<TransportationType> transportations = new ArrayList<>();
-
-  ;
 }
