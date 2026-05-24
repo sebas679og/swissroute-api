@@ -14,6 +14,8 @@
   - [Login User](#login-user)
 - [Stations Service](#stations-service)
   - [Search Stations](#search-stations)
+- [Connections Service](#connections-service)
+  - [Search Connections](#search-connections)
 
 ---
 
@@ -683,4 +685,308 @@ Occurs when the external Transport API is unavailable or temporarily unreachable
 * Authentication is mandatory for accessing station search functionality.
 * Results may include stations, stops, terminals, and transport hubs.
 * Distance values are returned only when searching by coordinates.
+* Timestamps are returned in ISO-8601 UTC format.
+
+## Connections Service
+
+### Search Connections
+
+Returns available public transport connections between two stations.
+
+### Endpoint
+
+```http
+GET /api/connections
+```
+
+### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+### Authorization
+
+The endpoint requires a valid JWT token in the request header.
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+### Query Parameters
+
+| Parameter         | Type   | Required | Description                        |
+|-------------------|--------|----------|------------------------------------|
+| `from`            | String | Yes      | Origin station name                |
+| `to`              | String | Yes      | Destination station name           |
+| `date`            | String | No       | Travel date in `yyyy-MM-dd` format |
+| `time`            | String | No       | Travel time in `HH:mm` format      |
+| `transportations` | Enum[] | No       | Transport types filter             |
+
+---
+
+### Supported Transportation Types
+
+The `transportations` parameter supports multiple values.
+
+Allowed values:
+
+* `TRAIN`
+* `TRAM`
+* `SHIP`
+* `BUS`
+* `CABLEWAY`
+
+---
+
+### Example Requests
+
+#### Basic Search
+
+```http
+GET /api/connections?from=Lausanne&to=Genève
+```
+
+---
+
+#### Search With Date and Time
+
+```http
+GET /api/connections?from=Lausanne&to=Genève&date=2026-05-25&time=21:30
+```
+
+---
+
+#### Search With Transportation Filters
+
+```http
+GET /api/connections?from=Lausanne&to=Genève&transportations=TRAIN,BUS
+```
+
+---
+
+### Successful Response
+
+#### 200 — OK
+
+```json
+{
+  "connections": [
+    {
+      "origin": "Lausanne",
+      "destination": "Genève",
+      "duration": "00d00:54:00",
+      "products": [
+        "RE33"
+      ],
+      "sections": [
+        {
+          "category": "RE",
+          "number": "33",
+          "operator": "SBB",
+          "destination": "Genève-Aéroport",
+          "departureStation": "Lausanne",
+          "departureTime": "2026-05-25T21:30:00Z",
+          "arrivalStation": "Genève",
+          "arrivalTime": "2026-05-25T22:24:00Z",
+          "platform": "7"
+        }
+      ]
+    },
+    {
+      "origin": "Lausanne",
+      "destination": "Genève",
+      "duration": "00d00:49:00",
+      "products": [
+        "IR 95"
+      ],
+      "sections": [
+        {
+          "category": "IR",
+          "number": "95",
+          "operator": "SBB",
+          "destination": "Genève",
+          "departureStation": "Lausanne",
+          "departureTime": "2026-05-25T21:50:00Z",
+          "arrivalStation": "Genève",
+          "arrivalTime": "2026-05-25T22:39:00Z",
+          "platform": "8"
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+### Response Fields
+
+#### Connection Fields
+
+| Field         | Type          | Description               |
+|---------------|---------------|---------------------------|
+| `origin`      | String        | Origin station            |
+| `destination` | String        | Destination station       |
+| `duration`    | String        | Total connection duration |
+| `products`    | Array<String> | Transport products used   |
+| `sections`    | Array<Object> | List of route sections    |
+
+---
+
+#### Section Fields
+
+| Field              | Type     | Description                      |
+|--------------------|----------|----------------------------------|
+| `category`         | String   | Transport category               |
+| `number`           | String   | Route or line number             |
+| `operator`         | String   | Transport operator               |
+| `destination`      | String   | Final destination of the section |
+| `departureStation` | String   | Departure station                |
+| `departureTime`    | DateTime | Departure date and time          |
+| `arrivalStation`   | String   | Arrival station                  |
+| `arrivalTime`      | DateTime | Arrival date and time            |
+| `platform`         | String   | Departure platform               |
+
+---
+
+### Error Responses
+
+#### 400 — Bad Request
+
+Occurs when request parameters are missing or invalid.
+
+##### Missing Required Parameters
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "to: Destination station must not be blank; from: Origin station must not be blank",
+  "timestamp": "2026-05-24T00:22:20.931Z"
+}
+```
+
+---
+
+##### Invalid Date Format
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Field 'date': invalid value '2026-05-25-34'",
+  "timestamp": "2026-05-24T00:22:43.142Z"
+}
+```
+
+---
+
+##### Invalid Time Format
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Field 'time': invalid value '23:18:2321'",
+  "timestamp": "2026-05-24T00:23:31.985Z"
+}
+```
+
+---
+
+##### Invalid Transportation Type
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Field 'transportations': invalid value 'buseta'",
+  "timestamp": "2026-05-24T00:23:56.045Z"
+}
+```
+
+---
+
+#### 401 — Unauthorized
+
+Occurs when the request does not contain a valid JWT token or the token has expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-22T00:33:35.539Z"
+}
+```
+
+---
+
+#### 404 — Not Found
+
+Occurs when no transport connections match the provided parameters.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "No connections found for the given parameters",
+  "timestamp": "2026-05-24T00:24:29.585Z"
+}
+```
+
+---
+
+#### 502 — Bad Gateway
+
+Occurs when the external Transport API rejects the request.
+
+```json id="b2q7pm"
+{
+  "code": 502,
+  "name": "BAD_GATEWAY",
+  "description": "Api Transport rejected the request",
+  "timestamp": "2026-05-22T00:34:33.657Z"
+}
+```
+
+---
+
+#### 503 — Service Unavailable
+
+Occurs when the external Transport API is unavailable or temporarily unreachable.
+
+```json
+{
+  "code": 503,
+  "name": "SERVICE_UNAVAILABLE",
+  "description": "Api Transport is unavailable",
+  "timestamp": "2026-05-22T00:34:33.657Z"
+}
+```
+
+---
+
+### Validation Rules
+
+| Parameter         | Validation                            |
+|-------------------|---------------------------------------|
+| `from`            | Must not be null, empty, or blank     |
+| `to`              | Must not be null, empty, or blank     |
+| `date`            | Must follow `yyyy-MM-dd` format       |
+| `time`            | Must follow `HH:mm` format            |
+| `transportations` | Only allowed enum values are accepted |
+
+---
+
+### Notes
+
+* Authentication is mandatory for accessing this endpoint.
+* The service integrates with the external Swiss Public Transport API.
+* Multiple transportation filters can be provided simultaneously.
+* Date and time parameters are optional and default to current system values if omitted.
+* Connection sections represent each segment of the trip.
 * Timestamps are returned in ISO-8601 UTC format.

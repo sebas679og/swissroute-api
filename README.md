@@ -53,7 +53,7 @@ usuarios
 
 rutas_favoritas
 ├── id             UUID PK
-├── usuario_id     BIGINT FK → usuarios.id
+├── usuario_id     UUID FK → usuarios.id
 ├── nombre         VARCHAR NOT NULL
 ├── origen         VARCHAR NOT NULL
 ├── destino        VARCHAR NOT NULL
@@ -62,7 +62,7 @@ rutas_favoritas
 
 historial_busquedas
 ├── id             UUID PK
-├── usuario_id     BIGINT FK → usuarios.id
+├── usuario_id     UUID FK → usuarios.id
 ├── origen         VARCHAR NOT NULL
 ├── destino        VARCHAR NOT NULL
 ├── fecha_consulta TIMESTAMP NOT NULL
@@ -70,7 +70,7 @@ historial_busquedas
 
 estaciones_favoritas
 ├── id                 UUID PK
-├── usuario_id         BIGINT FK → usuarios.id
+├── usuario_id         UUID FK → usuarios.id
 ├── estacion_id_externo VARCHAR NOT NULL
 ├── nombre_estacion    VARCHAR NOT NULL
 └── created_at         TIMESTAMP DEFAULT NOW()
@@ -156,6 +156,7 @@ http://localhost:8080/v3/api-docs
 | `POST` | `/api/users/register` | Creates a new user account in the SwissRoute platform. |
 | `POST` | `/api/users/login`    | Authenticates a user and returns a JWT token.          |
 | `GET`  | `/api/stations`       | Searches for stations based on a query string.         |
+| `GET`  | `/api/connections`    | Searches for connections between two stations.         |
 
 ---
 
