@@ -7,8 +7,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import com.group4.swissrouteapi.config.constants.ApiPaths;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 /**
@@ -44,12 +46,12 @@ public class ApiTransportsConnectionsStub {
    */
   public void stubConnectionsByFromAndTo(String from, String to) {
     wireMock.stubFor(
-        get(urlPathEqualTo("/connections"))
+        get(urlPathEqualTo(ApiPaths.TransportApi.CONNECTIONS))
             .withQueryParam("from", equalTo(from))
             .withQueryParam("to", equalTo(to))
             .willReturn(
                 aResponse()
-                    .withStatus(200)
+                    .withStatus(HttpStatus.OK.value())
                     .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBodyFile("api-transports/connections/connections-standard.json")));
   }
@@ -63,13 +65,13 @@ public class ApiTransportsConnectionsStub {
    */
   public void stubConnectionsByDate(String from, String to, String date) {
     wireMock.stubFor(
-        get(urlPathEqualTo("/connections"))
+        get(urlPathEqualTo(ApiPaths.TransportApi.CONNECTIONS))
             .withQueryParam("from", equalTo(from))
             .withQueryParam("to", equalTo(to))
             .withQueryParam("date", equalTo(date))
             .willReturn(
                 aResponse()
-                    .withStatus(200)
+                    .withStatus(HttpStatus.OK.value())
                     .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBodyFile("api-transports/connections/connections-by-datetime.json")));
   }
@@ -84,14 +86,14 @@ public class ApiTransportsConnectionsStub {
    */
   public void stubConnectionsByDateAndTime(String from, String to, String date, String time) {
     wireMock.stubFor(
-        get(urlPathEqualTo("/connections"))
+        get(urlPathEqualTo(ApiPaths.TransportApi.CONNECTIONS))
             .withQueryParam("from", equalTo(from))
             .withQueryParam("to", equalTo(to))
             .withQueryParam("date", equalTo(date))
             .withQueryParam("time", equalTo(time))
             .willReturn(
                 aResponse()
-                    .withStatus(200)
+                    .withStatus(HttpStatus.OK.value())
                     .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBodyFile("api-transports/connections/connections-by-datetime.json")));
   }
@@ -108,7 +110,7 @@ public class ApiTransportsConnectionsStub {
   public void stubConnectionsByDateAndTimeAndTransportations(
       String from, String to, String date, String time, String transportation) {
     wireMock.stubFor(
-        get(urlPathEqualTo("/connections"))
+        get(urlPathEqualTo(ApiPaths.TransportApi.CONNECTIONS))
             .withQueryParam("from", equalTo(from))
             .withQueryParam("to", equalTo(to))
             .withQueryParam("date", equalTo(date))
@@ -116,7 +118,7 @@ public class ApiTransportsConnectionsStub {
             .withQueryParam("transportations[]", equalTo(transportation))
             .willReturn(
                 aResponse()
-                    .withStatus(200)
+                    .withStatus(HttpStatus.OK.value())
                     .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBodyFile(
                         "api-transports/connections"
@@ -135,7 +137,7 @@ public class ApiTransportsConnectionsStub {
   public void stubConnectionsByDateAndTimeAndTransportations(
       String from, String to, String date, String time, List<String> transportations) {
     MappingBuilder stub =
-        get(urlPathEqualTo("/connections"))
+        get(urlPathEqualTo(ApiPaths.TransportApi.CONNECTIONS))
             .withQueryParam("from", equalTo(from))
             .withQueryParam("to", equalTo(to))
             .withQueryParam("date", equalTo(date))
@@ -151,7 +153,7 @@ public class ApiTransportsConnectionsStub {
     wireMock.stubFor(
         stub.willReturn(
             aResponse()
-                .withStatus(200)
+                .withStatus(HttpStatus.OK.value())
                 .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .withBodyFile(
                     "api-transports/connections/connections-by-two-transportations.json")));
@@ -165,12 +167,12 @@ public class ApiTransportsConnectionsStub {
    */
   public void stubConnectionsNotFound(String from, String to) {
     wireMock.stubFor(
-        get(urlPathEqualTo("/connections"))
+        get(urlPathEqualTo(ApiPaths.TransportApi.CONNECTIONS))
             .withQueryParam("from", equalTo(from))
             .withQueryParam("to", equalTo(to))
             .willReturn(
                 aResponse()
-                    .withStatus(200)
+                    .withStatus(HttpStatus.OK.value())
                     .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBodyFile("api-transports/connections/connections-not-found.json")));
   }
