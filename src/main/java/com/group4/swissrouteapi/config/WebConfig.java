@@ -2,6 +2,7 @@ package com.group4.swissrouteapi.config;
 
 import com.group4.swissrouteapi.utils.enums.TransportationType;
 import java.util.Arrays;
+import java.util.Locale;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -22,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
         TransportationType.class,
         source -> {
           try {
-            return TransportationType.valueOf(source.toUpperCase());
+            return TransportationType.valueOf(source.toUpperCase(Locale.ROOT));
           } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(
                 "Invalid transport type: '%s'. Valid values: %s"

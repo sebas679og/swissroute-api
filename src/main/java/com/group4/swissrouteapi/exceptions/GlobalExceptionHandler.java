@@ -1,7 +1,6 @@
 package com.group4.swissrouteapi.exceptions;
 
 import com.group4.swissrouteapi.dtos.responses.ErrorResponse;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
@@ -54,16 +53,13 @@ public class GlobalExceptionHandler {
                     String field = fieldError.getField();
                     Object rejectedValue = fieldError.getRejectedValue();
 
-                    Throwable cause =
-                        Optional.of(fieldError.unwrap(TypeMismatchException.class))
-                            .map(Throwable::getCause)
-                            .orElse(null);
-
-                    if (cause instanceof IllegalArgumentException) {
-                      return cause.getMessage();
-                    }
-
-                    if (rejectedValue != null) {
+                    if (fieldError.contains(TypeMismatchException.class)) {
+                      TypeMismatchException typeMismatch =
+                          fieldError.unwrap(TypeMismatchException.class);
+                      Throwable cause = typeMismatch.getCause();
+                      if (cause instanceof IllegalArgumentException) {
+                        return cause.getMessage();
+                      }
                       return "Field '%s': invalid value '%s'".formatted(field, rejectedValue);
                     }
 
