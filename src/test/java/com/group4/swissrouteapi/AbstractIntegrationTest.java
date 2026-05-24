@@ -33,7 +33,8 @@ public class AbstractIntegrationTest {
           .options(wireMockConfig().dynamicPort().usingFilesUnderClasspath("src/test/resources"))
           .build();
 
-  protected ApiTransportsStub transportsStub;
+  protected ApiTransportsLocationsStub transportsStubLocations;
+  protected ApiTransportsConnectionsStub connectionsStub;
 
   @DynamicPropertySource
   static void overrideProperties(DynamicPropertyRegistry registry) {
@@ -42,11 +43,13 @@ public class AbstractIntegrationTest {
 
   @BeforeEach
   void setUpBase() {
-    transportsStub = new ApiTransportsStub(wireMockExtension);
+    transportsStubLocations = new ApiTransportsLocationsStub(wireMockExtension);
+    connectionsStub = new ApiTransportsConnectionsStub(wireMockExtension);
   }
 
   @AfterEach
   void tearDown() {
-    transportsStub.reset();
+    transportsStubLocations.reset();
+    connectionsStub.reset();
   }
 }

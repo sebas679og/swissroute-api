@@ -91,7 +91,7 @@ class StationControllerTest extends AbstractIntegrationTest {
 
       @Test
       void shouldReturnStationsWhenSearchingByName() throws Exception {
-        transportsStub.stubLocationsByQuery("Basel");
+        transportsStubLocations.stubLocationsByQuery("Basel");
         mockMvc
             .perform(
                 get(ApiPaths.Station.STATIONS)
@@ -104,7 +104,7 @@ class StationControllerTest extends AbstractIntegrationTest {
 
       @Test
       void shouldReturnEmptyListWhenStationNotFound() throws Exception {
-        transportsStub.stubLocationsByQueryNotFound("sagmade");
+        transportsStubLocations.stubLocationsByQueryNotFound("sagmade");
         mockMvc
             .perform(
                 get(ApiPaths.Station.STATIONS)
@@ -128,7 +128,7 @@ class StationControllerTest extends AbstractIntegrationTest {
 
       @Test
       void shouldReturnStationsWhenSearchingByCoordinates() throws Exception {
-        transportsStub.stubLocationsByCoordinates(LATITUDE, LONGITUDE);
+        transportsStubLocations.stubLocationsByCoordinates(LATITUDE, LONGITUDE);
         mockMvc
             .perform(
                 get(ApiPaths.Station.STATIONS)
@@ -166,7 +166,7 @@ class StationControllerTest extends AbstractIntegrationTest {
 
       @Test
       void shouldThrowBadGatewayExceptionWhenApiReturns4xxClientError() throws Exception {
-        transportsStub.stubLocationResponse4xx("Basel");
+        transportsStubLocations.stubLocationResponse4xx("Basel");
         mockMvc
             .perform(
                 get(ApiPaths.Station.STATIONS)
@@ -181,7 +181,7 @@ class StationControllerTest extends AbstractIntegrationTest {
 
       @Test
       void shouldThrowServiceUnavailableExceptionWhenApiReturns5xxServerError() throws Exception {
-        transportsStub.stubLocationResponse5xx("Basel");
+        transportsStubLocations.stubLocationResponse5xx("Basel");
         mockMvc
             .perform(
                 get(ApiPaths.Station.STATIONS)

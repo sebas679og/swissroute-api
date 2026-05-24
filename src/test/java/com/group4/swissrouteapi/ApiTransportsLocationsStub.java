@@ -19,11 +19,11 @@ import org.springframework.http.MediaType;
  * during integration testing, including successful queries, not found results, and error responses
  * (4xx and 5xx).
  */
-public class ApiTransportsStub {
+public class ApiTransportsLocationsStub {
 
   private final WireMockExtension wireMock;
 
-  public ApiTransportsStub(WireMockExtension wireMock) {
+  public ApiTransportsLocationsStub(WireMockExtension wireMock) {
     this.wireMock = wireMock;
   }
 
