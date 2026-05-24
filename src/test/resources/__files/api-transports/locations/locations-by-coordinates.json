@@ -1,0 +1,124 @@
+{
+  "stations": [
+    {
+      "id": null,
+      "name": "Hauptbahnhof Zuerich, Zürich",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": null,
+        "y": null
+      },
+      "distance": 11.3755634812835,
+      "icon": null
+    },
+    {
+      "id": "8503000",
+      "name": "Zürich HB",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.377847,
+        "y": 8.540502
+      },
+      "distance": 0,
+      "icon": "train"
+    },
+    {
+      "id": "8587348",
+      "name": "Zürich, Bahnhofplatz/HB",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.377237,
+        "y": 8.539337
+      },
+      "distance": 100,
+      "icon": "tram"
+    },
+    {
+      "id": "8587349",
+      "name": "Zürich, Bahnhofquai/HB",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.377556,
+        "y": 8.541741
+      },
+      "distance": 123,
+      "icon": "bus"
+    },
+    {
+      "id": "8503446",
+      "name": "Zürich Landesmuseum (See)",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.379033,
+        "y": 8.541573
+      },
+      "distance": 161,
+      "icon": "ship"
+    },
+    {
+      "id": "8591067",
+      "name": "Zürich, Bahnhofstrasse/HB",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.376211,
+        "y": 8.539462
+      },
+      "distance": 198,
+      "icon": "tram"
+    },
+    {
+      "id": "8591368",
+      "name": "Zürich, Sihlquai/HB",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.379862,
+        "y": 8.537604
+      },
+      "distance": 291,
+      "icon": "tram"
+    },
+    {
+      "id": "8588078",
+      "name": "Zürich, Central",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.376833,
+        "y": 8.543937
+      },
+      "distance": 307,
+      "icon": "tram"
+    },
+    {
+      "id": "8591262",
+      "name": "Zürich, Löwenplatz",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.375879,
+        "y": 8.537416
+      },
+      "distance": 309,
+      "icon": "tram"
+    },
+    {
+      "id": "8591379",
+      "name": "Zürich, Stampfenbachplatz",
+      "score": null,
+      "coordinate": {
+        "type": "WGS84",
+        "x": 47.380281,
+        "y": 8.542777
+      },
+      "distance": 327,
+      "icon": "tram"
+    }
+  ]
+}

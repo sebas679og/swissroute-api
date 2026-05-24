@@ -1,9 +1,11 @@
 # SwissRoute 🚆
 
-Backend REST API for planning and tracking public transport trips in Switzerland. Built with Java + Spring Boot + 
-PostgreSQL, it acts as a business layer on top of the [Swiss Public Transport API](https://transport.opendata.ch/docs.html), 
-allowing registered users to search connections, save favorite routes and stations, consult station boards, and keep a 
+Backend REST API for planning and tracking public transport trips **within Switzerland**. Built with Java + Spring Boot +
+PostgreSQL, it acts as a business layer on top of the [Swiss Public Transport API](https://transport.opendata.ch/docs.html),
+allowing registered users to search connections, save favorite routes and stations, consult station boards, and keep a
 history of their planned trips.
+
+> **Geographic scope:** SwissRoute is exclusively designed for the Swiss public transport network. All features — connection searches, station lookups, and timetables — rely on the Swiss Public Transport API (`transport.opendata.ch`), which only covers destinations and routes within Switzerland.
 
 ---
 
@@ -12,9 +14,9 @@ history of their planned trips.
 - [Tech Stack](#tech-stack)
 - [Database Model](#database-model)
 - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Environment Configuration](#environment-configuration)
-    - [Running with Docker](#running-with-docker)
+  - [Prerequisites](#prerequisites)
+  - [Environment Configuration](#environment-configuration)
+  - [Running with Docker](#running-with-docker)
 - [API Documentation](#api-documentation)
 - [External API Reference](#external-api-reference)
 - [Running Tests](#running-tests)
@@ -42,16 +44,16 @@ history of their planned trips.
 
 ```
 usuarios
-├── id             UUIDv7 PK
-├── nombre         VARCHAR NOT NULL
+├── id             UUID PK
+├── name         VARCHAR NOT NULL
 ├── email          VARCHAR UNIQUE NOT NULL
 ├── password       VARCHAR NOT NULL
-├── ciudad_base    VARCHAR
+├── base_city    VARCHAR
 └── created_at     TIMESTAMP DEFAULT NOW()
 
 rutas_favoritas
-├── id             UUIDv7 PK
-├── usuario_id     BIGINT FK → usuarios.id
+├── id             UUID PK
+├── usuario_id     UUID FK → usuarios.id
 ├── nombre         VARCHAR NOT NULL
 ├── origen         VARCHAR NOT NULL
 ├── destino        VARCHAR NOT NULL
@@ -59,16 +61,16 @@ rutas_favoritas
 └── created_at     TIMESTAMP DEFAULT NOW()
 
 historial_busquedas
-├── id             UUIDv7 PK
-├── usuario_id     BIGINT FK → usuarios.id
+├── id             UUID PK
+├── usuario_id     UUID FK → usuarios.id
 ├── origen         VARCHAR NOT NULL
 ├── destino        VARCHAR NOT NULL
 ├── fecha_consulta TIMESTAMP NOT NULL
 └── num_resultados INT
 
 estaciones_favoritas
-├── id                 UUIDv7 PK
-├── usuario_id         BIGINT FK → usuarios.id
+├── id                 UUID PK
+├── usuario_id         UUID FK → usuarios.id
 ├── estacion_id_externo VARCHAR NOT NULL
 ├── nombre_estacion    VARCHAR NOT NULL
 └── created_at         TIMESTAMP DEFAULT NOW()
@@ -148,16 +150,22 @@ http://localhost:8080/v3/api-docs
 
 ### Endpoint Summary
 
-| Method   | Path  | Description |
-|----------|-------|-------------|
-| `methos` | `url` | description |
 
+| Method | Path                  | Description                                            |
+|--------|-----------------------|--------------------------------------------------------|
+| `POST` | `/api/users/register` | Creates a new user account in the SwissRoute platform. |
+| `POST` | `/api/users/login`    | Authenticates a user and returns a JWT token.          |
+| `GET`  | `/api/stations`       | Searches for stations based on a query string.         |
+| `GET`  | `/api/connections`    | Searches for connections between two stations.         |
 
 ---
 
 ## External API Reference
 
 SwissRoute integrates with the **Swiss Public Transport API** (`https://transport.opendata.ch/v1`). No API key is required.
+
+> [!IMPORTANT]
+> This API exclusively covers **public transportation within Switzerland**. It does not support routes, stations, or connections outside Swiss territory. All location searches, connection lookups, and station boards are limited to the Swiss public transport network (trains, buses, trams, boats, and cable cars operated within Switzerland).
 
 | Endpoint            | Used by           |
 |---------------------|-------------------|
@@ -186,6 +194,12 @@ Run tests only (skipping linters):
 ./mvnw -B clean verify "-Dspotless.check.skip=true" "-Dcheckstyle.skip=true" "-Dpmd.skip=true"
 ```
 
+Run all integration test with the external Transport API (requires internet connection):
+
+```bash
+./mvnw -B verify "-Dspotless.check.skip=true" "-Dcheckstyle.skip=true" "-Dpmd.skip=true" "-Dtransport.integration.tests=true"
+````
+
 Apply code formatter before pushing:
 
 ```bash
@@ -197,3 +211,7 @@ Apply code formatter before pushing:
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for branch conventions, commit format, linting requirements, and the PR process before opening your first pull request.
+
+## Documentation
+
+The complete documentation of the API can be found at the following location: [doc/SwissRouteApi.md](doc/SwissRouteApi.md)

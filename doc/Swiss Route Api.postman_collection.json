@@ -1,0 +1,213 @@
+{
+  "info": {
+    "_postman_id": "afb773c4-ba22-4556-89f3-287629562f89",
+    "name": "Swiss Route Api",
+    "description": "Backend REST API for planning and tracking public transport trips in Switzerland. Built with Java + Spring Boot + PostgreSQL, it acts as a business layer on top of the [Swiss Public Transport API](https://transport.opendata.ch/docs.html), allowing registered users to search connections, save favorite routes and stations, consult station boards, and keep a history of their planned trips.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "35777093"
+  },
+  "item": [
+    {
+      "name": "Auth Service",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Joe Doe\",\n  \"email\": \"joedoe@email.com\",\n  \"password\": \"Password123!\",\n  \"baseCity\": \"Madrid\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/register",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            },
+            "description": "# 👤 User Registration\n\n## 📌 Endpoint\n\n**POST**  \n`http://localhost:8080/api/users/register`\n\n---\n\n## 📖 Description\n\nRegisters a new user in the **SwissRoute API** platform.\n\nThis endpoint allows public user registration by providing basic account information such as name, email, password, and base city.\n\nFor security purposes:\n\n- Passwords are encrypted using **BCrypt**\n    \n- Passwords must comply with strong security rules before being accepted\n    \n\n---\n\n# 🔐 Access\n\n**Public endpoint**  \nNo authentication required.\n\n---\n\n# 📥 Request\n\n## Request Body (JSON)\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| name | String | ✅ Yes | Full name of the user |\n| email | String | ✅ Yes | Unique email address |\n| password | String | ✅ Yes | User password following security requirements |\n| baseCity | String | ✅ Yes | User's base city |\n\n---\n\n## Password Requirements\n\nThe password must contain:\n\n- Minimum **8 characters**\n    \n- At least:\n    \n    - One uppercase letter\n        \n    - One lowercase letter\n        \n    - One number\n        \n    - One special character\n        \n\n### Example of a valid password\n\n``` text\nPassword123!\n\n ```\n\n---\n\n### Example Request\n\n``` http\nPOST /api/users/register\nContent-Type: application/json\n\n ```\n\n``` json\n{\n  \"name\": \"Joe Doe\",\n  \"email\": \"joedoe@email.com\",\n  \"password\": \"Password123!\",\n  \"baseCity\": \"Madrid\"\n}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 201 Created\n\nThe user was successfully registered.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"name\": \"Joe Doe\",\n    \"email\": \"joedoe@email.com\",\n    \"baseCity\": \"Madrid\",\n    \"createdAt\": \"2026-05-20T00:04:05.836Z\"\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid or missing data.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"email: Email is required; name: Name is required; password: Password is required; baseCity: Base city is required\",\n    \"timestamp\": \"2026-05-20T00:05:24.008Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing required fields\n    \n- Invalid email format\n    \n- Password does not meet security requirements\n    \n- Malformed request body\n    \n\n---\n\n## ⚠️ 409 Conflict\n\nThe email address is already registered.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 409,\n    \"name\": \"CONFLICT\",\n    \"description\": \"Email is already in use.\",\n    \"timestamp\": \"2026-05-20T00:04:38.297Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"joedoe@email.com\",\n  \"password\": \"Password123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/users/login",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "login"
+              ]
+            },
+            "description": "# 🔐 User Login\n\n## 📌 Endpoint\n\n**POST**  \n`/api/users/login`\n\n---\n\n## 📖 Description\n\nAuthenticates a registered user and returns a **JWT access token**.\n\nThis endpoint validates the provided credentials and generates a signed token that can be used to access protected resources within the **SwissRoute API** platform.\n\nThe returned token must be included in the `Authorization` header for authenticated requests.\n\n---\n\n# 🔐 Access\n\n**Public endpoint**  \nNo authentication required.\n\n---\n\n# 📥 Request\n\n## Request Body (JSON)\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| email | String | ✅ Yes | Registered user email |\n| password | String | ✅ Yes | User password |\n\n> ⚠️ All fields are required.  \nNull, empty, or blank values are not allowed. \n  \n\n---\n\n### Example Request\n\n``` http\nPOST /api/users/login\nContent-Type: application/json\n\n ```\n\n``` json\n{\n  \"email\": \"joedoe@email.com\",\n  \"password\": \"Password123!\"\n}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nAuthentication was successful.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNTIxOGNiNC1iYjU3LTRlYTktYjAwMi1mMmU3MzUwNWQwNDEiLCJlbWFpbCI6ImpvZWRvZUBlbWFpbC5jb20iLCJpYXQiOjE3NzkzMjI2OTQsImV4cCI6MTc3OTMyNjI5NH0.GOV38Fwa9xDDNjqsFILinGixmLg2qLYi-_8J_ymTFrc\",\n    \"tokenType\": \"Bearer\",\n    \"expiresIn\": 3600,\n    \"userId\": \"d5218cb4-bb57-4ea9-b002-f2e73505d041\"\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid or missing data.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"password: Password is required; email: Email is required\",\n    \"timestamp\": \"2026-05-21T00:18:38.544Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing required fields\n    \n- Empty or blank values\n    \n- Malformed request body\n    \n- Invalid email format\n    \n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication failed due to invalid credentials.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Invalid credentials\",\n    \"timestamp\": \"2026-05-21T00:19:05.308Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Incorrect email\n    \n- Incorrect password\n    \n- User does not exist\n    \n\n---\n\n💡 **Tip (security level 🔥):**  \nThe JWT token returned by this endpoint contains authenticated user information and is digitally signed to prevent tampering.\n\nProtected endpoints should use the following header format:\n\n``` http\nAuthorization: Bearer {{token}}\n\n ```\n\nThe token expires automatically after the configured expiration time (`expiresIn`)."
+          },
+          "response": []
+        }
+      ],
+      "description": "Registration and access to the platform"
+    },
+    {
+      "name": "Stations",
+      "item": [
+        {
+          "name": "Search for Stations",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/stations?query=Basel&latitude=47.377921&longitude=8.540192",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "stations"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "Basel"
+                },
+                {
+                  "key": "latitude",
+                  "value": "47.377921"
+                },
+                {
+                  "key": "longitude",
+                  "value": "8.540192"
+                }
+              ]
+            },
+            "description": "# 🚉 Search Stations\n\n## 📌 Endpoint\n\n**GET**  \n`/api/stations`\n\n---\n\n## 📖 Description\n\nSearches for train or transport stations using one of the following search methods:\n\n- Station name (`query`)\n    \n- Geographic coordinates (`latitude` + `longitude`)\n    \n\nThe endpoint integrates with the external transport provider and returns nearby or matching stations depending on the search type.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Query Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| query | String | ❌ Conditional | Station name to search |\n| latitude | Double | ❌ Conditional | Latitude coordinate |\n| longitude | Double | ❌ Conditional | Longitude coordinate |\n\n---\n\n## Search Rules\n\n### ✅ Search by Name\n\nUse only:\n\n- `query`\n    \n\nExample:\n\n``` http\nGET /api/stations?query=Basel\n\n ```\n\n---\n\n### ✅ Search by Coordinates\n\nUse both:\n\n- `latitude`\n    \n- `longitude`\n    \n\nExample:\n\n``` http\nGET /api/stations?latitude=47.3769&longitude=8.5417\n\n ```\n\n---\n\n## Validation Rules\n\n### ⚠️ Coordinate Rules\n\n- `latitude` and `longitude` must always be provided together\n    \n- Valid latitude range:\n    \n    - `-90` to `90`\n        \n- Valid longitude range:\n    \n    - `-180` to `180`\n        \n\n---\n\n### ⚠️ Search Constraints\n\nThe following combinations are **not allowed**:\n\n- Providing all parameters together (`query + latitude + longitude`)\n    \n- Sending only one coordinate\n    \n- Sending no search parameters\n    \n\nA request must use:\n\n- Either `query`\n    \n- Or `latitude` + `longitude`\n    \n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nStations were successfully retrieved.\n\n---\n\n### Response Example — Search by Name\n\n``` json\n{\n    \"stations\": [\n        {\n            \"id\": \"8500010\",\n            \"name\": \"Basel SBB\",\n            \"latitude\": 47.547403,\n            \"longitude\": 7.589564\n        },\n        {\n            \"id\": \"8500090\",\n            \"name\": \"Basel Bad Bf\",\n            \"latitude\": 47.567301,\n            \"longitude\": 7.606922\n        }\n    ]\n}\n\n ```\n\n---\n\n### Response Example — Search by Coordinates\n\nWhen searching by coordinates, each station includes the `distance` field.\n\n``` json\n{\n    \"stations\": [\n        {\n            \"id\": null,\n            \"name\": \"Hauptbahnhof Zuerich, Zürich\",\n            \"latitude\": null,\n            \"longitude\": null,\n            \"distance\": 11\n        }\n    ]\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid query parameters.\n\n### Possible Causes\n\n- Missing required search parameters\n    \n- Sending all parameters together\n    \n- Only one coordinate provided\n    \n- Blank `query`\n    \n- Invalid coordinate ranges\n    \n- Malformed query parameters\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"latitude and longitude must be provided together\",\n    \"timestamp\": \"2026-05-22T00:25:20.152Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-22T00:33:35.539Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nNo stations were found matching the search criteria.\n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"No stations found with the name: sagmade\",\n    \"timestamp\": \"2026-05-22T00:34:33.657Z\"\n}\n\n ```\n\n---\n\n## 🔌 502 Bad Gateway\n\nError while communicating with the external transport provider.\n\n### Example Response\n\n``` json\n{\n    \"code\": 502,\n    \"name\": \"BAD_GATEWAY\",\n    \"description\": \"Api Transport rejected the request\",\n    \"timestamp\": \"2026-05-22T00:34:33.657Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Invalid response from external API\n    \n- External provider processing error\n    \n- Request rejected by transport provider\n    \n\n---\n\n## 🚨 503 Service Unavailable\n\nThe external transport service is currently unavailable.\n\n### Example Response\n\n``` json\n{\n    \"code\": 503,\n    \"name\": \"SERVICE_UNAVAILABLE\",\n    \"description\": \"Api Transport is unavailable\",\n    \"timestamp\": \"2026-05-22T00:34:33.657Z\"\n}\n\n ```\n\n### Possible Causes\n\n- External API downtime\n    \n- Network connectivity issues\n    \n- Timeout while contacting the provider\n    \n\n---\n\n💡 **Tip (architecture level 🔥):**  \nThis endpoint supports both:\n\n- Text-based station discovery\n    \n- Geolocation-based nearest station lookup\n    \n\nwhile enforcing strict validation rules to avoid ambiguous or inconsistent searches."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Connections",
+      "item": [
+        {
+          "name": "Search for Connections",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/connections?from=Lausanne&to=Genève&date=2026-05-25&time=23:18&transportations=train",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "connections"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "Lausanne"
+                },
+                {
+                  "key": "to",
+                  "value": "Genève"
+                },
+                {
+                  "key": "date",
+                  "value": "2026-05-25"
+                },
+                {
+                  "key": "time",
+                  "value": "23:18"
+                },
+                {
+                  "key": "transportations",
+                  "value": "train"
+                }
+              ]
+            },
+            "description": "# 🚆 Search Connections Between Stations\n\n## 📌 Endpoint\n\n**GET**  \n`/api/connections`\n\n---\n\n## 📖 Description\n\nRetrieves available transport connections between two stations.\n\nThe endpoint supports optional filtering by:\n\n- Date\n    \n- Time\n    \n- Transportation types\n    \n\nEach connection includes route details such as:\n\n- Duration\n    \n- Products/services\n    \n- Route sections\n    \n- Departure and arrival information\n    \n- Platform details\n    \n\nThe data is obtained from the external transport provider and normalized before being returned to authenticated users.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Query Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| from | String | ✅ Yes | Origin station |\n| to | String | ✅ Yes | Destination station |\n| date | Date (`yyyy-MM-dd`) | ❌ No | Travel date |\n| time | Time (`HH:mm`) | ❌ No | Desired departure time |\n| transportations | Enum List | ❌ No | Transportation types filter |\n\n---\n\n## Supported Transportation Types\n\nThe `transportations` parameter accepts one or multiple values:\n\n- `TRAIN`\n    \n- `TRAM`\n    \n- `SHIP`\n    \n- `BUS`\n    \n- `CABLEWAY`\n    \n\n---\n\n## Example Request — Basic Search\n\n``` http\nGET /api/connections?from=Lausanne&to=Genève\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n## Example Request — With Filters\n\n``` http\nGET /api/connections?from=Lausanne&to=Genève&date=2026-05-25&time=21:30&transportations=TRAIN,BUS\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nConnections were successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"connections\": [\n        {\n            \"origin\": \"Lausanne\",\n            \"destination\": \"Genève\",\n            \"duration\": \"00d00:54:00\",\n            \"products\": [\n                \"RE33\"\n            ],\n            \"sections\": [\n                {\n                    \"category\": \"RE\",\n                    \"number\": \"33\",\n                    \"operator\": \"SBB\",\n                    \"destination\": \"Genève-Aéroport\",\n                    \"departureStation\": \"Lausanne\",\n                    \"departureTime\": \"2026-05-25T21:30:00Z\",\n                    \"arrivalStation\": \"Genève\",\n                    \"arrivalTime\": \"2026-05-25T22:24:00Z\",\n                    \"platform\": \"7\"\n                }\n            ]\n        },\n        {\n            \"origin\": \"Lausanne\",\n            \"destination\": \"Genève\",\n            \"duration\": \"00d00:49:00\",\n            \"products\": [\n                \"IR 95\"\n            ],\n            \"sections\": [\n                {\n                    \"category\": \"IR\",\n                    \"number\": \"95\",\n                    \"operator\": \"SBB\",\n                    \"destination\": \"Genève\",\n                    \"departureStation\": \"Lausanne\",\n                    \"departureTime\": \"2026-05-25T21:50:00Z\",\n                    \"arrivalStation\": \"Genève\",\n                    \"arrivalTime\": \"2026-05-25T22:39:00Z\",\n                    \"platform\": \"8\"\n                }\n            ]\n        }\n    ]\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid query parameters.\n\n### Possible Causes\n\n- Missing required parameters (`from`, `to`)\n    \n- Invalid date format\n    \n- Invalid time format\n    \n- Invalid transportation type\n    \n- Malformed query parameters\n    \n\n---\n\n### Example — Missing Stations\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"to: Destination station must not be blank; from: Origin station must not be blank\",\n    \"timestamp\": \"2026-05-24T00:22:20.931Z\"\n}\n\n ```\n\n---\n\n### Example — Invalid Date\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Field 'date': invalid value '2026-05-25-34'\",\n    \"timestamp\": \"2026-05-24T00:22:43.142Z\"\n}\n\n ```\n\n---\n\n### Example — Invalid Time\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Field 'time': invalid value '23:18:2321'\",\n    \"timestamp\": \"2026-05-24T00:23:31.985Z\"\n}\n\n ```\n\n---\n\n### Example — Invalid Transportation Type\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Field 'transportations': invalid value 'buseta'\",\n    \"timestamp\": \"2026-05-24T00:23:56.045Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"code\": 401,\n  \"name\": \"UNAUTHORIZED\",\n  \"description\": \"Authentication required or token expired\",\n  \"timestamp\": \"2026-05-22T00:33:35.539Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nNo connections were found for the provided parameters.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"No connections found for the given parameters\",\n    \"timestamp\": \"2026-05-24T00:24:29.585Z\"\n}\n\n ```\n\n---\n\n## 🔌 502 Bad Gateway\n\nError while communicating with the external transport provider.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"code\": 502,\n  \"name\": \"BAD_GATEWAY\",\n  \"description\": \"Api Transport rejected the request\",\n  \"timestamp\": \"2026-05-22T00:34:33.657Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Invalid response from transport API\n    \n- External provider processing error\n    \n- Request rejected by provider\n    \n\n---\n\n## 🚨 503 Service Unavailable\n\nThe external transport provider is currently unavailable.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"code\": 503,\n  \"name\": \"SERVICE_UNAVAILABLE\",\n  \"description\": \"Api Transport is unavailable\",\n  \"timestamp\": \"2026-05-22T00:34:33.657Z\"\n}\n\n ```\n\n### Possible Causes\n\n- External API downtime\n    \n- Network connectivity issues\n    \n- Timeout while contacting the provider\n    \n\n---\n\n💡 **Tip (architecture level 🔥):**  \nThis endpoint centralizes route planning logic and abstracts the external transport provider, allowing clients to:\n\n- Search connections consistently\n    \n- Filter transportation methods\n    \n- Retrieve normalized scheduling information\n    \n- Avoid direct dependency on external transport APIs"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": ""
+    },
+    {
+      "key": "JWT",
+      "value": ""
+    }
+  ]
+}

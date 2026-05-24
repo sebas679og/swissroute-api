@@ -1,0 +1,82 @@
+package com.group4.swissrouteapi.config.constants;
+
+/**
+ * ApiPaths
+ *
+ * <p>Utility class that centralizes API endpoint path constants used throughout the application.
+ *
+ * <p>Designed as a {@code final} class with a private constructor to prevent instantiation and
+ * extension.
+ */
+public final class ApiPaths {
+
+  private ApiPaths() {}
+
+  /**
+   * Auth
+   *
+   * <p>Defines API paths related to authentication operations.
+   *
+   * <p>Provides a constant for user registration endpoint.
+   */
+  public static final class Auth {
+    public static final String REGISTER = "/api/users/register";
+    public static final String LOGIN = "/api/users/login";
+  }
+
+  /**
+   * Station
+   *
+   * <p>Defines API path constants related to station operations.
+   *
+   * <p>Serves as a centralized holder for endpoint URIs used by the application when interacting
+   * with station-related resources.
+   *
+   * <p>Currently provides a constant for the stations endpoint.
+   */
+  public static final class Station {
+    public static final String STATIONS = "/api/stations";
+  }
+
+  /**
+   * Connection
+   *
+   * <p>Utility class holding API path constants related to transport connections.
+   *
+   * <p>Provides:
+   *
+   * <ul>
+   *   <li>{@link #CONNECTIONS} → Base path for connections endpoint ({@code /api/connections}).
+   * </ul>
+   *
+   * <p>Declared as {@code static final} to group constants in a type-safe manner.
+   */
+  public static final class Connection {
+    public static final String CONNECTIONS = "/api/connections";
+  }
+
+  /**
+   * Docs
+   *
+   * <p>Defines API paths related to documentation endpoints.
+   *
+   * <p>Includes constants for Swagger UI and OpenAPI specification access.
+   */
+  public static final class Docs {
+    public static final String SWAGGER_UI = "/swagger-ui/**";
+    public static final String API_DOCS = "/v3/api-docs/**";
+  }
+
+  /**
+   * TransportApi
+   *
+   * <p>Defines API path constants related to transport operations.
+   *
+   * <p>Serves as a centralized holder for endpoint URIs used by the transport client when
+   * interacting with external services.
+   */
+  public static final class TransportApi {
+    public static final String LOCATIONS = "/locations";
+    public static final String CONNECTIONS = "/connections";
+  }
+}
