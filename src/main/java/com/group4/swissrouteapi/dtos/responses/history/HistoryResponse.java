@@ -16,6 +16,6 @@ public class HistoryResponse {
   List<History> history;
   Integer page;
   Integer size;
-  Integer totalElements;
+  Long totalElements;
   Integer totalPages;
 }

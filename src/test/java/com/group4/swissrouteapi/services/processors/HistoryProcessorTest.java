@@ -154,8 +154,7 @@ class HistoryProcessorTest {
     void shouldThrowNotFoundWhenUserDoesNotExist() {
       when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
 
-      assertThatThrownBy(
-              () -> historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID))
+      assertThatThrownBy(() -> historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID))
           .isInstanceOf(NotFoundException.class)
           .hasMessage("User not found");
     }
@@ -165,8 +164,7 @@ class HistoryProcessorTest {
     void shouldNotSaveWhenUserDoesNotExist() {
       when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
 
-      assertThatThrownBy(
-              () -> historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID))
+      assertThatThrownBy(() -> historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID))
           .isInstanceOf(NotFoundException.class);
 
       verify(searchHistoryRepository, never()).save(any());

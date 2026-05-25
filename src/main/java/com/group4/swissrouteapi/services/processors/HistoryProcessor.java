@@ -7,6 +7,10 @@ import com.group4.swissrouteapi.repositories.SearchHistoryRepository;
 import com.group4.swissrouteapi.repositories.UserRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +59,26 @@ public class HistoryProcessor {
             .destination(to)
             .resultCount(resultCount)
             .build());
+  }
+
+  /**
+   * Retrieves a paginated list of search history records for a given user.
+   *
+   * <p>Results are sorted by {@code searchedAt} in descending order to show the most recent
+   * searches first.
+   *
+   * @param userId unique identifier of the user
+   * @param page page number to retrieve (1-based index)
+   * @param size number of records per page
+   * @return a {@link org.springframework.data.domain.Page} of {@link SearchHistoryEntity}
+   *     containing the user's search history
+   * @throws NotFoundException if the user does not exist
+   */
+  @Transactional(readOnly = true)
+  public Page<SearchHistoryEntity> getAllHistoryByUserId(UUID userId, Integer page, Integer size) {
+    UserEntity user = searchUser(userId);
+    Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "searchedAt"));
+    return searchHistoryRepository.findByUserId(user.getId(), pageable);
   }
 
   private UserEntity searchUser(UUID userId) {

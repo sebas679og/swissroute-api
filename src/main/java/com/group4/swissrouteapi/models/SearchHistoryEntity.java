@@ -6,6 +6,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
@@ -29,13 +30,17 @@ import lombok.Setter;
  * <p>Designed for persistence and retrieval using JPA/Hibernate, ensuring accurate tracking of user
  * activity and preferences.
  */
-@Entity
-@Table(name = "search_history")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(
+    name = "search_history",
+    indexes = {
+      @Index(name = "idx_history_user_searchedat", columnList = "user_id, searched_at DESC")
+    })
 public class SearchHistoryEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
