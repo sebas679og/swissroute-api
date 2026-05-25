@@ -11,6 +11,6 @@ import org.mapstruct.Mapper;
  * responses.
  */
 @Mapper(componentModel = "spring")
-public interface SearchHistoryMapper {
+public interface HistoryMapper {
   History toHistory(SearchHistoryEntity entity);
 }

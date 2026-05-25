@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @RequiredArgsConstructor
-public class SearchHistoryProcessor {
+public class HistoryProcessor {
 
   private final UserRepository userRepository;
   private final SearchHistoryRepository searchHistoryRepository;
@@ -45,7 +45,7 @@ public class SearchHistoryProcessor {
    * @throws NotFoundException if the user does not exist
    */
   @Transactional
-  public void saveSearchHistory(String from, String to, Integer resultCount, UUID userId) {
+  public void saveHistory(String from, String to, Integer resultCount, UUID userId) {
     UserEntity user = searchUser(userId);
 
     searchHistoryRepository.save(

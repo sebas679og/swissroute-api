@@ -26,20 +26,20 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * Unit tests for {@link SearchHistoryProcessor}.
+ * Unit tests for {@link HistoryProcessor}.
  *
- * <p>Verifies that {@code saveSearchHistory} correctly looks up the user, builds the {@link
+ * <p>Verifies that {@code saveHistory} correctly looks up the user, builds the {@link
  * SearchHistoryEntity} with all provided fields, delegates persistence to the repository, and
  * throws {@link NotFoundException} when the user does not exist.
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("SearchHistoryProcessor")
-class SearchHistoryProcessorTest {
+class HistoryProcessorTest {
 
   @Mock private UserRepository userRepository;
   @Mock private SearchHistoryRepository searchHistoryRepository;
 
-  @InjectMocks private SearchHistoryProcessor searchHistoryProcessor;
+  @InjectMocks private HistoryProcessor historyProcessor;
 
   // ---------------------------------------------------------------------------
   // Shared fixtures
@@ -53,11 +53,11 @@ class SearchHistoryProcessorTest {
   private final UserEntity buildUser = UserDataProvider.createMockUserLogin();
 
   // ===========================================================================
-  // saveSearchHistory — successful save
+  // saveHistory — successful save
   // ===========================================================================
 
   @Nested
-  @DisplayName("saveSearchHistory() - successful save")
+  @DisplayName("saveHistory() - successful save")
   class SuccessfulSaveTest {
 
     @Test
@@ -65,17 +65,17 @@ class SearchHistoryProcessorTest {
     void shouldLookUpUserByUserId() {
       when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
 
-      searchHistoryProcessor.saveSearchHistory(FROM, TO, RESULT_COUNT, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID);
 
       verify(userRepository).findById(USER_ID);
     }
 
     @Test
     @DisplayName("should save the search history entity exactly once")
-    void shouldSaveSearchHistoryOnce() {
+    void shouldSaveHistoryOnce() {
       when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
 
-      searchHistoryProcessor.saveSearchHistory(FROM, TO, RESULT_COUNT, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID);
 
       verify(searchHistoryRepository).save(any(SearchHistoryEntity.class));
     }
@@ -86,7 +86,7 @@ class SearchHistoryProcessorTest {
       when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
 
       ArgumentCaptor<SearchHistoryEntity> captor = forClass(SearchHistoryEntity.class);
-      searchHistoryProcessor.saveSearchHistory(FROM, TO, RESULT_COUNT, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID);
       verify(searchHistoryRepository).save(captor.capture());
 
       assertThat(captor.getValue().getOrigin()).isEqualTo(FROM);
@@ -98,7 +98,7 @@ class SearchHistoryProcessorTest {
       when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
 
       ArgumentCaptor<SearchHistoryEntity> captor = forClass(SearchHistoryEntity.class);
-      searchHistoryProcessor.saveSearchHistory(FROM, TO, RESULT_COUNT, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID);
       verify(searchHistoryRepository).save(captor.capture());
 
       assertThat(captor.getValue().getDestination()).isEqualTo(TO);
@@ -110,7 +110,7 @@ class SearchHistoryProcessorTest {
       when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
 
       ArgumentCaptor<SearchHistoryEntity> captor = forClass(SearchHistoryEntity.class);
-      searchHistoryProcessor.saveSearchHistory(FROM, TO, RESULT_COUNT, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID);
       verify(searchHistoryRepository).save(captor.capture());
 
       assertThat(captor.getValue().getResultCount()).isEqualTo(RESULT_COUNT);
@@ -122,7 +122,7 @@ class SearchHistoryProcessorTest {
       when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
 
       ArgumentCaptor<SearchHistoryEntity> captor = forClass(SearchHistoryEntity.class);
-      searchHistoryProcessor.saveSearchHistory(FROM, TO, RESULT_COUNT, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID);
       verify(searchHistoryRepository).save(captor.capture());
 
       assertThat(captor.getValue().getUser()).isSameAs(buildUser);
@@ -134,7 +134,7 @@ class SearchHistoryProcessorTest {
       when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
 
       ArgumentCaptor<SearchHistoryEntity> captor = forClass(SearchHistoryEntity.class);
-      searchHistoryProcessor.saveSearchHistory(FROM, TO, 0, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, 0, USER_ID);
       verify(searchHistoryRepository).save(captor.capture());
 
       assertThat(captor.getValue().getResultCount()).isZero();
@@ -142,11 +142,11 @@ class SearchHistoryProcessorTest {
   }
 
   // ===========================================================================
-  // saveSearchHistory — user not found
+  // saveHistory — user not found
   // ===========================================================================
 
   @Nested
-  @DisplayName("saveSearchHistory() - user not found")
+  @DisplayName("saveHistory() - user not found")
   class UserNotFoundTest {
 
     @Test
@@ -155,7 +155,7 @@ class SearchHistoryProcessorTest {
       when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
 
       assertThatThrownBy(
-              () -> searchHistoryProcessor.saveSearchHistory(FROM, TO, RESULT_COUNT, USER_ID))
+              () -> historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID))
           .isInstanceOf(NotFoundException.class)
           .hasMessage("User not found");
     }
@@ -166,7 +166,7 @@ class SearchHistoryProcessorTest {
       when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
 
       assertThatThrownBy(
-              () -> searchHistoryProcessor.saveSearchHistory(FROM, TO, RESULT_COUNT, USER_ID))
+              () -> historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID))
           .isInstanceOf(NotFoundException.class);
 
       verify(searchHistoryRepository, never()).save(any());
