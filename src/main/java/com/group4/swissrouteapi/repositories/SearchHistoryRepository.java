@@ -1,6 +1,7 @@
 package com.group4.swissrouteapi.repositories;
 
 import com.group4.swissrouteapi.models.SearchHistoryEntity;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,5 +14,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * operations and query execution for search history records.
  */
 public interface SearchHistoryRepository extends JpaRepository<SearchHistoryEntity, UUID> {
+
   Page<SearchHistoryEntity> findByUserId(UUID userId, Pageable pageable);
+
+  Optional<SearchHistoryEntity> findByIdAndUserId(UUID historyId, UUID userId);
 }

@@ -42,6 +42,8 @@ public class SecurityConfig {
 
   private final JsonWriter jsonWriter;
 
+  private static final String AUTHORITY = "AUTH_JWT";
+
   /**
    * Configures the application's security filter chain.
    *
@@ -79,11 +81,13 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, ApiPaths.Auth.LOGIN)
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, ApiPaths.Station.STATIONS)
-                    .hasAuthority("AUTH_JWT")
+                    .hasAuthority(AUTHORITY)
                     .requestMatchers(HttpMethod.GET, ApiPaths.Connection.CONNECTIONS)
-                    .hasAuthority("AUTH_JWT")
+                    .hasAuthority(AUTHORITY)
                     .requestMatchers(HttpMethod.GET, ApiPaths.History.HISTORY)
-                    .hasAuthority("AUTH_JWT")
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.DELETE, ApiPaths.History.HISTORY_ITEM)
+                    .hasAuthority(AUTHORITY)
                     .anyRequest()
                     .authenticated())
         .addFilterBefore(bearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

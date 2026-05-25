@@ -13,4 +13,6 @@ import java.util.UUID;
 public interface HistoryService {
 
   HistoryResponse getAllHistory(HistoryQueryParams queryParams, UUID userId);
+
+  void deleteHistoryItem(UUID itemId, UUID userId);
 }

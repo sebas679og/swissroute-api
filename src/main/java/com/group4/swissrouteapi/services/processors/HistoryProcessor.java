@@ -81,6 +81,26 @@ public class HistoryProcessor {
     return searchHistoryRepository.findByUserId(user.getId(), pageable);
   }
 
+  /**
+   * Deletes a specific search history record for a given user.
+   *
+   * <p>Validates that the history item exists and belongs to the user before deletion. If no
+   * matching record is found, a {@link NotFoundException} is thrown.
+   *
+   * @param itemId unique identifier of the history record to delete
+   * @param userId unique identifier of the user who owns the record
+   * @throws NotFoundException if the history item does not exist or does not belong to the user
+   */
+  @Transactional
+  public void deleteHistoryItem(UUID itemId, UUID userId) {
+    SearchHistoryEntity history =
+        searchHistoryRepository
+            .findByIdAndUserId(itemId, userId)
+            .orElseThrow(() -> new NotFoundException("History item not found"));
+
+    searchHistoryRepository.delete(history);
+  }
+
   private UserEntity searchUser(UUID userId) {
     return userRepository
         .findById(userId)

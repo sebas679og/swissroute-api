@@ -39,4 +39,9 @@ public class HistoryServiceImpl implements HistoryService {
         .totalPages(pageResult.getTotalPages())
         .build();
   }
+
+  @Override
+  public void deleteHistoryItem(UUID itemId, UUID userId) {
+    historyProcessor.deleteHistoryItem(itemId, userId);
+  }
 }

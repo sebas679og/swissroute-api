@@ -10,8 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,5 +34,12 @@ public class HistoryController {
       Authentication authentication, @Valid @ModelAttribute HistoryQueryParams queryParams) {
     return ResponseEntity.status(HttpStatus.OK)
         .body(historyService.getAllHistory(queryParams, UUID.fromString(authentication.getName())));
+  }
+
+  @DeleteMapping(ApiPaths.History.HISTORY_ITEM)
+  public ResponseEntity<Void> deleteHistoryItem(
+      Authentication authentication, @PathVariable UUID id) {
+    historyService.deleteHistoryItem(id, UUID.fromString(authentication.getName()));
+    return ResponseEntity.noContent().build();
   }
 }
