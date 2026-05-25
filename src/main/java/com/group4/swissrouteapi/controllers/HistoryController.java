@@ -42,4 +42,10 @@ public class HistoryController {
     historyService.deleteHistoryItem(id, UUID.fromString(authentication.getName()));
     return ResponseEntity.noContent().build();
   }
+
+  @DeleteMapping(ApiPaths.History.HISTORY)
+  public ResponseEntity<Void> clearHistory(Authentication authentication) {
+    historyService.clearHistory(UUID.fromString(authentication.getName()));
+    return ResponseEntity.noContent().build();
+  }
 }

@@ -44,4 +44,9 @@ public class HistoryServiceImpl implements HistoryService {
   public void deleteHistoryItem(UUID itemId, UUID userId) {
     historyProcessor.deleteHistoryItem(itemId, userId);
   }
+
+  @Override
+  public void clearHistory(UUID userId) {
+    historyProcessor.clearHistory(userId);
+  }
 }

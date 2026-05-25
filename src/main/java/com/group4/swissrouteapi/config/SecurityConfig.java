@@ -88,6 +88,8 @@ public class SecurityConfig {
                     .hasAuthority(AUTHORITY)
                     .requestMatchers(HttpMethod.DELETE, ApiPaths.History.HISTORY_ITEM)
                     .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.DELETE, ApiPaths.History.HISTORY)
+                    .hasAuthority(AUTHORITY)
                     .anyRequest()
                     .authenticated())
         .addFilterBefore(bearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

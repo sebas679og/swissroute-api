@@ -15,4 +15,6 @@ public interface HistoryService {
   HistoryResponse getAllHistory(HistoryQueryParams queryParams, UUID userId);
 
   void deleteHistoryItem(UUID itemId, UUID userId);
+
+  void clearHistory(UUID userId);
 }

@@ -18,4 +18,6 @@ public interface SearchHistoryRepository extends JpaRepository<SearchHistoryEnti
   Page<SearchHistoryEntity> findByUserId(UUID userId, Pageable pageable);
 
   Optional<SearchHistoryEntity> findByIdAndUserId(UUID historyId, UUID userId);
+
+  void deleteByUserId(UUID userId);
 }

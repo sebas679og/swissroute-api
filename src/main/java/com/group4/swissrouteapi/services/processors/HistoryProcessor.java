@@ -101,6 +101,21 @@ public class HistoryProcessor {
     searchHistoryRepository.delete(history);
   }
 
+  /**
+   * Deletes all search history records for a given user.
+   *
+   * <p>Validates the existence of the user before performing the deletion. All records associated
+   * with the user's ID are removed from the repository.
+   *
+   * @param userId unique identifier of the user whose history will be cleared
+   * @throws NotFoundException if the user does not exist
+   */
+  @Transactional
+  public void clearHistory(UUID userId) {
+    UserEntity user = searchUser(userId);
+    searchHistoryRepository.deleteByUserId(user.getId());
+  }
+
   private UserEntity searchUser(UUID userId) {
     return userRepository
         .findById(userId)
