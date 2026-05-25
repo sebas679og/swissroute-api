@@ -174,6 +174,109 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "History",
+      "item": [
+        {
+          "name": "Get History",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/history?page=1&size=20",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "# 📚 Get Search History\n\n## 📌 Endpoint\n\n**GET**  \n`/api/history?page=1&size=20`\n\n---\n\n## 📖 Description\n\nRetrieves the paginated search history of the authenticated user.\n\nEach record represents a previously executed connection search and includes:\n\n- Origin station\n    \n- Destination station\n    \n- Number of results returned\n    \n- Search timestamp\n    \n\nThe history is ordered by the most recent searches.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Query Parameters\n\n| Parameter | Type | Required | Default | Description |\n| --- | --- | --- | --- | --- |\n| page | Integer | ❌ No | `1` | Page number (starts at `1`) |\n| size | Integer | ❌ No | `20` | Number of items per page |\n\n---\n\n## Pagination Rules\n\n- `page` must be greater than or equal to `1`\n    \n- `size` minimum value: `1`\n    \n- `size` maximum value: `50`\n    \n\n---\n\n### Example Request\n\n``` http\nGET /api/history?page=1&size=20\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nSearch history was successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"history\": [\n        {\n            \"id\": \"13fbb325-04cb-41a0-a5aa-9b61f55b66d3\",\n            \"origin\": \"Lausanne\",\n            \"destination\": \"Genève\",\n            \"resultCount\": 4,\n            \"searchedAt\": \"2026-05-25T20:57:38.072Z\"\n        },\n        {\n            \"id\": \"5dabc735-6249-4ebc-9e94-39a1a73c3a56\",\n            \"origin\": \"Lausanne\",\n            \"destination\": \"Genève\",\n            \"resultCount\": 4,\n            \"searchedAt\": \"2026-05-25T20:57:28.993Z\"\n        }\n    ],\n    \"page\": 1,\n    \"size\": 20,\n    \"totalElements\": 2,\n    \"totalPages\": 1\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid pagination parameters.\n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"page: Page must be greater than or equal to 1; size: Size must be less than or equal to 50\",\n    \"timestamp\": \"2026-05-25T20:58:26.857Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Invalid page number\n    \n- Invalid page size\n    \n- Negative values\n    \n- Size greater than allowed limit\n    \n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n  \"code\": 401,\n  \"name\": \"UNAUTHORIZED\",\n  \"description\": \"Authentication required or token expired\",\n  \"timestamp\": \"2026-05-25T00:33:35.539Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nThe authenticated user was not found.\n\n### Example Response\n\n``` json\n{\n  \"code\": 404,\n  \"name\": \"NOT_FOUND\",\n  \"description\": \"User not found\",\n  \"timestamp\": \"2026-05-25T00:34:33.657Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Item",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/history/{{ITEM_ID}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "history",
+                "{{ITEM_ID}}"
+              ]
+            },
+            "description": "# 🗑️ Delete Search History Item\n\n## 📌 Endpoint\n\n**DELETE**  \n`/api/history/{ITEM_ID}`\n\n---\n\n## 📖 Description\n\nDeletes a specific search history item belonging to the authenticated user.\n\nOnly the owner of the history entry can delete it.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Path Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| ITEM_ID | UUID | ✅ Yes | Unique identifier of the history item |\n\n---\n\n### Example Request\n\n``` http\nDELETE /api/history/13fbb325-04cb-41a0-a5aa-9b61f55b66d3\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 204 No Content\n\nThe history item was successfully deleted.\n\n---\n\n## ❌ 400 Bad Request\n\nThe provided path parameter is invalid.\n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Invalid path parameter for: 'itemId'\",\n    \"timestamp\": \"2026-05-25T20:44:37.866Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Invalid UUID format\n    \n- Malformed path parameter\n    \n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n  \"code\": 401,\n  \"name\": \"UNAUTHORIZED\",\n  \"description\": \"Authentication required or token expired\",\n  \"timestamp\": \"2026-05-22T00:33:35.539Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe specified history item does not exist.\n\n### Example Response\n\n``` json\n{\n  \"code\": 404,\n  \"name\": \"NOT_FOUND\",\n  \"description\": \"Item id not found\",\n  \"timestamp\": \"2026-05-24T00:24:29.585Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Clear History",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/history",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "history"
+              ]
+            },
+            "description": "# 🧹 Clear Search History\n\n## 📌 Endpoint\n\n**DELETE**  \n`/api/history`\n\n---\n\n## 📖 Description\n\nDeletes the entire search history of the authenticated user.\n\nThis operation permanently removes all stored connection searches associated with the user account.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 204 No Content\n\nThe search history was successfully cleared.\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n  \"code\": 401,\n  \"name\": \"UNAUTHORIZED\",\n  \"description\": \"Authentication required or token expired\",\n  \"timestamp\": \"2026-05-22T00:33:35.539Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nThe authenticated user was not found.\n\n### Example Response\n\n``` json\n{\n  \"code\": 404,\n  \"name\": \"NOT_FOUND\",\n  \"description\": \"user not found\",\n  \"timestamp\": \"2026-05-24T00:24:29.585Z\"\n}\n\n ```"
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "event": [
@@ -207,6 +310,10 @@
     },
     {
       "key": "JWT",
+      "value": ""
+    },
+    {
+      "key": "ITEM_ID",
       "value": ""
     }
   ]

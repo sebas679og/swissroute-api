@@ -16,6 +16,10 @@
   - [Search Stations](#search-stations)
 - [Connections Service](#connections-service)
   - [Search Connections](#search-connections)
+- [Search History](#search-history)
+  - [Get Search History](#get-search-history)
+  - [Delete Search History Item](#delete-search-history-item)
+  - [Clear Search History](#clear-search-history)
 
 ---
 
@@ -1037,3 +1041,347 @@ Occurs when the external Transport API is unavailable or temporarily unreachable
 * Connection sections represent each segment of the trip. 
 * All timestamps (searchedAt, timestamp, etc.) are handled and stored in ISO-8601 UTC format. 
 * resultCount represents the total number of connections returned in the response payload.
+
+---
+
+## Search History
+
+### Get Search History
+
+Returns the paginated connection search history of the authenticated user.
+
+#### Endpoint
+
+```http
+GET /api/history?page=1&size=20
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+#### Query Parameters
+
+| Parameter | Type    | Required | Default | Validation                  | Description    |
+|-----------|---------|----------|---------|-----------------------------|----------------|
+| `page`    | Integer | No       | `1`     | Minimum value: `1`          | Page number    |
+| `size`    | Integer | No       | `20`    | Minimum: `1`, Maximum: `50` | Items per page |
+
+---
+
+#### Example Request
+
+```http
+GET /api/history?page=1&size=20
+```
+
+---
+
+#### Successful Response
+
+##### 200 — OK
+
+```json
+{
+  "history": [
+    {
+      "id": "13fbb325-04cb-41a0-a5aa-9b61f55b66d3",
+      "origin": "Lausanne",
+      "destination": "Genève",
+      "resultCount": 4,
+      "searchedAt": "2026-05-25T20:57:38.072Z"
+    },
+    {
+      "id": "5dabc735-6249-4ebc-9e94-39a1a73c3a56",
+      "origin": "Lausanne",
+      "destination": "Genève",
+      "resultCount": 4,
+      "searchedAt": "2026-05-25T20:57:28.993Z"
+    },
+    {
+      "id": "94f93a9f-b292-4bb3-8946-c7d5ca3e359c",
+      "origin": "Lausanne",
+      "destination": "Genève",
+      "resultCount": 4,
+      "searchedAt": "2026-05-25T20:56:37.321Z"
+    },
+    {
+      "id": "4e947c4a-0c82-4072-ae24-c9b53b42c77c",
+      "origin": "Lausanne",
+      "destination": "Genève",
+      "resultCount": 4,
+      "searchedAt": "2026-05-25T20:56:22.840Z"
+    }
+  ],
+  "page": 1,
+  "size": 20,
+  "totalElements": 4,
+  "totalPages": 1
+}
+```
+
+---
+
+#### Response Fields
+
+##### History Item Fields
+
+| Field         | Type     | Description                           |
+|---------------|----------|---------------------------------------|
+| `id`          | UUID     | Search history item identifier        |
+| `origin`      | String   | Origin station                        |
+| `destination` | String   | Destination station                   |
+| `resultCount` | Integer  | Total connections returned by the API |
+| `searchedAt`  | DateTime | UTC timestamp of the search           |
+
+---
+
+##### Pagination Fields
+
+| Field           | Type    | Description           |
+|-----------------|---------|-----------------------|
+| `page`          | Integer | Current page number   |
+| `size`          | Integer | Requested page size   |
+| `totalElements` | Integer | Total history records |
+| `totalPages`    | Integer | Total available pages |
+
+---
+
+#### Error Responses
+
+##### 400 — Bad Request
+
+Occurs when pagination parameters are invalid.
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "page: Page must be greater than or equal to 1; size: Size must be less than or equal to 50",
+  "timestamp": "2026-05-25T20:58:26.857Z"
+}
+```
+
+---
+
+##### 401 — Unauthorized
+
+Occurs when the request does not contain a valid JWT token or the token has expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-25T00:33:35.539Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when the authenticated user does not exist.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "User not found",
+  "timestamp": "2026-05-25T00:34:33.657Z"
+}
+```
+
+---
+
+#### Notes
+
+* Search history is scoped exclusively to the authenticated user.
+* Results are returned in descending order by `searchedAt`.
+* Pagination starts at page `1`.
+* UTC timestamps follow ISO-8601 format.
+
+---
+
+### Delete Search History Item
+
+Deletes a specific search history item belonging to the authenticated user.
+
+#### Endpoint
+
+```http
+DELETE /api/history/{ITEM_ID}
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+#### Path Parameters
+
+| Parameter | Type | Required | Description                    |
+|-----------|------|----------|--------------------------------|
+| `ITEM_ID` | UUID | Yes      | Search history item identifier |
+
+---
+
+#### Example Request
+
+```http
+DELETE /api/history/13fbb325-04cb-41a0-a5aa-9b61f55b66d3
+```
+
+---
+
+#### Successful Response
+
+##### 204 — No Content
+
+The history item was successfully deleted.
+
+---
+
+#### Error Responses
+
+##### 400 — Bad Request
+
+Occurs when the provided path parameter is not a valid UUID.
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Invalid path parameter for: 'itemId'",
+  "timestamp": "2026-05-25T20:44:37.866Z"
+}
+```
+
+---
+
+##### 401 — Unauthorized
+
+Occurs when the request does not contain a valid JWT token or the token has expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-22T00:33:35.539Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when the history item does not exist.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "Item id not found",
+  "timestamp": "2026-05-24T00:24:29.585Z"
+}
+```
+
+---
+
+# Notes
+
+* Users can only delete their own history items.
+* Deletion is permanent and cannot be undone.
+
+---
+
+### Clear Search History
+
+Deletes all connection search history records of the authenticated user.
+
+#### Endpoint
+
+```http
+DELETE /api/history
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+#### Successful Response
+
+##### 204 — No Content
+
+The authenticated user's search history was successfully cleared.
+
+---
+
+#### Error Responses
+
+##### 401 — Unauthorized
+
+Occurs when the request does not contain a valid JWT token or the token has expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-22T00:33:35.539Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when the authenticated user does not exist.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "User not found",
+  "timestamp": "2026-05-25T00:34:33.657Z"
+}
+```
+
+---
+
+# Notes
+
+* Only the authenticated user's history is deleted.
+* The operation permanently removes all stored search history records for the user.
+* This operation cannot be undone.
+
