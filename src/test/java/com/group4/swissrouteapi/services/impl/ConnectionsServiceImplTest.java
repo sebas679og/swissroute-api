@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -162,10 +161,9 @@ class ConnectionsServiceImplTest {
       Connection mapped = buildMappedConnection();
 
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
-              .thenReturn(buildApiResponse(List.of(apiConn)));
+          .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(mapped);
-      doNothing().when(historyProcessor)
-              .saveSearchHistory(FROM, TO, 1, USER_ID);
+      doNothing().when(historyProcessor).saveSearchHistory(FROM, TO, 1, USER_ID);
 
       ConnectionsResponse result = connectionsService.getConnections(buildParams(), USER_ID);
 
@@ -184,8 +182,7 @@ class ConnectionsServiceImplTest {
           .thenReturn(buildApiResponse(List.of(apiConn1, apiConn2)));
       when(connectionsMapper.toConnectionResponse(apiConn1)).thenReturn(mapped1);
       when(connectionsMapper.toConnectionResponse(apiConn2)).thenReturn(mapped2);
-      doNothing().when(historyProcessor)
-              .saveSearchHistory(FROM, TO, 2, USER_ID);
+      doNothing().when(historyProcessor).saveSearchHistory(FROM, TO, 2, USER_ID);
 
       ConnectionsResponse result = connectionsService.getConnections(buildParams(), USER_ID);
 
@@ -200,8 +197,7 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
-      doNothing().when(historyProcessor)
-              .saveSearchHistory(FROM, TO, 1, USER_ID);
+      doNothing().when(historyProcessor).saveSearchHistory(FROM, TO, 1, USER_ID);
 
       connectionsService.getConnections(buildParams(), USER_ID);
 
@@ -216,8 +212,7 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, DATE, TIME, List.of(TransportationType.TRAIN)))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
-      doNothing().when(historyProcessor)
-              .saveSearchHistory(FROM, TO, 1, USER_ID);
+      doNothing().when(historyProcessor).saveSearchHistory(FROM, TO, 1, USER_ID);
 
       connectionsService.getConnections(buildParamsWithOptionals(), USER_ID);
 
@@ -233,8 +228,7 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
-      doNothing().when(historyProcessor)
-              .saveSearchHistory(FROM, TO, 1, USER_ID);
+      doNothing().when(historyProcessor).saveSearchHistory(FROM, TO, 1, USER_ID);
 
       connectionsService.getConnections(buildParams(), USER_ID);
 

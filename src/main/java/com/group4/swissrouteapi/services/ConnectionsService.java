@@ -2,7 +2,6 @@ package com.group4.swissrouteapi.services;
 
 import com.group4.swissrouteapi.dtos.requests.ConnectionsQueryParams;
 import com.group4.swissrouteapi.dtos.responses.connections.ConnectionsResponse;
-
 import java.util.UUID;
 
 /**

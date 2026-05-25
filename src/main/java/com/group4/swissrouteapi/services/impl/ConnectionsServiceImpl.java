@@ -9,11 +9,10 @@ import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnec
 import com.group4.swissrouteapi.services.ConnectionsService;
 import com.group4.swissrouteapi.services.processors.SearchHistoryProcessor;
 import com.group4.swissrouteapi.utils.mappers.ConnectionsMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 /**
  * ConnectionsServiceImpl
@@ -44,14 +43,12 @@ public class ConnectionsServiceImpl implements ConnectionsService {
       throw new NotFoundException("No connections found for the given parameters");
     }
 
-    List<Connection> connections = api.connections().stream()
-            .map(connectionsMapper::toConnectionResponse)
-            .toList();
+    List<Connection> connections =
+        api.connections().stream().map(connectionsMapper::toConnectionResponse).toList();
 
-    historyProcessor.saveSearchHistory(requestParams.getFrom(), requestParams.getTo(), connections.size(), userId);
+    historyProcessor.saveSearchHistory(
+        requestParams.getFrom(), requestParams.getTo(), connections.size(), userId);
 
-    return ConnectionsResponse.builder()
-        .connections(connections)
-        .build();
+    return ConnectionsResponse.builder().connections(connections).build();
   }
 }
