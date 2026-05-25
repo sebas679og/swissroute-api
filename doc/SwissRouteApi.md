@@ -852,6 +852,34 @@ GET /api/connections?from=Lausanne&to=Genève&transportations=TRAIN,BUS
 
 ---
 
+### Additional Persistence Behavior
+
+Every successful connection search is automatically persisted in the database using the `search_history` table.
+
+The search history is associated with the authenticated user extracted from the JWT token.
+
+---
+
+# Persisted Search History Fields
+
+| Field         | Description                                              |
+|---------------|----------------------------------------------------------|
+| `user_id`     | Authenticated user identifier obtained from JWT token    |
+| `origin`      | Value provided in the `from` query parameter             |
+| `destination` | Value provided in the `to` query parameter               |
+| `resultCount` | Total number of connections returned by the external API |
+| `searchedAt`  | Exact UTC timestamp when the search was executed         |
+
+---
+
+# Search History Persistence Example
+
+| user_id                                | origin   | destination | resultCount | searchedAt                 |
+|----------------------------------------|----------|-------------|-------------|----------------------------|
+| `d5218cb4-bb57-4ea9-b002-f2e73505d041` | Lausanne | Genève      | 4           | `2026-05-24T00:24:29.585Z` |
+
+---
+
 ### Error Responses
 
 #### 400 — Bad Request
@@ -938,6 +966,21 @@ Occurs when no transport connections match the provided parameters.
 }
 ```
 
+#### 404 — User Not Found
+
+Occurs when the authenticated user extracted from the JWT token does not exist in the system database.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "user not found",
+  "timestamp": "2026-05-24T00:24:29.585Z"
+}
+```
+
+---
+
 ---
 
 #### 502 — Bad Gateway
@@ -984,9 +1027,13 @@ Occurs when the external Transport API is unavailable or temporarily unreachable
 
 ### Notes
 
-* Authentication is mandatory for accessing this endpoint.
-* The service integrates with the external Swiss Public Transport API.
-* Multiple transportation filters can be provided simultaneously.
-* Date and time parameters are optional and default to current system values if omitted.
-* Connection sections represent each segment of the trip.
-* Timestamps are returned in ISO-8601 UTC format.
+* Authentication is mandatory for accessing this endpoint. 
+* Search history is persisted only for successfully authenticated users. 
+* The local persistence process occurs automatically after a successful connection search. 
+* The authenticated user must exist in the local database before the search history can be stored. 
+* The service integrates with the external Swiss Public Transport API. 
+* Multiple transportation filters can be provided simultaneously. 
+* Date and time parameters are optional and default to current system values if omitted. 
+* Connection sections represent each segment of the trip. 
+* All timestamps (searchedAt, timestamp, etc.) are handled and stored in ISO-8601 UTC format. 
+* resultCount represents the total number of connections returned in the response payload.
