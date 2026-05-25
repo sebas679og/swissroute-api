@@ -56,6 +56,26 @@ public final class ApiPaths {
   }
 
   /**
+   * History
+   *
+   * <p>Utility class holding API path constants for history endpoints.
+   *
+   * <p>Provides:
+   *
+   * <ul>
+   *   <li>{@link #HISTORY} → Base path for retrieving history records ({@code /api/history}).
+   *   <li>{@link #HISTORY_DELETE_ELEMENT} → Path for deleting a specific history record by ID
+   *       ({@code /api/history/{id}}).
+   * </ul>
+   *
+   * <p>Declared as {@code static final} to group constants in a type-safe manner.
+   */
+  public static final class History {
+    public static final String HISTORY = "/api/history";
+    public static final String HISTORY_DELETE_ELEMENT = "/api/history/{id}";
+  }
+
+  /**
    * Docs
    *
    * <p>Defines API paths related to documentation endpoints.

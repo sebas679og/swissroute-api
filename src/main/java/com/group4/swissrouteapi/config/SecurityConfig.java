@@ -67,10 +67,9 @@ public class SecurityConfig {
         .exceptionHandling(
             exception ->
                 exception.authenticationEntryPoint(
-                    (request, response, authException) -> {
-                      jsonWriter.sendError(
-                          response, HttpStatus.UNAUTHORIZED, "Authentication required");
-                    }))
+                    (request, response, authException) ->
+                        jsonWriter.sendError(
+                            response, HttpStatus.UNAUTHORIZED, "Authentication required")))
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(ApiPaths.Docs.SWAGGER_UI, ApiPaths.Docs.API_DOCS)
@@ -82,6 +81,8 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, ApiPaths.Station.STATIONS)
                     .hasAuthority("AUTH_JWT")
                     .requestMatchers(HttpMethod.GET, ApiPaths.Connection.CONNECTIONS)
+                    .hasAuthority("AUTH_JWT")
+                    .requestMatchers(HttpMethod.GET, ApiPaths.History.HISTORY)
                     .hasAuthority("AUTH_JWT")
                     .anyRequest()
                     .authenticated())
