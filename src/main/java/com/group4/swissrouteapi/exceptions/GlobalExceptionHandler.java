@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 /**
  * GlobalExceptionHandler
@@ -75,6 +76,12 @@ public class GlobalExceptionHandler {
             .collect(Collectors.joining("; "));
 
     return buildErrorResponse(HttpStatus.BAD_REQUEST, description);
+  }
+
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+    String message = String.format("Invalid path parameter for: '%s'", ex.getName());
+    return buildErrorResponse(HttpStatus.BAD_REQUEST, message);
   }
 
   @ExceptionHandler(UnauthorizedException.class)
