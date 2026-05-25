@@ -2,6 +2,7 @@ package com.group4.swissrouteapi.services.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,6 +22,7 @@ import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiProgno
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiSection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStationConnection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStations;
+import com.group4.swissrouteapi.services.processors.SearchHistoryProcessor;
 import com.group4.swissrouteapi.utils.enums.TransportationType;
 import com.group4.swissrouteapi.utils.mappers.ConnectionsMapper;
 import java.time.LocalDate;
@@ -29,6 +31,8 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -50,6 +54,7 @@ class ConnectionsServiceImplTest {
 
   @Mock private TransportClient transportClient;
   @Mock private ConnectionsMapper connectionsMapper;
+  @Mock private SearchHistoryProcessor historyProcessor;
 
   @InjectMocks private ConnectionsServiceImpl connectionsService;
 
@@ -61,6 +66,7 @@ class ConnectionsServiceImplTest {
   private static final String TO = "Bern";
   private static final LocalDate DATE = LocalDate.of(2024, 10, 10);
   private static final LocalTime TIME = LocalTime.of(8, 0);
+  private static final UUID USER_ID = UUID.randomUUID();
 
   private ConnectionsQueryParams buildParams() {
     return ConnectionsQueryParams.builder().from(FROM).to(TO).build();
@@ -156,10 +162,12 @@ class ConnectionsServiceImplTest {
       Connection mapped = buildMappedConnection();
 
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
-          .thenReturn(buildApiResponse(List.of(apiConn)));
+              .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(mapped);
+      doNothing().when(historyProcessor)
+              .saveSearchHistory(FROM, TO, 1, USER_ID);
 
-      ConnectionsResponse result = connectionsService.getConnections(buildParams());
+      ConnectionsResponse result = connectionsService.getConnections(buildParams(), USER_ID);
 
       assertThat(result.getConnections()).containsExactly(mapped);
     }
@@ -176,8 +184,10 @@ class ConnectionsServiceImplTest {
           .thenReturn(buildApiResponse(List.of(apiConn1, apiConn2)));
       when(connectionsMapper.toConnectionResponse(apiConn1)).thenReturn(mapped1);
       when(connectionsMapper.toConnectionResponse(apiConn2)).thenReturn(mapped2);
+      doNothing().when(historyProcessor)
+              .saveSearchHistory(FROM, TO, 2, USER_ID);
 
-      ConnectionsResponse result = connectionsService.getConnections(buildParams());
+      ConnectionsResponse result = connectionsService.getConnections(buildParams(), USER_ID);
 
       assertThat(result.getConnections()).containsExactly(mapped1, mapped2);
     }
@@ -190,8 +200,10 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
+      doNothing().when(historyProcessor)
+              .saveSearchHistory(FROM, TO, 1, USER_ID);
 
-      connectionsService.getConnections(buildParams());
+      connectionsService.getConnections(buildParams(), USER_ID);
 
       verify(connectionsMapper).toConnectionResponse(apiConn);
     }
@@ -204,8 +216,10 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, DATE, TIME, List.of(TransportationType.TRAIN)))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
+      doNothing().when(historyProcessor)
+              .saveSearchHistory(FROM, TO, 1, USER_ID);
 
-      connectionsService.getConnections(buildParamsWithOptionals());
+      connectionsService.getConnections(buildParamsWithOptionals(), USER_ID);
 
       verify(transportClient)
           .getConnections(FROM, TO, DATE, TIME, List.of(TransportationType.TRAIN));
@@ -219,8 +233,10 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
+      doNothing().when(historyProcessor)
+              .saveSearchHistory(FROM, TO, 1, USER_ID);
 
-      connectionsService.getConnections(buildParams());
+      connectionsService.getConnections(buildParams(), USER_ID);
 
       verify(transportClient).getConnections(FROM, TO, null, null, new ArrayList<>());
     }
@@ -240,7 +256,7 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
           .thenReturn(null);
 
-      assertThatThrownBy(() -> connectionsService.getConnections(buildParams()))
+      assertThatThrownBy(() -> connectionsService.getConnections(buildParams(), USER_ID))
           .isInstanceOf(NotFoundException.class)
           .hasMessage("No connections found for the given parameters");
     }
@@ -251,7 +267,7 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
           .thenReturn(buildApiResponse(null));
 
-      assertThatThrownBy(() -> connectionsService.getConnections(buildParams()))
+      assertThatThrownBy(() -> connectionsService.getConnections(buildParams(), USER_ID))
           .isInstanceOf(NotFoundException.class)
           .hasMessage("No connections found for the given parameters");
     }
@@ -262,7 +278,7 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
           .thenReturn(buildApiResponse(Collections.emptyList()));
 
-      assertThatThrownBy(() -> connectionsService.getConnections(buildParams()))
+      assertThatThrownBy(() -> connectionsService.getConnections(buildParams(), USER_ID))
           .isInstanceOf(NotFoundException.class)
           .hasMessage("No connections found for the given parameters");
     }
@@ -273,7 +289,7 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
           .thenReturn(buildApiResponse(Collections.emptyList()));
 
-      assertThatThrownBy(() -> connectionsService.getConnections(buildParams()))
+      assertThatThrownBy(() -> connectionsService.getConnections(buildParams(), USER_ID))
           .isInstanceOf(NotFoundException.class);
 
       verify(connectionsMapper, never()).toConnectionResponse(org.mockito.ArgumentMatchers.any());
