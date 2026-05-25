@@ -15,6 +15,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 import javax.crypto.SecretKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,7 +56,7 @@ class BearerAuthenticationFilterTest {
   private static final String TEST_SECRET =
       "dGVzdC1zZWNyZXQta2V5LXRoYXQtaXMtbG9uZy1lbm91Z2gtZm9yLUhTMjU2";
 
-  private static final String USER_ID = "user-42";
+  private static final String USER_ID = UUID.randomUUID().toString();
   private static final String EMAIL = "john.doe@example.com";
 
   private SecretKey signingKey;
@@ -209,8 +210,8 @@ class BearerAuthenticationFilterTest {
     }
 
     @Test
-    @DisplayName("should set the email as the authentication principal")
-    void shouldSetEmailAsPrincipal() throws Exception {
+    @DisplayName("should set the UUID as the authentication principal")
+    void shouldSetIdAsPrincipal() throws Exception {
       stubSigningKey();
       MockHttpServletRequest request = requestWithBearer(buildValidToken());
       MockHttpServletResponse response = new MockHttpServletResponse();
@@ -218,7 +219,7 @@ class BearerAuthenticationFilterTest {
       filter.doFilterInternal(request, response, filterChain);
 
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      assertThat(authentication.getPrincipal()).isEqualTo(EMAIL);
+      assertThat(authentication.getPrincipal()).isEqualTo(USER_ID);
     }
 
     @Test
