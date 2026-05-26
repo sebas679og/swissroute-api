@@ -24,6 +24,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -58,6 +59,17 @@ public class ConnectionControllerTest extends AbstractIntegrationTest {
         .claim("email", user.getEmail())
         .issuedAt(Date.from(now))
         .expiration(Date.from(now.minus(1, ChronoUnit.MINUTES)))
+        .signWith(provider.getSigningKey())
+        .compact();
+  }
+
+  private String generateTokenWithOtherUser() {
+    Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    return Jwts.builder()
+        .subject(UUID.randomUUID().toString())
+        .claim("email", user.getEmail())
+        .issuedAt(Date.from(now))
+        .expiration(Date.from(now.plusSeconds(20)))
         .signWith(provider.getSigningKey())
         .compact();
   }
@@ -260,6 +272,22 @@ public class ConnectionControllerTest extends AbstractIntegrationTest {
           .andExpect(status().isUnauthorized())
           .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
           .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.name()))
+          .andExpect(jsonPath("$.description").exists())
+          .andExpect(jsonPath("$.timestamp").exists());
+    }
+
+    @Test
+    void shouldReturn404NotFoundWhenSavingHistoryAndUserUuidDoesNotExist() throws Exception {
+      connectionsStub.stubConnectionsByFromAndTo(FROM, TO);
+      mockMvc
+          .perform(
+              get(ApiPaths.Connection.CONNECTIONS)
+                  .param("from", FROM)
+                  .param("to", TO)
+                  .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + generateTokenWithOtherUser()))
+          .andExpect(status().isNotFound())
+          .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+          .andExpect(jsonPath("$.name").value(HttpStatus.NOT_FOUND.name()))
           .andExpect(jsonPath("$.description").exists())
           .andExpect(jsonPath("$.timestamp").exists());
     }

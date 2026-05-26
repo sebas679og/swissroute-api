@@ -16,11 +16,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +46,14 @@ public class ConnectionController {
 
   private final ConnectionsService connectionsService;
 
+  /**
+   * Handles GET requests for transport connections.
+   *
+   * @param queryParams validated query parameters including origin, destination, optional
+   *     date/time, and transportation filters
+   * @param authentication authenticated user performing the request
+   * @return {@link ResponseEntity} containing {@link ConnectionsResponse} with HTTP 200 status
+   */
   @Operation(
       summary = "Get connections between stations",
       description = "Endpoint responsible for obtaining connections between stations.",
@@ -107,8 +117,11 @@ public class ConnectionController {
                       allowableValues = {"train", "tram", "ship", "bus", "cableway"}))
           @Valid
           @ModelAttribute
-          ConnectionsQueryParams queryParams) {
+          ConnectionsQueryParams queryParams,
+      Authentication authentication) {
     return ResponseEntity.status(HttpStatus.OK)
-        .body(connectionsService.getConnections(queryParams));
+        .body(
+            connectionsService.getConnections(
+                queryParams, UUID.fromString(authentication.getName())));
   }
 }

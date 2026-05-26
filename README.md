@@ -151,12 +151,15 @@ http://localhost:8080/v3/api-docs
 ### Endpoint Summary
 
 
-| Method | Path                  | Description                                            |
-|--------|-----------------------|--------------------------------------------------------|
-| `POST` | `/api/users/register` | Creates a new user account in the SwissRoute platform. |
-| `POST` | `/api/users/login`    | Authenticates a user and returns a JWT token.          |
-| `GET`  | `/api/stations`       | Searches for stations based on a query string.         |
-| `GET`  | `/api/connections`    | Searches for connections between two stations.         |
+| Method    | Path                   | Description                                                                    |
+|-----------|------------------------|--------------------------------------------------------------------------------|
+| `POST`    | `/api/users/register`  | Creates a new user account in the SwissRoute platform.                         |
+| `POST`    | `/api/users/login`     | Authenticates a user and returns a JWT token.                                  |
+| `GET`     | `/api/stations`        | Searches for stations based on a query string.                                 |
+| `GET`     | `/api/connections`     | Searches for connections between two stations.                                 |
+| `GET`     | `/api/history`         | Returns list of connections search by user.                                    |
+| `DELETE`  | `/api/history/{id}`    | Delete a specific connection search from the history associated with the user. |
+| `DELETE`  | `/api/history`         | Delete all the user's connection search history.                               |
 
 ---
 
