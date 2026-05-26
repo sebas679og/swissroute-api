@@ -1,0 +1,13 @@
+package com.group4.swissrouteapi.repositories;
+
+import com.group4.swissrouteapi.models.FavoriteRouteEntity;
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+/**
+ * FavoriteRouteRepository
+ *
+ * <p>Spring Data JPA repository interface for managing persistence operations related to {@link
+ * FavoriteRouteEntity}.
+ */
+public interface FavoriteRouteRepository extends JpaRepository<FavoriteRouteEntity, UUID> {}
