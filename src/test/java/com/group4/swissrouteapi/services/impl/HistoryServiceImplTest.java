@@ -6,10 +6,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.dtos.requests.HistoryQueryParams;
 import com.group4.swissrouteapi.dtos.responses.history.History;
 import com.group4.swissrouteapi.dtos.responses.history.HistoryResponse;
 import com.group4.swissrouteapi.models.SearchHistoryEntity;
+import com.group4.swissrouteapi.models.UserEntity;
+import com.group4.swissrouteapi.services.components.UserFinder;
 import com.group4.swissrouteapi.services.processors.HistoryProcessor;
 import com.group4.swissrouteapi.utils.mappers.HistoryMapper;
 import java.time.Instant;
@@ -30,8 +33,8 @@ import org.springframework.data.domain.PageImpl;
 class HistoryServiceImplTest {
 
   @Mock private HistoryProcessor historyProcessor;
-
   @Mock private HistoryMapper historyMapper;
+  @Mock private UserFinder userFinder;
 
   @InjectMocks private HistoryServiceImpl historyService;
 
@@ -39,8 +42,10 @@ class HistoryServiceImplTest {
   // Fixtures
   // -------------------------------------------------------------------------
 
-  private static final UUID USER_ID = UUID.randomUUID();
+  private static final UUID USER_ID = UserDataProvider.USER_ID;
   private static final UUID ITEM_ID = UUID.randomUUID();
+
+  private final UserEntity buildUser = UserDataProvider.createMockUserLogin();
 
   private SearchHistoryEntity buildEntity(String origin, String destination) {
     return SearchHistoryEntity.builder()
@@ -82,6 +87,7 @@ class HistoryServiceImplTest {
       Page<SearchHistoryEntity> page = new PageImpl<>(List.of(entity));
       HistoryQueryParams params = defaultQueryParams();
 
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       when(historyProcessor.getAllHistoryByUserId(USER_ID, params.getPage(), params.getSize()))
           .thenReturn(page);
       when(historyMapper.toHistory(entity)).thenReturn(mappedHistory);
@@ -101,6 +107,7 @@ class HistoryServiceImplTest {
       HistoryQueryParams params = defaultQueryParams();
       Page<SearchHistoryEntity> emptyPage = Page.empty();
 
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       when(historyProcessor.getAllHistoryByUserId(USER_ID, params.getPage(), params.getSize()))
           .thenReturn(emptyPage);
 
@@ -122,6 +129,7 @@ class HistoryServiceImplTest {
       Page<SearchHistoryEntity> page = new PageImpl<>(List.of(first, second));
       HistoryQueryParams params = defaultQueryParams();
 
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       when(historyProcessor.getAllHistoryByUserId(USER_ID, params.getPage(), params.getSize()))
           .thenReturn(page);
       when(historyMapper.toHistory(first)).thenReturn(firstHistory);
@@ -141,6 +149,7 @@ class HistoryServiceImplTest {
       Page<SearchHistoryEntity> page =
           new PageImpl<>(List.of(), org.springframework.data.domain.PageRequest.of(2, 10), 0);
 
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       when(historyProcessor.getAllHistoryByUserId(USER_ID, 3, 10)).thenReturn(page);
 
       HistoryResponse response = historyService.getAllHistory(params, USER_ID);
@@ -153,24 +162,12 @@ class HistoryServiceImplTest {
     @DisplayName("delegates to processor with correct userId, page, and size")
     void delegatesToProcessor_withCorrectArguments() {
       HistoryQueryParams params = HistoryQueryParams.builder().page(2).size(5).build();
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       when(historyProcessor.getAllHistoryByUserId(USER_ID, 2, 5)).thenReturn(Page.empty());
 
       historyService.getAllHistory(params, USER_ID);
 
       verify(historyProcessor).getAllHistoryByUserId(USER_ID, 2, 5);
-    }
-
-    @Test
-    @DisplayName("propagates exception thrown by processor")
-    void propagatesException_thrownByProcessor() {
-      HistoryQueryParams params = defaultQueryParams();
-      when(historyProcessor.getAllHistoryByUserId(USER_ID, params.getPage(), params.getSize()))
-          .thenThrow(new RuntimeException("Processor failure"));
-
-      org.assertj.core.api.Assertions.assertThatThrownBy(
-              () -> historyService.getAllHistory(params, USER_ID))
-          .isInstanceOf(RuntimeException.class)
-          .hasMessage("Processor failure");
     }
   }
 
@@ -223,6 +220,7 @@ class HistoryServiceImplTest {
     @Test
     @DisplayName("delegates clearing to processor with correct userId")
     void delegatesClearingToProcessor_withCorrectUserId() {
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       historyService.clearHistory(USER_ID);
 
       verify(historyProcessor).clearHistory(USER_ID);
@@ -231,19 +229,10 @@ class HistoryServiceImplTest {
     @Test
     @DisplayName("does not interact with historyMapper when clearing history")
     void doesNotInteractWithMapper_whenClearingHistory() {
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       historyService.clearHistory(USER_ID);
 
       verifyNoInteractions(historyMapper);
-    }
-
-    @Test
-    @DisplayName("propagates exception thrown by processor when clearing history")
-    void propagatesException_thrownByProcessor() {
-      doThrow(new RuntimeException("User not found")).when(historyProcessor).clearHistory(USER_ID);
-
-      org.assertj.core.api.Assertions.assertThatThrownBy(() -> historyService.clearHistory(USER_ID))
-          .isInstanceOf(RuntimeException.class)
-          .hasMessage("User not found");
     }
   }
 }

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.dtos.requests.ConnectionsQueryParams;
 import com.group4.swissrouteapi.dtos.responses.connections.Connection;
 import com.group4.swissrouteapi.dtos.responses.connections.ConnectionsResponse;
@@ -22,6 +23,8 @@ import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiProgno
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiSection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStationConnection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStations;
+import com.group4.swissrouteapi.models.UserEntity;
+import com.group4.swissrouteapi.services.components.UserFinder;
 import com.group4.swissrouteapi.services.processors.HistoryProcessor;
 import com.group4.swissrouteapi.utils.enums.TransportationType;
 import com.group4.swissrouteapi.utils.mappers.ConnectionsMapper;
@@ -54,6 +57,7 @@ class ConnectionsServiceImplTest {
   @Mock private TransportClient transportClient;
   @Mock private ConnectionsMapper connectionsMapper;
   @Mock private HistoryProcessor historyProcessor;
+  @Mock private UserFinder userFinder;
 
   @InjectMocks private ConnectionsServiceImpl connectionsService;
 
@@ -66,6 +70,8 @@ class ConnectionsServiceImplTest {
   private static final LocalDate DATE = LocalDate.of(2024, 10, 10);
   private static final LocalTime TIME = LocalTime.of(8, 0);
   private static final UUID USER_ID = UUID.randomUUID();
+
+  private final UserEntity buildUser = UserDataProvider.createMockUserLogin();
 
   private ConnectionsQueryParams buildParams() {
     return ConnectionsQueryParams.builder().from(FROM).to(TO).build();
@@ -163,7 +169,8 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(mapped);
-      doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, USER_ID);
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
+      doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, buildUser);
 
       ConnectionsResponse result = connectionsService.getConnections(buildParams(), USER_ID);
 
@@ -182,7 +189,8 @@ class ConnectionsServiceImplTest {
           .thenReturn(buildApiResponse(List.of(apiConn1, apiConn2)));
       when(connectionsMapper.toConnectionResponse(apiConn1)).thenReturn(mapped1);
       when(connectionsMapper.toConnectionResponse(apiConn2)).thenReturn(mapped2);
-      doNothing().when(historyProcessor).saveHistory(FROM, TO, 2, USER_ID);
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
+      doNothing().when(historyProcessor).saveHistory(FROM, TO, 2, buildUser);
 
       ConnectionsResponse result = connectionsService.getConnections(buildParams(), USER_ID);
 
@@ -196,8 +204,9 @@ class ConnectionsServiceImplTest {
 
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
           .thenReturn(buildApiResponse(List.of(apiConn)));
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
-      doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, USER_ID);
+      doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, buildUser);
 
       connectionsService.getConnections(buildParams(), USER_ID);
 
@@ -212,7 +221,8 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, DATE, TIME, List.of(TransportationType.TRAIN)))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
-      doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, USER_ID);
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
+      doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, buildUser);
 
       connectionsService.getConnections(buildParamsWithOptionals(), USER_ID);
 
@@ -228,7 +238,8 @@ class ConnectionsServiceImplTest {
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>()))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
-      doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, USER_ID);
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
+      doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, buildUser);
 
       connectionsService.getConnections(buildParams(), USER_ID);
 
