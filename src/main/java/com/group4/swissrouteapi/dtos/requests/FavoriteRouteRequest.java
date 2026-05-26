@@ -1,5 +1,7 @@
 package com.group4.swissrouteapi.dtos.requests;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.group4.swissrouteapi.utils.deserializer.TransportationTypeDeserializer;
 import com.group4.swissrouteapi.utils.enums.TransportationType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -28,5 +30,6 @@ public class FavoriteRouteRequest {
   @NotBlank(message = "Destination is required")
   private String destination;
 
+  @JsonDeserialize(using = TransportationTypeDeserializer.class)
   private TransportationType transportationType;
 }

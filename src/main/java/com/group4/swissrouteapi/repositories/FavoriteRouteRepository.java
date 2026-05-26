@@ -10,4 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * <p>Spring Data JPA repository interface for managing persistence operations related to {@link
  * FavoriteRouteEntity}.
  */
-public interface FavoriteRouteRepository extends JpaRepository<FavoriteRouteEntity, UUID> {}
+public interface FavoriteRouteRepository extends JpaRepository<FavoriteRouteEntity, UUID> {
+
+  boolean existsByUserIdAndName(UUID userId, String name);
+}

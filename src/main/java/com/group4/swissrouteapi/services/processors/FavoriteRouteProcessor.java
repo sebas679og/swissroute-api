@@ -1,5 +1,6 @@
 package com.group4.swissrouteapi.services.processors;
 
+import com.group4.swissrouteapi.exceptions.ConflictException;
 import com.group4.swissrouteapi.models.FavoriteRouteEntity;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.repositories.FavoriteRouteRepository;
@@ -41,6 +42,9 @@ public class FavoriteRouteProcessor {
       String origin,
       String destination,
       TransportationType transportType) {
+    if (favoriteRouteRepository.existsByUserIdAndName(user.getId(), name)) {
+      throw new ConflictException("Favorite route name already exists");
+    }
     return favoriteRouteRepository.save(
         FavoriteRouteEntity.builder()
             .user(user)

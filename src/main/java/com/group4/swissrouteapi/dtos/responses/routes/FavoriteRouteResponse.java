@@ -20,6 +20,7 @@ import lombok.Value;
 public class FavoriteRouteResponse {
   UUID id;
   String name;
+  String origin;
   String destination;
   TransportationType transportType;
   Instant createdAt;
