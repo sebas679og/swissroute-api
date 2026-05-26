@@ -30,13 +30,13 @@ import lombok.Setter;
  * <p>Designed for persistence and retrieval using JPA/Hibernate, ensuring consistency and integrity
  * of user-related data.
  */
-@Entity
-@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "users")
 public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)

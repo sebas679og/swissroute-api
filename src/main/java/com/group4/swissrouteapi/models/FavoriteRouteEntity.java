@@ -1,7 +1,10 @@
 package com.group4.swissrouteapi.models;
 
+import com.group4.swissrouteapi.utils.enums.TransportationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,13 +32,13 @@ import lombok.Setter;
  * <p>Designed for persistence and retrieval using JPA/Hibernate, ensuring proper management of
  * user-defined travel preferences.
  */
-@Entity
-@Table(name = "favorite_routes")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "favorite_routes")
 public class FavoriteRouteEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -46,7 +49,7 @@ public class FavoriteRouteEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String name;
 
   @Column(nullable = false)
@@ -56,7 +59,8 @@ public class FavoriteRouteEntity {
   private String destination;
 
   @Column(name = "transport_type")
-  private String transportType;
+  @Enumerated(EnumType.STRING)
+  private TransportationType transportType;
 
   @Column(
       name = "created_at",
