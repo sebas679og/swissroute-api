@@ -145,13 +145,6 @@ public class HistoryController {
         responseCode = "204",
         description = "Successful response - All history items cleared successfully"),
     @ApiResponse(
-        responseCode = "400",
-        description = "Validation error - Invalid input fields",
-        content =
-            @Content(
-                mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = ErrorResponse.class))),
-    @ApiResponse(
         responseCode = "401",
         description = "Unauthorized - Missing or invalid authentication token",
         content =

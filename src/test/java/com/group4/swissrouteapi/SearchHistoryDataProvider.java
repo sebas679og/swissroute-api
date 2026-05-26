@@ -8,13 +8,6 @@ import com.group4.swissrouteapi.models.UserEntity;
  *
  * <p>Utility class for providing mock {@link SearchHistoryEntity} instances used in testing
  * scenarios.
- *
- * <p>Contains predefined origin and destination constants (e.g., Madrid → Paris, Barcelona →
- * London) and factory methods to create transient mock entities associated with a given {@link
- * UserEntity}.
- *
- * <p>Intended for use in unit tests or integration tests where sample search history data is
- * required.
  */
 public class SearchHistoryDataProvider {
 
