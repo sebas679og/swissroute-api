@@ -3,7 +3,9 @@ package com.group4.swissrouteapi.services.impl;
 import com.group4.swissrouteapi.dtos.requests.HistoryQueryParams;
 import com.group4.swissrouteapi.dtos.responses.history.HistoryResponse;
 import com.group4.swissrouteapi.models.SearchHistoryEntity;
+import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.services.HistoryService;
+import com.group4.swissrouteapi.services.components.UserFinder;
 import com.group4.swissrouteapi.services.processors.HistoryProcessor;
 import com.group4.swissrouteapi.utils.mappers.HistoryMapper;
 import java.util.UUID;
@@ -23,13 +25,15 @@ import org.springframework.stereotype.Service;
 public class HistoryServiceImpl implements HistoryService {
 
   private final HistoryProcessor historyProcessor;
+  private final UserFinder userFinder;
   private final HistoryMapper historyMapper;
 
   @Override
   public HistoryResponse getAllHistory(HistoryQueryParams queryParams, UUID userId) {
+    UserEntity user = userFinder.findById(userId);
     Page<SearchHistoryEntity> pageResult =
         historyProcessor.getAllHistoryByUserId(
-            userId, queryParams.getPage(), queryParams.getSize());
+            user.getId(), queryParams.getPage(), queryParams.getSize());
 
     return HistoryResponse.builder()
         .history(pageResult.getContent().stream().map(historyMapper::toHistory).toList())
@@ -47,6 +51,7 @@ public class HistoryServiceImpl implements HistoryService {
 
   @Override
   public void clearHistory(UUID userId) {
-    historyProcessor.clearHistory(userId);
+    UserEntity user = userFinder.findById(userId);
+    historyProcessor.clearHistory(user.getId());
   }
 }

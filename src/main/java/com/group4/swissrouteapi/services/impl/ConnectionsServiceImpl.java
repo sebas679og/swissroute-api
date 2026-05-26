@@ -6,7 +6,9 @@ import com.group4.swissrouteapi.dtos.responses.connections.ConnectionsResponse;
 import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.integrations.TransportClient;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnectionsResponse;
+import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.services.ConnectionsService;
+import com.group4.swissrouteapi.services.components.UserFinder;
 import com.group4.swissrouteapi.services.processors.HistoryProcessor;
 import com.group4.swissrouteapi.utils.mappers.ConnectionsMapper;
 import java.util.List;
@@ -28,6 +30,7 @@ public class ConnectionsServiceImpl implements ConnectionsService {
   private final TransportClient transportClient;
   private final ConnectionsMapper connectionsMapper;
   private final HistoryProcessor historyProcessor;
+  private final UserFinder userFinder;
 
   @Override
   public ConnectionsResponse getConnections(ConnectionsQueryParams requestParams, UUID userId) {
@@ -46,8 +49,10 @@ public class ConnectionsServiceImpl implements ConnectionsService {
     List<Connection> connections =
         api.connections().stream().map(connectionsMapper::toConnectionResponse).toList();
 
+    UserEntity user = userFinder.findById(userId);
+
     historyProcessor.saveHistory(
-        requestParams.getFrom(), requestParams.getTo(), connections.size(), userId);
+        requestParams.getFrom(), requestParams.getTo(), connections.size(), user);
 
     return ConnectionsResponse.builder().connections(connections).build();
   }
