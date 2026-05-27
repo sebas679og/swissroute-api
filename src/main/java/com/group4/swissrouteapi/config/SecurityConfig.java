@@ -94,6 +94,8 @@ public class SecurityConfig {
                     .hasAuthority(AUTHORITY)
                     .requestMatchers(HttpMethod.GET, ApiPaths.FavoriteRoutes.FAVORITE_ROUTES)
                     .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.PUT,ApiPaths.FavoriteRoutes.FAVORITE_ROUTE)
+                    .hasAuthority(AUTHORITY)
                     .anyRequest()
                     .authenticated())
         .addFilterBefore(bearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

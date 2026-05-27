@@ -83,6 +83,7 @@ public final class ApiPaths {
    */
   public static final class FavoriteRoutes {
     public static final String FAVORITE_ROUTES = "/api/favorite-routes";
+    public static final String FAVORITE_ROUTE = "/api/favorite-routes/{routeId}";
   }
 
   /**
