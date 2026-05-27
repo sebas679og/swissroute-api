@@ -277,6 +277,49 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Favorite Routes",
+      "item": [
+        {
+          "name": "Add Favorite Route",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Home to work\",\n  \"origin\": \"Geneve\",\n  \"destination\": \"Zurich\",\n  \"transportationType\": \"TRAIN\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/favorite-routes",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "favorite-routes"
+              ]
+            },
+            "description": "# ⭐ Register Favorite Route\n\n## 📌 Endpoint\n\n**POST**  \n`/api/favorite-routes`\n\n---\n\n## 📖 Description\n\nRegisters a favorite route for the authenticated user.\n\nFavorite routes allow users to quickly save and reuse frequently searched routes such as:\n\n- Home to work\n    \n- Daily commute\n    \n- Frequent travel destinations\n    \n\nEach favorite route is associated with the authenticated user and includes:\n\n- Route name\n    \n- Origin station\n    \n- Destination station\n    \n- Preferred transportation type (optional)\n    \n\nThe route name must be unique in the system.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Request Body (JSON)\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| name | String | ✅ Yes | Unique favorite route name |\n| origin | String | ✅ Yes | Origin station |\n| destination | String | ✅ Yes | Destination station |\n| transportationType | Enum | ❌ No | Preferred transportation type |\n\n---\n\n## Supported Transportation Types\n\nThe `transportationType` field accepts the following values:\n\n- `TRAIN`\n    \n- `TRAM`\n    \n- `SHIP`\n    \n- `BUS`\n    \n- `CABLEWAY`\n    \n\nThe value is case-insensitive.\n\n---\n\n## Example Request\n\n``` http\nPOST /api/favorite-routes\nAuthorization: Bearer {{JWT}}\nContent-Type: application/json\n\n ```\n\n``` json\n{\n  \"name\": \"Home to work\",\n  \"origin\": \"Geneve\",\n  \"destination\": \"Zurich\",\n  \"transportationType\": \"TRAIN\"\n}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 201 Created\n\nThe favorite route was successfully created.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"id\": \"028abc30-423b-4b17-8bb8-87647d860b6a\",\n    \"name\": \"Home to work\",\n    \"origin\": \"Geneve\",\n    \"destination\": \"Zurich\",\n    \"transportType\": \"TRAIN\",\n    \"createdAt\": \"2026-05-26T23:58:17.137Z\"\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid or missing fields.\n\n### Possible Causes\n\n- Missing required fields\n    \n- Blank values\n    \n- Invalid transportation type\n    \n- Malformed request body\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"name: Name is required; origin: Origin is required\",\n    \"timestamp\": \"2026-05-26T23:59:10.245Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Malformed token\n    \n- Invalid token signature\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-26T23:59:58.731Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe authenticated user was not found in the system.\n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"User not registered\",\n    \"timestamp\": \"2026-05-27T00:00:14.117Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 409 Conflict\n\nThe favorite route name already exists.\n\n### Possible Causes\n\n- Duplicate route name\n    \n- Unique constraint violation\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 409,\n    \"name\": \"CONFLICT\",\n    \"description\": \"Favorite route name already exists\",\n    \"timestamp\": \"2026-05-27T00:01:20.552Z\"\n}\n\n ```"
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "event": [

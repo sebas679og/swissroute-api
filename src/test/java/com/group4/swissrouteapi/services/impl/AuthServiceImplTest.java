@@ -8,7 +8,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.config.properties.JwtProperties;
 import com.group4.swissrouteapi.dtos.requests.LoginRequest;
 import com.group4.swissrouteapi.dtos.requests.RegisterRequest;
@@ -17,6 +16,7 @@ import com.group4.swissrouteapi.dtos.responses.auth.RegisterResponse;
 import com.group4.swissrouteapi.exceptions.ResourceConflictException;
 import com.group4.swissrouteapi.exceptions.UnauthorizedException;
 import com.group4.swissrouteapi.models.UserEntity;
+import com.group4.swissrouteapi.providers.UserDataProvider;
 import com.group4.swissrouteapi.repositories.UserRepository;
 import com.group4.swissrouteapi.services.components.JwtComponent;
 import com.group4.swissrouteapi.services.processors.UserLoginProcessor;

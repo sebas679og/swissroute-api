@@ -76,6 +76,16 @@ public final class ApiPaths {
   }
 
   /**
+   * FavoriteRoutes
+   *
+   * <p>Static holder class for API endpoint path constants related to favorite routes
+   * functionality.
+   */
+  public static final class FavoriteRoutes {
+    public static final String FAVORITE_ROUTES = "/api/favorite-routes";
+  }
+
+  /**
    * Docs
    *
    * <p>Defines API paths related to documentation endpoints.

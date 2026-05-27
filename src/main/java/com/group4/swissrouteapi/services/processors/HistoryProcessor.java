@@ -4,7 +4,6 @@ import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.models.SearchHistoryEntity;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.repositories.SearchHistoryRepository;
-import com.group4.swissrouteapi.repositories.UserRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,25 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
  * SearchHistoryProcessor
  *
  * <p>Spring service responsible for processing and persisting user search history.
- *
- * <p>Responsibilities:
- *
- * <ul>
- *   <li>Retrieves the {@link UserEntity} associated with a given user ID.
- *   <li>Builds and saves a {@link SearchHistoryEntity} with origin, destination, result count, and
- *       user association.
- *   <li>Ensures transactional integrity when persisting search history records.
- * </ul>
- *
- * <p>Annotated with {@link org.springframework.stereotype.Service} and {@link
- * lombok.RequiredArgsConstructor} for Spring integration and constructor-based dependency
- * injection.
  */
 @Service
 @RequiredArgsConstructor
 public class HistoryProcessor {
 
-  private final UserRepository userRepository;
   private final SearchHistoryRepository searchHistoryRepository;
 
   /**
@@ -45,13 +30,12 @@ public class HistoryProcessor {
    * @param from origin station name
    * @param to destination station name
    * @param resultCount number of results returned by the search
-   * @param userId unique identifier of the user performing the search
+   * @param user the {@link UserEntity} performing the search, used to associate the history record
+   *     with the user
    * @throws NotFoundException if the user does not exist
    */
   @Transactional
-  public void saveHistory(String from, String to, Integer resultCount, UUID userId) {
-    UserEntity user = searchUser(userId);
-
+  public void saveHistory(String from, String to, Integer resultCount, UserEntity user) {
     searchHistoryRepository.save(
         SearchHistoryEntity.builder()
             .user(user)
@@ -76,9 +60,8 @@ public class HistoryProcessor {
    */
   @Transactional(readOnly = true)
   public Page<SearchHistoryEntity> getAllHistoryByUserId(UUID userId, Integer page, Integer size) {
-    UserEntity user = searchUser(userId);
     Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "searchedAt"));
-    return searchHistoryRepository.findByUserId(user.getId(), pageable);
+    return searchHistoryRepository.findByUserId(userId, pageable);
   }
 
   /**
@@ -112,13 +95,6 @@ public class HistoryProcessor {
    */
   @Transactional
   public void clearHistory(UUID userId) {
-    UserEntity user = searchUser(userId);
-    searchHistoryRepository.deleteByUserId(user.getId());
-  }
-
-  private UserEntity searchUser(UUID userId) {
-    return userRepository
-        .findById(userId)
-        .orElseThrow(() -> new NotFoundException("User not found"));
+    searchHistoryRepository.deleteByUserId(userId);
   }
 }

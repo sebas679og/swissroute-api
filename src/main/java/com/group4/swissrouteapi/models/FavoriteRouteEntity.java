@@ -1,7 +1,10 @@
 package com.group4.swissrouteapi.models;
 
+import com.group4.swissrouteapi.utils.enums.TransportationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,6 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
@@ -29,13 +33,18 @@ import lombok.Setter;
  * <p>Designed for persistence and retrieval using JPA/Hibernate, ensuring proper management of
  * user-defined travel preferences.
  */
-@Entity
-@Table(name = "favorite_routes")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(
+    name = "favorite_routes",
+    uniqueConstraints =
+        @UniqueConstraint(
+            name = "uk_favorite_routes_user_name",
+            columnNames = {"user_id", "name"}))
 public class FavoriteRouteEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -56,7 +65,8 @@ public class FavoriteRouteEntity {
   private String destination;
 
   @Column(name = "transport_type")
-  private String transportType;
+  @Enumerated(EnumType.STRING)
+  private TransportationType transportType;
 
   @Column(
       name = "created_at",

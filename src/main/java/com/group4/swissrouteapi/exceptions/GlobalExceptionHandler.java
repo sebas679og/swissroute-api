@@ -1,10 +1,13 @@
 package com.group4.swissrouteapi.exceptions;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.group4.swissrouteapi.dtos.responses.ErrorResponse;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -75,13 +78,43 @@ public class GlobalExceptionHandler {
             .filter(msg -> msg != null && !msg.isBlank())
             .collect(Collectors.joining("; "));
 
-    return buildErrorResponse(HttpStatus.BAD_REQUEST, description);
+    return badRequest(description);
+  }
+
+  /**
+   * Handle exceptions related to malformed JSON in the request body, such as invalid enum values or
+   * incorrect data types. This method provides detailed error messages for easier debugging.
+   */
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<ErrorResponse> customHttpMessageNotReadableException(
+      HttpMessageNotReadableException ex) {
+    Throwable cause = ex.getCause();
+    String message = "Invalid request payload";
+
+    if (cause instanceof InvalidFormatException formatException
+        && formatException.getTargetType().isEnum()) {
+
+      String fieldName = formatException.getPath().getFirst().getFieldName();
+      Object invalidValue = formatException.getValue();
+
+      String allowedValues =
+          Arrays.stream(formatException.getTargetType().getEnumConstants())
+              .map(Object::toString)
+              .collect(Collectors.joining(", "));
+
+      message =
+          String.format(
+              "%s: Invalid value '%s'. Allowed values: [%s]",
+              fieldName, invalidValue, allowedValues);
+    }
+
+    return badRequest(message);
   }
 
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
   public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
     String message = String.format("Invalid path parameter for: '%s'", ex.getName());
-    return buildErrorResponse(HttpStatus.BAD_REQUEST, message);
+    return badRequest(message);
   }
 
   @ExceptionHandler(UnauthorizedException.class)
@@ -94,6 +127,11 @@ public class GlobalExceptionHandler {
     return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
   }
 
+  @ExceptionHandler(ConflictException.class)
+  public ResponseEntity<ErrorResponse> handleConflictException(ConflictException ex) {
+    return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage());
+  }
+
   @ExceptionHandler(BadGatewayException.class)
   public ResponseEntity<ErrorResponse> handleBadGatewayException(BadGatewayException ex) {
     return buildErrorResponse(HttpStatus.BAD_GATEWAY, ex.getMessage());
@@ -103,6 +141,10 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleServiceUnavailableException(
       ServiceUnavailableException ex) {
     return buildErrorResponse(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+  }
+
+  private ResponseEntity<ErrorResponse> badRequest(String message) {
+    return buildErrorResponse(HttpStatus.BAD_REQUEST, message);
   }
 
   private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status, String description) {

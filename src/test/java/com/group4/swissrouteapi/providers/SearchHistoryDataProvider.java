@@ -1,4 +1,4 @@
-package com.group4.swissrouteapi;
+package com.group4.swissrouteapi.providers;
 
 import com.group4.swissrouteapi.models.SearchHistoryEntity;
 import com.group4.swissrouteapi.models.UserEntity;

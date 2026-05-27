@@ -20,6 +20,8 @@
   - [Get Search History](#get-search-history)
   - [Delete Search History Item](#delete-search-history-item)
   - [Clear Search History](#clear-search-history)
+- [Favorite Routes](#favorite-routes)
+  - [Create Favorite Route](#create-favorite-route)
 
 ---
 
@@ -1384,4 +1386,194 @@ Occurs when the authenticated user does not exist.
 * Only the authenticated user's history is deleted.
 * The operation permanently removes all stored search history records for the user.
 * This operation cannot be undone.
+
+---
+
+## Favorite Routes
+
+### Create Favorite Route
+
+Registers a favorite route for the authenticated user.
+
+#### Endpoint
+
+```http
+POST /api/favorite-routes
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+#### Request Body
+
+```json
+{
+  "name": "Home to work",
+  "origin": "Geneve",
+  "destination": "Zurich",
+  "transportationType": "TRAIN"
+}
+```
+
+---
+
+#### Request Fields
+
+| Field                | Type   | Required | Description                |
+|----------------------|--------|----------|----------------------------|
+| `name`               | String | Yes      | Unique favorite route name |
+| `origin`             | String | Yes      | Origin station             |
+| `destination`        | String | Yes      | Destination station        |
+| `transportationType` | Enum   | No       | Transportation type filter |
+
+---
+
+#### Supported Transportation Types
+
+Allowed values for `transportationType`:
+
+* `TRAIN`
+* `TRAM`
+* `SHIP`
+* `BUS`
+* `CABLEWAY`
+
+---
+
+#### Validation Rules
+
+| Field                | Validation                                   |
+|----------------------|----------------------------------------------|
+| `name`               | Must not be null, empty, or blank            |
+| `origin`             | Must not be null, empty, or blank            |
+| `destination`        | Must not be null, empty, or blank            |
+| `transportationType` | Optional, but must match allowed enum values |
+
+---
+
+#### Successful Response
+
+##### 201 — Created
+
+```json
+{
+  "id": "028abc30-423b-4b17-8bb8-87647d860b6a",
+  "name": "Home to work",
+  "origin": "Geneve",
+  "destination": "Zurich",
+  "transportType": "TRAIN",
+  "createdAt": "2026-05-26T23:58:17.137Z"
+}
+```
+
+---
+
+#### Response Fields
+
+| Field           | Type     | Description                |
+|-----------------|----------|----------------------------|
+| `id`            | UUID     | Favorite route identifier  |
+| `name`          | String   | Favorite route name        |
+| `origin`        | String   | Origin station             |
+| `destination`   | String   | Destination station        |
+| `transportType` | String   | Transportation type filter |
+| `createdAt`     | DateTime | UTC creation timestamp     |
+
+---
+
+#### Error Responses
+
+##### 400 — Bad Request
+
+Occurs when required fields are missing or the transportation type is invalid.
+
+###### Missing Required Fields
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "name: Name is required; origin: Origin is required; destination: Destination is required",
+  "timestamp": "2026-05-26T23:58:17.137Z"
+}
+```
+
+---
+
+###### Invalid Transportation Type
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Field 'transportationType': invalid value 'plane'",
+  "timestamp": "2026-05-26T23:58:17.137Z"
+}
+```
+
+---
+
+##### 401 — Unauthorized
+
+Occurs when the JWT token is malformed, invalid, or expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-26T23:58:17.137Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when the authenticated user does not exist in the database.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "User not found",
+  "timestamp": "2026-05-26T23:58:17.137Z"
+}
+```
+
+---
+
+##### 409 — Conflict
+
+Occurs when the favorite route name already exists.
+
+```json
+{
+  "code": 409,
+  "name": "CONFLICT",
+  "description": "Favorite route name already exists",
+  "timestamp": "2026-05-26T23:58:17.137Z"
+}
+```
+
+---
+
+### Notes
+
+* Favorite routes are associated with the authenticated user.
+* The `name` field must be unique in the database.
+* Transportation type filtering is optional.
+* All timestamps are returned in ISO-8601 UTC format.
+* Favorite routes can later be used for quick connection searches.
 

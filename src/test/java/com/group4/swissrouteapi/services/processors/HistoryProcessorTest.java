@@ -8,15 +8,13 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.models.SearchHistoryEntity;
 import com.group4.swissrouteapi.models.UserEntity;
+import com.group4.swissrouteapi.providers.UserDataProvider;
 import com.group4.swissrouteapi.repositories.SearchHistoryRepository;
-import com.group4.swissrouteapi.repositories.UserRepository;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -46,7 +44,6 @@ import org.springframework.data.domain.Pageable;
 @DisplayName("SearchHistoryProcessor")
 class HistoryProcessorTest {
 
-  @Mock private UserRepository userRepository;
   @Mock private SearchHistoryRepository searchHistoryRepository;
 
   @InjectMocks private HistoryProcessor historyProcessor;
@@ -63,9 +60,9 @@ class HistoryProcessorTest {
   private final UserEntity buildUser = UserDataProvider.createMockUserLogin();
   private static final UUID ITEM_ID = UUID.randomUUID();
 
-  private UserEntity buildUser(UUID id) {
-    UserEntity user = new UserEntity();
-    user.setId(id);
+  private UserEntity buildUser() {
+    UserEntity user = UserEntity.builder().build();
+    user.setId(USER_ID);
     return user;
   }
 
@@ -91,19 +88,13 @@ class HistoryProcessorTest {
     @Test
     @DisplayName("should look up the user by the provided userId")
     void shouldLookUpUserByUserId() {
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
-
-      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID);
-
-      verify(userRepository).findById(USER_ID);
+      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, buildUser);
     }
 
     @Test
     @DisplayName("should save the search history entity exactly once")
     void shouldSaveHistoryOnce() {
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
-
-      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, buildUser);
 
       verify(searchHistoryRepository).save(any(SearchHistoryEntity.class));
     }
@@ -111,10 +102,8 @@ class HistoryProcessorTest {
     @Test
     @DisplayName("should save the entity with the correct origin")
     void shouldSaveEntityWithCorrectOrigin() {
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
-
       ArgumentCaptor<SearchHistoryEntity> captor = forClass(SearchHistoryEntity.class);
-      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, buildUser);
       verify(searchHistoryRepository).save(captor.capture());
 
       assertThat(captor.getValue().getOrigin()).isEqualTo(FROM);
@@ -123,10 +112,8 @@ class HistoryProcessorTest {
     @Test
     @DisplayName("should save the entity with the correct destination")
     void shouldSaveEntityWithCorrectDestination() {
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
-
       ArgumentCaptor<SearchHistoryEntity> captor = forClass(SearchHistoryEntity.class);
-      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, buildUser);
       verify(searchHistoryRepository).save(captor.capture());
 
       assertThat(captor.getValue().getDestination()).isEqualTo(TO);
@@ -135,10 +122,8 @@ class HistoryProcessorTest {
     @Test
     @DisplayName("should save the entity with the correct result count")
     void shouldSaveEntityWithCorrectResultCount() {
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
-
       ArgumentCaptor<SearchHistoryEntity> captor = forClass(SearchHistoryEntity.class);
-      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, buildUser);
       verify(searchHistoryRepository).save(captor.capture());
 
       assertThat(captor.getValue().getResultCount()).isEqualTo(RESULT_COUNT);
@@ -147,10 +132,8 @@ class HistoryProcessorTest {
     @Test
     @DisplayName("should save the entity associated with the looked-up user")
     void shouldSaveEntityWithCorrectUser() {
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
-
       ArgumentCaptor<SearchHistoryEntity> captor = forClass(SearchHistoryEntity.class);
-      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, buildUser);
       verify(searchHistoryRepository).save(captor.capture());
 
       assertThat(captor.getValue().getUser()).isSameAs(buildUser);
@@ -159,43 +142,11 @@ class HistoryProcessorTest {
     @Test
     @DisplayName("should pass zero as result count when no results were found")
     void shouldSaveEntityWithZeroResultCount() {
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(buildUser));
-
       ArgumentCaptor<SearchHistoryEntity> captor = forClass(SearchHistoryEntity.class);
-      historyProcessor.saveHistory(FROM, TO, 0, USER_ID);
+      historyProcessor.saveHistory(FROM, TO, 0, buildUser);
       verify(searchHistoryRepository).save(captor.capture());
 
       assertThat(captor.getValue().getResultCount()).isZero();
-    }
-  }
-
-  // ===========================================================================
-  // saveHistory — user not found
-  // ===========================================================================
-
-  @Nested
-  @DisplayName("saveHistory() - user not found")
-  class UserNotFoundTest {
-
-    @Test
-    @DisplayName("should throw NotFoundException when the user does not exist")
-    void shouldThrowNotFoundWhenUserDoesNotExist() {
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
-
-      assertThatThrownBy(() -> historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID))
-          .isInstanceOf(NotFoundException.class)
-          .hasMessage("User not found");
-    }
-
-    @Test
-    @DisplayName("should not save anything when the user does not exist")
-    void shouldNotSaveWhenUserDoesNotExist() {
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
-
-      assertThatThrownBy(() -> historyProcessor.saveHistory(FROM, TO, RESULT_COUNT, USER_ID))
-          .isInstanceOf(NotFoundException.class);
-
-      verify(searchHistoryRepository, never()).save(any());
     }
   }
 
@@ -210,11 +161,9 @@ class HistoryProcessorTest {
     @Test
     @DisplayName("returns page from repository for valid user")
     void returnsPageFromRepository_forValidUser() {
-      UserEntity user = buildUser(USER_ID);
+      UserEntity user = buildUser();
       SearchHistoryEntity entity = buildEntity(user);
       Page<SearchHistoryEntity> expectedPage = new PageImpl<>(List.of(entity));
-
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
       when(searchHistoryRepository.findByUserId(eq(USER_ID), any(Pageable.class)))
           .thenReturn(expectedPage);
 
@@ -226,8 +175,6 @@ class HistoryProcessorTest {
     @Test
     @DisplayName("builds pageable with descending searchedAt sort and 0-based page index")
     void buildsPageable_withDescendingSort_andZeroBasedIndex() {
-      UserEntity user = buildUser(USER_ID);
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
       when(searchHistoryRepository.findByUserId(eq(USER_ID), any(Pageable.class)))
           .thenReturn(Page.empty());
 
@@ -244,32 +191,6 @@ class HistoryProcessorTest {
               Objects.requireNonNull(captured.getSort().getOrderFor("searchedAt")).getDirection())
           .isEqualTo(org.springframework.data.domain.Sort.Direction.DESC);
     }
-
-    @Test
-    @DisplayName("throws NotFoundException when user does not exist")
-    void throwsNotFoundException_whenUserDoesNotExist() {
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
-
-      assertThatThrownBy(() -> historyProcessor.getAllHistoryByUserId(USER_ID, 1, 20))
-          .isInstanceOf(NotFoundException.class)
-          .hasMessageContaining("User not found");
-
-      verifyNoInteractions(searchHistoryRepository);
-    }
-
-    @Test
-    @DisplayName("passes user's id (not the UUID argument) to repository query")
-    void passesUserEntityId_toRepositoryQuery() {
-      UUID persistedId = UUID.randomUUID();
-      UserEntity user = buildUser(persistedId);
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
-      when(searchHistoryRepository.findByUserId(eq(persistedId), any(Pageable.class)))
-          .thenReturn(Page.empty());
-
-      historyProcessor.getAllHistoryByUserId(USER_ID, 1, 20);
-
-      verify(searchHistoryRepository).findByUserId(eq(persistedId), any(Pageable.class));
-    }
   }
 
   // -------------------------------------------------------------------------
@@ -283,7 +204,7 @@ class HistoryProcessorTest {
     @Test
     @DisplayName("deletes the entity when it exists and belongs to the user")
     void deletesEntity_whenItExistsAndBelongsToUser() {
-      UserEntity user = buildUser(USER_ID);
+      UserEntity user = buildUser();
       SearchHistoryEntity entity = buildEntity(user);
 
       when(searchHistoryRepository.findByIdAndUserId(ITEM_ID, USER_ID))
@@ -320,14 +241,12 @@ class HistoryProcessorTest {
     @Test
     @DisplayName("does not interact with userRepository during item deletion")
     void doesNotInteractWithUserRepository_duringItemDeletion() {
-      UserEntity user = buildUser(USER_ID);
+      UserEntity user = buildUser();
       SearchHistoryEntity entity = buildEntity(user);
       when(searchHistoryRepository.findByIdAndUserId(ITEM_ID, USER_ID))
           .thenReturn(Optional.of(entity));
 
       historyProcessor.deleteHistoryItem(ITEM_ID, USER_ID);
-
-      verifyNoInteractions(userRepository);
     }
   }
 
@@ -342,44 +261,14 @@ class HistoryProcessorTest {
     @Test
     @DisplayName("deletes all history for user when user exists")
     void deletesAllHistory_whenUserExists() {
-      UserEntity user = buildUser(USER_ID);
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
-
       historyProcessor.clearHistory(USER_ID);
 
       verify(searchHistoryRepository).deleteByUserId(USER_ID);
     }
 
     @Test
-    @DisplayName("passes user entity's id to repository deleteByUserId")
-    void passesUserEntityId_toDeleteByUserId() {
-      UUID persistedId = UUID.randomUUID();
-      UserEntity user = buildUser(persistedId);
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
-
-      historyProcessor.clearHistory(USER_ID);
-
-      verify(searchHistoryRepository).deleteByUserId(persistedId);
-    }
-
-    @Test
-    @DisplayName("throws NotFoundException when user does not exist")
-    void throwsNotFoundException_whenUserDoesNotExist() {
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.empty());
-
-      assertThatThrownBy(() -> historyProcessor.clearHistory(USER_ID))
-          .isInstanceOf(NotFoundException.class)
-          .hasMessageContaining("User not found");
-
-      verifyNoInteractions(searchHistoryRepository);
-    }
-
-    @Test
     @DisplayName("calls deleteByUserId exactly once for a valid user")
     void callsDeleteByUserId_exactlyOnce_forValidUser() {
-      UserEntity user = buildUser(USER_ID);
-      when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
-
       historyProcessor.clearHistory(USER_ID);
 
       verify(searchHistoryRepository, times(1)).deleteByUserId(any());
