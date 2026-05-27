@@ -10,10 +10,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.models.SearchHistoryEntity;
 import com.group4.swissrouteapi.models.UserEntity;
+import com.group4.swissrouteapi.providers.UserDataProvider;
 import com.group4.swissrouteapi.repositories.SearchHistoryRepository;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

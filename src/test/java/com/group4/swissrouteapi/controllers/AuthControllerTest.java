@@ -9,12 +9,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.swissrouteapi.AbstractIntegrationTest;
-import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.config.properties.JwtProperties;
 import com.group4.swissrouteapi.dtos.requests.LoginRequest;
 import com.group4.swissrouteapi.dtos.requests.RegisterRequest;
 import com.group4.swissrouteapi.models.UserEntity;
+import com.group4.swissrouteapi.providers.UserDataProvider;
 import com.group4.swissrouteapi.repositories.UserRepository;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;

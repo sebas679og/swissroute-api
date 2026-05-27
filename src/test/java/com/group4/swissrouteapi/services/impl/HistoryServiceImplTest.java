@@ -6,12 +6,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.dtos.requests.HistoryQueryParams;
 import com.group4.swissrouteapi.dtos.responses.history.History;
 import com.group4.swissrouteapi.dtos.responses.history.HistoryResponse;
 import com.group4.swissrouteapi.models.SearchHistoryEntity;
 import com.group4.swissrouteapi.models.UserEntity;
+import com.group4.swissrouteapi.providers.UserDataProvider;
 import com.group4.swissrouteapi.services.components.UserFinder;
 import com.group4.swissrouteapi.services.processors.HistoryProcessor;
 import com.group4.swissrouteapi.utils.mappers.HistoryMapper;

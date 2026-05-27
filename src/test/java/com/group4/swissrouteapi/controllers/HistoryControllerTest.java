@@ -12,14 +12,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.swissrouteapi.AbstractIntegrationTest;
-import com.group4.swissrouteapi.SearchHistoryMockFactory;
-import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.config.JwtKeyProvider;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.dtos.requests.LoginRequest;
 import com.group4.swissrouteapi.dtos.responses.auth.LoginResponse;
 import com.group4.swissrouteapi.models.SearchHistoryEntity;
 import com.group4.swissrouteapi.models.UserEntity;
+import com.group4.swissrouteapi.providers.SearchHistoryMockFactory;
+import com.group4.swissrouteapi.providers.UserDataProvider;
 import com.group4.swissrouteapi.repositories.SearchHistoryRepository;
 import com.group4.swissrouteapi.repositories.UserRepository;
 import com.group4.swissrouteapi.services.AuthService;

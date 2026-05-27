@@ -13,11 +13,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
-
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,11 +40,11 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(
-        name = "favorite_routes",
-uniqueConstraints = @UniqueConstraint(
-        name = "uk_favorite_routes_user_name",
-        columnNames = {"user_id", "name"}
-))
+    name = "favorite_routes",
+    uniqueConstraints =
+        @UniqueConstraint(
+            name = "uk_favorite_routes_user_name",
+            columnNames = {"user_id", "name"}))
 public class FavoriteRouteEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)

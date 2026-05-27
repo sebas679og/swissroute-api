@@ -7,7 +7,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.dtos.requests.ConnectionsQueryParams;
 import com.group4.swissrouteapi.dtos.responses.connections.Connection;
 import com.group4.swissrouteapi.dtos.responses.connections.ConnectionsResponse;
@@ -24,6 +23,7 @@ import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiSectio
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStationConnection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStations;
 import com.group4.swissrouteapi.models.UserEntity;
+import com.group4.swissrouteapi.providers.UserDataProvider;
 import com.group4.swissrouteapi.services.components.UserFinder;
 import com.group4.swissrouteapi.services.processors.HistoryProcessor;
 import com.group4.swissrouteapi.utils.enums.TransportationType;

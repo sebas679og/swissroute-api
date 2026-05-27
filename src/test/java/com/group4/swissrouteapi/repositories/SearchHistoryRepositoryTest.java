@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.group4.swissrouteapi.AbstractIntegrationTest;
-import com.group4.swissrouteapi.SearchHistoryDataProvider;
-import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.models.SearchHistoryEntity;
 import com.group4.swissrouteapi.models.UserEntity;
+import com.group4.swissrouteapi.providers.SearchHistoryDataProvider;
+import com.group4.swissrouteapi.providers.UserDataProvider;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
