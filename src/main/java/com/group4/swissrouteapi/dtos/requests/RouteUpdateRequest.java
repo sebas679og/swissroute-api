@@ -21,4 +21,13 @@ public class RouteUpdateRequest {
 
     @JsonDeserialize(using = TransportationTypeDeserializer.class)
     private TransportationType transportationType;
+
+
+    public boolean isEmpty() {
+        return
+                (name == null || name.isBlank()) &&
+                        (origin == null || origin.isBlank()) &&
+                        (destination == null || destination.isBlank()) &&
+                        transportationType == null;
+    }
 }
