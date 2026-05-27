@@ -100,4 +100,13 @@ public class FavoriteRouteProcessor {
 
     return favoriteRouteRepository.save(route);
   }
+
+  @Transactional
+  public void deleteFavoriteRoute(UUID userId, UUID routeId) {
+    FavoriteRouteEntity route =
+            favoriteRouteRepository.findByUserIdAndId(userId, routeId)
+                    .orElseThrow(()-> new NotFoundException("Route not found"));
+
+    favoriteRouteRepository.delete(route);
+  }
 }
