@@ -3,7 +3,7 @@ package com.group4.swissrouteapi.controllers;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.dtos.requests.FavoriteRouteRequest;
 import com.group4.swissrouteapi.dtos.responses.ErrorResponse;
-import com.group4.swissrouteapi.dtos.responses.favorites.RegisterRouteResponse;
+import com.group4.swissrouteapi.dtos.responses.favorites.RouteResponse;
 import com.group4.swissrouteapi.services.FavoriteRouteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -49,7 +49,7 @@ public class FavoriteRouteController {
    *
    * @param authentication the Spring Security authentication object containing the user's identity
    * @param request the validated request payload with route details
-   * @return a {@link ResponseEntity} containing the created {@link RegisterRouteResponse} with HTTP
+   * @return a {@link ResponseEntity} containing the created {@link RouteResponse} with HTTP
    *     status {@link org.springframework.http.HttpStatus#OK}
    */
   @Operation(
@@ -70,7 +70,7 @@ public class FavoriteRouteController {
         content =
             @Content(
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(implementation = RegisterRouteResponse.class))),
+                schema = @Schema(implementation = RouteResponse.class))),
     @ApiResponse(
         responseCode = "400",
         description = "Validation error - Invalid input fields",
@@ -101,7 +101,7 @@ public class FavoriteRouteController {
                 schema = @Schema(implementation = ErrorResponse.class))),
   })
   @PostMapping(ApiPaths.FavoriteRoutes.FAVORITE_ROUTES)
-  public ResponseEntity<RegisterRouteResponse> addFavoriteRoute(
+  public ResponseEntity<RouteResponse> addFavoriteRoute(
       Authentication authentication, @RequestBody @Valid FavoriteRouteRequest request) {
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(

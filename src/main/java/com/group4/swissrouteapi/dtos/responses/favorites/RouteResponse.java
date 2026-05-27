@@ -17,7 +17,7 @@ import lombok.Value;
  */
 @Value
 @Builder
-public class RegisterRouteResponse {
+public class RouteResponse {
   UUID id;
   String name;
   String origin;

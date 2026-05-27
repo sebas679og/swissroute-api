@@ -8,5 +8,5 @@ import java.util.List;
 @Value
 @Builder
 public class RoutesResponse {
-    List<Route> favoriteRoutes;
+    List<RouteResponse> favoriteRoutes;
 }
