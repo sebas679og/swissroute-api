@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.UUID;
+
 /**
  * FavoriteRouteProcessor
  *
@@ -53,5 +56,10 @@ public class FavoriteRouteProcessor {
             .destination(destination)
             .transportType(transportType)
             .build());
+  }
+
+  @Transactional(readOnly = true)
+  public List<FavoriteRouteEntity> getAllFavoriteRoutes(UUID userId){
+    return favoriteRouteRepository.findByUserId(userId);
   }
 }
