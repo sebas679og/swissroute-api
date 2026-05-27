@@ -3,6 +3,7 @@ package com.group4.swissrouteapi.repositories;
 import com.group4.swissrouteapi.models.FavoriteRouteEntity;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,6 +16,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface FavoriteRouteRepository extends JpaRepository<FavoriteRouteEntity, UUID> {
 
   boolean existsByUserIdAndName(UUID userId, String name);
+
+  Optional<FavoriteRouteEntity> findByUserIdAndId(UUID userId, UUID routeId);
 
   List<FavoriteRouteEntity> findByUserId(UUID userId);
 }
