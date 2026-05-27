@@ -77,7 +77,7 @@ public class FavoriteRouteServiceImpl implements FavoriteRouteService {
     UserEntity user = getUser(userId);
     favoriteRouteProcessor.deleteFavoriteRoute(user.getId(), routeId);
   }
-  
+
   private UserEntity getUser(UUID userId) {
     return userFinder.findById(userId);
   }
