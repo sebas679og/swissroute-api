@@ -65,7 +65,7 @@ public class FavoriteRouteController {
               schema = @Schema(implementation = FavoriteRouteRequest.class)))
   @ApiResponses({
     @ApiResponse(
-        responseCode = "200",
+        responseCode = "201",
         description = "Successful Response - Favorite route response body when registered",
         content =
             @Content(
@@ -103,7 +103,7 @@ public class FavoriteRouteController {
   @PostMapping(ApiPaths.FavoriteRoutes.FAVORITE_ROUTES)
   public ResponseEntity<FavoriteRouteResponse> addFavoriteRoute(
       Authentication authentication, @RequestBody @Valid FavoriteRouteRequest request) {
-    return ResponseEntity.status(HttpStatus.OK)
+    return ResponseEntity.status(HttpStatus.CREATED)
         .body(
             favoriteRouteService.addFavoriteRoute(
                 UUID.fromString(authentication.getName()), request));

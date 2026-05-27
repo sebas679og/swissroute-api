@@ -1464,7 +1464,7 @@ Allowed values for `transportationType`:
 
 #### Successful Response
 
-##### 200 — OK
+##### 201 — Created
 
 ```json
 {
