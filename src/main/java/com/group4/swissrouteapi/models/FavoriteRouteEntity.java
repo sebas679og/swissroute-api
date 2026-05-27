@@ -16,6 +16,8 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
+
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,7 +40,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "favorite_routes")
+@Table(
+        name = "favorite_routes",
+uniqueConstraints = @UniqueConstraint(
+        name = "uk_favorite_routes_user_name",
+        columnNames = {"user_id", "name"}
+))
 public class FavoriteRouteEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -49,7 +56,7 @@ public class FavoriteRouteEntity {
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false)
   private String name;
 
   @Column(nullable = false)

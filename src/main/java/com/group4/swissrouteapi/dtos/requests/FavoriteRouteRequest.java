@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.group4.swissrouteapi.utils.deserializer.TransportationTypeDeserializer;
 import com.group4.swissrouteapi.utils.enums.TransportationType;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -19,6 +21,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FavoriteRouteRequest {
 
   @NotBlank(message = "Name is required")
