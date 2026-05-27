@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,14 +16,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayName("TransportationTypeDeserializer")
-class TransportationTypeDeserializerTest {
+class TransportTypeDeserializerTest {
 
   private ObjectMapper objectMapper;
 
   @BeforeEach
   void setUp() {
     SimpleModule module = new SimpleModule();
-    module.addDeserializer(TransportationType.class, new TransportationTypeDeserializer());
+    module.addDeserializer(TransportType.class, new TransportationTypeDeserializer());
     objectMapper = new ObjectMapper().registerModule(module);
   }
 
@@ -32,9 +32,9 @@ class TransportationTypeDeserializerTest {
    * deserializes it back as TransportationType. This avoids embedding literal control characters
    * (tab, newline) directly into JSON, which would produce a JsonParseException.
    */
-  private TransportationType deserialize(String value) throws JsonProcessingException {
+  private TransportType deserialize(String value) throws JsonProcessingException {
     String jsonToken = objectMapper.writeValueAsString(value);
-    return objectMapper.readValue(jsonToken, TransportationType.class);
+    return objectMapper.readValue(jsonToken, TransportType.class);
   }
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -49,22 +49,21 @@ class TransportationTypeDeserializerTest {
     @ValueSource(strings = {"TRAIN", "TRAM", "SHIP", "BUS", "CABLEWAY"})
     @DisplayName("deserializes all exact uppercase enum names correctly")
     void deserializesExactUppercase_correctly(String value) throws JsonProcessingException {
-      assertThat(deserialize(value)).isEqualTo(TransportationType.valueOf(value));
+      assertThat(deserialize(value)).isEqualTo(TransportType.valueOf(value));
     }
 
     @ParameterizedTest(name = "lowercase [{0}]")
     @ValueSource(strings = {"train", "tram", "ship", "bus", "cableway"})
     @DisplayName("normalizes lowercase input to uppercase before resolving the enum")
     void normalizesLowercase_toUppercase(String value) throws JsonProcessingException {
-      assertThat(deserialize(value)).isEqualTo(TransportationType.valueOf(value.toUpperCase()));
+      assertThat(deserialize(value)).isEqualTo(TransportType.valueOf(value.toUpperCase()));
     }
 
     @ParameterizedTest(name = "mixed-case [{0}]")
     @ValueSource(strings = {"Train", "tRaIn", "sHip", "Bus", "CableWay"})
     @DisplayName("normalizes mixed-case input to uppercase before resolving the enum")
     void normalizesMixedCase_toUppercase(String value) throws JsonProcessingException {
-      assertThat(deserialize(value))
-          .isEqualTo(TransportationType.valueOf(value.trim().toUpperCase()));
+      assertThat(deserialize(value)).isEqualTo(TransportType.valueOf(value.trim().toUpperCase()));
     }
 
     @ParameterizedTest(name = "padded [{0}]")
@@ -72,8 +71,7 @@ class TransportationTypeDeserializerTest {
     @DisplayName("trims surrounding whitespace before resolving the enum")
     void trimsSurroundingWhitespace_beforeResolvingEnum(String value)
         throws JsonProcessingException {
-      assertThat(deserialize(value))
-          .isEqualTo(TransportationType.valueOf(value.trim().toUpperCase()));
+      assertThat(deserialize(value)).isEqualTo(TransportType.valueOf(value.trim().toUpperCase()));
     }
   }
 
@@ -136,7 +134,7 @@ class TransportationTypeDeserializerTest {
           .satisfies(
               ex -> {
                 InvalidFormatException ife = (InvalidFormatException) ex;
-                assertThat(ife.getTargetType()).isEqualTo(TransportationType.class);
+                assertThat(ife.getTargetType()).isEqualTo(TransportType.class);
               });
     }
 

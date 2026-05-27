@@ -22,6 +22,9 @@
   - [Clear Search History](#clear-search-history)
 - [Favorite Routes](#favorite-routes)
   - [Create Favorite Route](#create-favorite-route)
+  - [Get User Favorite Routes](#get-user-favorite-routes)
+  - [Update Favorite Route](#update-favorite-route)
+  - [Delete Favorite Route](#delete-favorite-route)
 
 ---
 
@@ -1422,7 +1425,7 @@ Authorization: Bearer {{JWT}}
   "name": "Home to work",
   "origin": "Geneve",
   "destination": "Zurich",
-  "transportationType": "TRAIN"
+  "transportType": "TRAIN"
 }
 ```
 
@@ -1435,13 +1438,13 @@ Authorization: Bearer {{JWT}}
 | `name`               | String | Yes      | Unique favorite route name |
 | `origin`             | String | Yes      | Origin station             |
 | `destination`        | String | Yes      | Destination station        |
-| `transportationType` | Enum   | No       | Transportation type filter |
+| `transportType` | Enum   | No       | Transportation type filter |
 
 ---
 
 #### Supported Transportation Types
 
-Allowed values for `transportationType`:
+Allowed values for `transportType`:
 
 * `TRAIN`
 * `TRAM`
@@ -1458,7 +1461,7 @@ Allowed values for `transportationType`:
 | `name`               | Must not be null, empty, or blank            |
 | `origin`             | Must not be null, empty, or blank            |
 | `destination`        | Must not be null, empty, or blank            |
-| `transportationType` | Optional, but must match allowed enum values |
+| `transportType` | Optional, but must match allowed enum values |
 
 ---
 
@@ -1517,7 +1520,7 @@ Occurs when required fields are missing or the transportation type is invalid.
 {
   "code": 400,
   "name": "BAD_REQUEST",
-  "description": "Field 'transportationType': invalid value 'plane'",
+  "description": "Field 'transportType': invalid value 'plane'",
   "timestamp": "2026-05-26T23:58:17.137Z"
 }
 ```
@@ -1569,7 +1572,7 @@ Occurs when the favorite route name already exists.
 
 ---
 
-### Notes
+#### Notes
 
 * Favorite routes are associated with the authenticated user.
 * The `name` field must be unique in the database.
@@ -1577,3 +1580,387 @@ Occurs when the favorite route name already exists.
 * All timestamps are returned in ISO-8601 UTC format.
 * Favorite routes can later be used for quick connection searches.
 
+---
+
+### Get User Favorite Routes
+
+Returns the list of favorite routes belonging to the authenticated user.
+
+#### Endpoint
+
+```http
+GET /api/favorite-routes
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+#### Successful Response
+
+#### 200 — OK
+
+```json
+{
+  "favoriteRoutes": [
+    {
+      "id": "5690feae-e7be-4be8-8d79-b52bca6ed0cf",
+      "name": "Ruta1",
+      "origin": "Geneve",
+      "destination": "Zurich",
+      "transportType": "TRAIN",
+      "createdAt": "2026-05-26T19:22:48.844Z"
+    },
+    {
+      "id": "083f72e3-4bec-469c-9325-011df84d41f4",
+      "name": "Ruta2",
+      "origin": "Geneve",
+      "destination": "Zurich",
+      "transportType": "TRAIN",
+      "createdAt": "2026-05-26T19:29:13.347Z"
+    },
+    {
+      "id": "873f2e86-6ca7-4660-a36d-38c557a9f732",
+      "name": "Ruta4",
+      "origin": "Geneve",
+      "destination": "Zurich",
+      "transportType": null,
+      "createdAt": "2026-05-26T19:35:11.605Z"
+    }
+  ]
+}
+```
+
+---
+
+#### Response Fields
+
+| Field           | Type          | Description                       |
+|-----------------|---------------|-----------------------------------|
+| `id`            | UUID          | Favorite route identifier         |
+| `name`          | String        | Favorite route name               |
+| `origin`        | String        | Origin station                    |
+| `destination`   | String        | Destination station               |
+| `transportType` | String        | Null \ Transportation type filter |
+| `createdAt`     | DateTime      | UTC creation timestamp            |
+
+---
+
+#### Error Responses
+
+##### 401 — Unauthorized
+
+Occurs when the JWT token is invalid, malformed, or expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-26T19:22:48.844Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when the authenticated user does not exist.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "User not found",
+  "timestamp": "2026-05-26T19:22:48.844Z"
+}
+```
+
+---
+
+#### Notes
+
+* Only favorite routes belonging to the authenticated user are returned.
+* Results are ordered by creation date.
+* `transportType` may be `null` when no transportation filter was configured.
+
+---
+
+### Update Favorite Route
+
+Updates an existing favorite route belonging to the authenticated user.
+
+#### Endpoint
+
+```http
+PUT /api/favorite-routes/{routeId}
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+#### Path Parameters
+
+| Parameter | Type | Required | Description               |
+|-----------|------|----------|---------------------------|
+| `routeId` | UUID | Yes      | Favorite route identifier |
+
+---
+
+#### Request Body
+
+```json
+{
+  "name": "Home to work",
+  "origin": "Basilea",
+  "destination": "Berna",
+  "transportType": "BUS"
+}
+```
+
+---
+
+#### Update Rules
+
+* At least one field must be provided.
+* Requests with all fields empty or null are rejected.
+* Only allowed transportation enum values are accepted.
+* The route name must remain unique.
+
+---
+
+#### Successful Response
+
+##### 200 — OK
+
+```json
+{
+  "id": "5690feae-e7be-4be8-8d79-b52bca6ed0cf",
+  "name": "Home to work",
+  "origin": "Basilea",
+  "destination": "Berna",
+  "transportType": "BUS",
+  "createdAt": "2026-05-26T19:22:48.844Z"
+}
+```
+
+---
+
+#### Error Responses
+
+##### 400 — Bad Request
+
+Occurs when the path parameter format or request body validation fails.
+
+###### Invalid UUID Path Parameter
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Invalid path parameter for: 'routeId'",
+  "timestamp": "2026-05-26T19:22:48.844Z"
+}
+```
+
+---
+
+###### Empty Update Request
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "At least one field must be provided for update",
+  "timestamp": "2026-05-26T19:22:48.844Z"
+}
+```
+
+---
+
+###### Invalid Transportation Type
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Field 'transportType': invalid value 'plane'",
+  "timestamp": "2026-05-26T19:22:48.844Z"
+}
+```
+
+---
+
+##### 401 — Unauthorized
+
+Occurs when the JWT token is invalid, malformed, or expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-26T19:22:48.844Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when the user or favorite route does not exist.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "Favorite route not found",
+  "timestamp": "2026-05-26T19:22:48.844Z"
+}
+```
+
+---
+
+##### 409 — Conflict
+
+Occurs when another favorite route already uses the same route name.
+
+```json
+{
+  "code": 409,
+  "name": "CONFLICT",
+  "description": "Favorite route name already exists",
+  "timestamp": "2026-05-26T19:22:48.844Z"
+}
+```
+
+---
+
+#### Notes
+
+* Users can update only their own favorite routes.
+* Partial updates are supported.
+* All timestamps are returned in ISO-8601 UTC format.
+
+---
+
+### Delete Favorite Route
+
+Deletes a favorite route belonging to the authenticated user.
+
+#### Endpoint
+
+```http
+DELETE /api/favorite-routes/{routeId}
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+```http id="g4x1lt"
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+#### Path Parameters
+
+| Parameter | Type | Required | Description               |
+|-----------|------|----------|---------------------------|
+| `routeId` | UUID | Yes      | Favorite route identifier |
+
+---
+
+#### Example Request
+
+```http
+DELETE /api/favorite-routes/5690feae-e7be-4be8-8d79-b52bca6ed0cf
+```
+
+---
+
+#### Successful Response
+
+##### 204 — No Content
+
+The favorite route was successfully deleted.
+
+---
+
+#### Error Responses
+
+##### 400 — Bad Request
+
+Occurs when the UUID path parameter is malformed or invalid.
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Invalid path parameter for: 'routeId'",
+  "timestamp": "2026-05-26T19:22:48.844Z"
+}
+```
+
+---
+
+##### 401 — Unauthorized
+
+Occurs when the JWT token is malformed, invalid, or expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-26T19:22:48.844Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when the user or favorite route does not exist.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "Favorite route not found",
+  "timestamp": "2026-05-26T19:22:48.844Z"
+}
+```
+
+---
+
+#### Notes
+
+* Users can delete only their own favorite routes.
+* Deletion is permanent and cannot be undone.

@@ -1,6 +1,6 @@
 package com.group4.swissrouteapi.dtos.requests;
 
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -65,5 +65,5 @@ public class ConnectionsQueryParams {
               allowableValues = {"train", "tram", "ship", "bus", "cableway"}),
       arraySchema = @Schema(example = "[\"train\", \"bus\"]"))
   @Builder.Default
-  private List<TransportationType> transportations = new ArrayList<>();
+  private List<TransportType> transportations = new ArrayList<>();
 }

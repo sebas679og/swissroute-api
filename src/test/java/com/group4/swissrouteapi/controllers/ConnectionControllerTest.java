@@ -15,7 +15,7 @@ import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.providers.UserDataProvider;
 import com.group4.swissrouteapi.repositories.UserRepository;
 import com.group4.swissrouteapi.services.AuthService;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import io.jsonwebtoken.Jwts;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -171,7 +171,7 @@ public class ConnectionControllerTest extends AbstractIntegrationTest {
     void shouldGetConnectionsSuccessfullyWithFullQueryParams() throws Exception {
       String date = LocalDate.now().toString();
       String time = LocalTime.now().toString();
-      String transportations = TransportationType.TRAIN.name().toLowerCase(Locale.ROOT);
+      String transportations = TransportType.TRAIN.name().toLowerCase(Locale.ROOT);
       connectionsStub.stubConnectionsByDateAndTimeAndTransportations(
           FROM, TO, date, time, transportations);
 
@@ -193,8 +193,8 @@ public class ConnectionControllerTest extends AbstractIntegrationTest {
     void shouldReturn200OkWhenMultipleTransportationTypesAreProvided() throws Exception {
       String date = LocalDate.now().toString();
       String time = LocalTime.now().toString();
-      String transportations1 = TransportationType.TRAIN.name().toLowerCase(Locale.ROOT);
-      String transportations2 = TransportationType.BUS.name().toLowerCase(Locale.ROOT);
+      String transportations1 = TransportType.TRAIN.name().toLowerCase(Locale.ROOT);
+      String transportations2 = TransportType.BUS.name().toLowerCase(Locale.ROOT);
       connectionsStub.stubConnectionsByDateAndTimeAndTransportations(
           FROM, TO, date, time, List.of(transportations1, transportations2));
 
@@ -396,8 +396,7 @@ public class ConnectionControllerTest extends AbstractIntegrationTest {
                   .param("to", TO)
                   // "train" is valid, but "rocket" is not, so the whole request should be rejected
                   // with 400 Bad Request
-                  .param(
-                      "transportations", TransportationType.TRAIN.name().toLowerCase(Locale.ROOT))
+                  .param("transportations", TransportType.TRAIN.name().toLowerCase(Locale.ROOT))
                   .param("transportations", "rocket")
                   .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
           .andExpect(status().isBadRequest())

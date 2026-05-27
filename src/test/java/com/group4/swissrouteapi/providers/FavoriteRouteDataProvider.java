@@ -2,7 +2,7 @@ package com.group4.swissrouteapi.providers;
 
 import com.group4.swissrouteapi.models.FavoriteRouteEntity;
 import com.group4.swissrouteapi.models.UserEntity;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 
 /** Data provider for FavoriteRouteEntity entity. */
 public class FavoriteRouteDataProvider {
@@ -10,12 +10,12 @@ public class FavoriteRouteDataProvider {
   public static final String ROUTE_NAME = "Morning Commute";
   public static final String ORIGIN = "Madrid";
   public static final String DESTINATION = "Barcelona";
-  public static final TransportationType TYPE = TransportationType.TRAIN;
+  public static final TransportType TYPE = TransportType.TRAIN;
 
   public static final String ALT_ROUTE_NAME = "Weekend Trip";
   public static final String ALT_ORIGIN = "Barcelona";
   public static final String ALT_DESTINATION = "Valencia";
-  public static final TransportationType ALT_TYPE = TransportationType.BUS;
+  public static final TransportType ALT_TYPE = TransportType.BUS;
 
   /**
    * Creates a mock {@link FavoriteRouteEntity} for the given user.

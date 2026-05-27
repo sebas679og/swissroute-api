@@ -2,7 +2,7 @@ package com.group4.swissrouteapi.dtos.requests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -86,7 +86,7 @@ class ConnectionsQueryParamsTest {
             .to(VALID_TO)
             .date(LocalDate.of(2024, 10, 10))
             .time(LocalTime.of(8, 0))
-            .transportations(List.of(TransportationType.TRAIN, TransportationType.BUS))
+            .transportations(List.of(TransportType.TRAIN, TransportType.BUS))
             .build();
 
     assertThat(validate(params)).isEmpty();
@@ -271,11 +271,11 @@ class ConnectionsQueryParamsTest {
               .to(VALID_TO)
               .transportations(
                   List.of(
-                      TransportationType.TRAIN,
-                      TransportationType.TRAM,
-                      TransportationType.SHIP,
-                      TransportationType.BUS,
-                      TransportationType.CABLEWAY))
+                      TransportType.TRAIN,
+                      TransportType.TRAM,
+                      TransportType.SHIP,
+                      TransportType.BUS,
+                      TransportType.CABLEWAY))
               .build();
 
       assertThat(validate(params)).isEmpty();

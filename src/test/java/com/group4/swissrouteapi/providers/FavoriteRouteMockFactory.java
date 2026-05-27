@@ -2,10 +2,11 @@ package com.group4.swissrouteapi.providers;
 
 import com.group4.swissrouteapi.models.FavoriteRouteEntity;
 import com.group4.swissrouteapi.models.UserEntity;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 /** Mock Factory Data for FavoriteRouteEntity. */
 public class FavoriteRouteMockFactory {
@@ -102,13 +103,12 @@ public class FavoriteRouteMockFactory {
 
   private static String generateRandomRouteName() {
     String baseName = ROUTE_NAMES.get(RANDOM.nextInt(ROUTE_NAMES.size()));
-    int suffix = RANDOM.nextInt(10000);
-
+    String suffix = UUID.randomUUID().toString().substring(0, 8);
     return baseName + " " + suffix;
   }
 
-  private static TransportationType getRandomTransportType() {
-    TransportationType[] values = TransportationType.values();
+  private static TransportType getRandomTransportType() {
+    TransportType[] values = TransportType.values();
     return values[RANDOM.nextInt(values.length)];
   }
 }

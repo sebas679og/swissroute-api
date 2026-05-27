@@ -26,7 +26,7 @@ import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.providers.UserDataProvider;
 import com.group4.swissrouteapi.services.components.UserFinder;
 import com.group4.swissrouteapi.services.processors.HistoryProcessor;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import com.group4.swissrouteapi.utils.mappers.ConnectionsMapper;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -83,7 +83,7 @@ class ConnectionsServiceImplTest {
         .to(TO)
         .date(DATE)
         .time(TIME)
-        .transportations(List.of(TransportationType.TRAIN))
+        .transportations(List.of(TransportType.TRAIN))
         .build();
   }
 
@@ -218,7 +218,7 @@ class ConnectionsServiceImplTest {
     void shouldPassAllOptionalParamsToClient() {
       ApiConnection apiConn = buildApiConnection();
 
-      when(transportClient.getConnections(FROM, TO, DATE, TIME, List.of(TransportationType.TRAIN)))
+      when(transportClient.getConnections(FROM, TO, DATE, TIME, List.of(TransportType.TRAIN)))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
       when(userFinder.findById(USER_ID)).thenReturn(buildUser);
@@ -226,8 +226,7 @@ class ConnectionsServiceImplTest {
 
       connectionsService.getConnections(buildParamsWithOptionals(), USER_ID);
 
-      verify(transportClient)
-          .getConnections(FROM, TO, DATE, TIME, List.of(TransportationType.TRAIN));
+      verify(transportClient).getConnections(FROM, TO, DATE, TIME, List.of(TransportType.TRAIN));
     }
 
     @Test
