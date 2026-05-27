@@ -4,6 +4,7 @@ import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.dtos.requests.FavoriteRouteRequest;
 import com.group4.swissrouteapi.dtos.responses.ErrorResponse;
 import com.group4.swissrouteapi.dtos.responses.favorites.RouteResponse;
+import com.group4.swissrouteapi.dtos.responses.favorites.RoutesResponse;
 import com.group4.swissrouteapi.services.FavoriteRouteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -107,5 +109,10 @@ public class FavoriteRouteController {
         .body(
             favoriteRouteService.addFavoriteRoute(
                 UUID.fromString(authentication.getName()), request));
+  }
+  
+  @GetMapping(ApiPaths.FavoriteRoutes.FAVORITE_ROUTES)
+    public ResponseEntity<RoutesResponse> getAllFavoriteRoutes(Authentication authentication){
+      return ResponseEntity.status(HttpStatus.OK).body(favoriteRouteService.getFavoriteRoutes(UUID.fromString(authentication.getName())));
   }
 }
