@@ -11,7 +11,6 @@ import com.group4.swissrouteapi.services.FavoriteRouteService;
 import com.group4.swissrouteapi.services.components.UserFinder;
 import com.group4.swissrouteapi.services.processors.FavoriteRouteProcessor;
 import com.group4.swissrouteapi.utils.mappers.FavoriteRouteMapper;
-
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -45,13 +44,10 @@ public class FavoriteRouteServiceImpl implements FavoriteRouteService {
   @Override
   public RoutesResponse getFavoriteRoutes(UUID userId) {
     UserEntity user = getUser(userId);
-    List<FavoriteRouteEntity> routes = favoriteRouteProcessor
-            .getAllFavoriteRoutes(user.getId());
+    List<FavoriteRouteEntity> routes = favoriteRouteProcessor.getAllFavoriteRoutes(user.getId());
     return RoutesResponse.builder()
-            .favoriteRoutes(routes.stream()
-                    .map(favoriteRouteMapper::toFavoriteRouteResponse)
-                    .toList())
-            .build();
+        .favoriteRoutes(routes.stream().map(favoriteRouteMapper::toFavoriteRouteResponse).toList())
+        .build();
   }
 
   @Override
@@ -61,15 +57,13 @@ public class FavoriteRouteServiceImpl implements FavoriteRouteService {
     }
     UserEntity user = getUser(userId);
     return favoriteRouteMapper.toFavoriteRouteResponse(
-            favoriteRouteProcessor.updateFavoriteRoute(
-                    user.getId(),
-                    routeId,
-                    request.getName(),
-                    request.getOrigin(),
-                    request.getDestination(),
-                    request.getTransportationType()
-            )
-    );
+        favoriteRouteProcessor.updateFavoriteRoute(
+            user.getId(),
+            routeId,
+            request.getName(),
+            request.getOrigin(),
+            request.getDestination(),
+            request.getTransportationType()));
   }
 
   @Override

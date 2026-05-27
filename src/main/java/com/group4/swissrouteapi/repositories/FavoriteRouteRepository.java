@@ -1,7 +1,6 @@
 package com.group4.swissrouteapi.repositories;
 
 import com.group4.swissrouteapi.models.FavoriteRouteEntity;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

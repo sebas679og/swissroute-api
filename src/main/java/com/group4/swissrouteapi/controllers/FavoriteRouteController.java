@@ -56,8 +56,8 @@ public class FavoriteRouteController {
    *
    * @param authentication the Spring Security authentication object containing the user's identity
    * @param request the validated request payload with route details
-   * @return a {@link ResponseEntity} containing the created {@link RouteResponse} with HTTP
-   *     status {@link org.springframework.http.HttpStatus#OK}
+   * @return a {@link ResponseEntity} containing the created {@link RouteResponse} with HTTP status
+   *     {@link org.springframework.http.HttpStatus#OK}
    */
   @Operation(
       summary = "Add route to favorites",
@@ -116,155 +116,154 @@ public class FavoriteRouteController {
                 UUID.fromString(authentication.getName()), request));
   }
 
-
-    @Operation(
-            summary = "Retrieve favorite routes",
-            description = "Returns all favorite routes associated with the authenticated user.",
-            security = {@SecurityRequirement(name = "BearerAuth")}
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Favorite routes retrieved successfully.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = RoutesResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Unauthorized - Missing or invalid authentication token.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "User not found.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            )
-    })
+  @Operation(
+      summary = "Retrieve favorite routes",
+      description = "Returns all favorite routes associated with the authenticated user.",
+      security = {@SecurityRequirement(name = "BearerAuth")})
+  @ApiResponses({
+    @ApiResponse(
+        responseCode = "200",
+        description = "Favorite routes retrieved successfully.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = RoutesResponse.class))),
+    @ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized - Missing or invalid authentication token.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "404",
+        description = "User not found.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class)))
+  })
   @GetMapping(ApiPaths.FavoriteRoutes.FAVORITE_ROUTES)
-    public ResponseEntity<RoutesResponse> getAllFavoriteRoutes(Authentication authentication){
-      return ResponseEntity.status(HttpStatus.OK).body(favoriteRouteService.getFavoriteRoutes(UUID.fromString(authentication.getName())));
+  public ResponseEntity<RoutesResponse> getAllFavoriteRoutes(Authentication authentication) {
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(favoriteRouteService.getFavoriteRoutes(UUID.fromString(authentication.getName())));
   }
 
-    @Operation(
-            summary = "Update a favorite route",
-            description = "Updates the specified favorite route for the authenticated user.",
-            security = {@SecurityRequirement(name = "BearerAuth")}
-    )
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Request payload containing the route fields to update.",
-            required = true,
-            content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = RouteUpdateRequest.class)
-            )
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Favorite route updated successfully.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = RouteResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid request payload or malformed route identifier.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Unauthorized - Missing or invalid authentication token.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "User or favorite route not found.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "409",
-                    description = "Conflict - A favorite route with the same name already exists.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            )
-    })
+  /**
+   * Handles HTTP PUT requests to update an existing favorite route for the authenticated user.
+   *
+   * <p>Validates the provided {@link RouteUpdateRequest} payload and delegates the update logic to
+   * {@link FavoriteRouteService}. The route is identified by its unique {@code routeId} and is
+   * associated with the currently authenticated user.
+   *
+   * @param authentication the Spring Security authentication object containing the user's identity
+   * @param routeId unique identifier of the favorite route to update
+   * @param request the request payload containing updated route details
+   * @return a {@link ResponseEntity} containing the updated {@link RouteResponse} with HTTP status
+   *     {@link org.springframework.http.HttpStatus#OK}
+   */
+  @Operation(
+      summary = "Update a favorite route",
+      description = "Updates the specified favorite route for the authenticated user.",
+      security = {@SecurityRequirement(name = "BearerAuth")})
+  @io.swagger.v3.oas.annotations.parameters.RequestBody(
+      description = "Request payload containing the route fields to update.",
+      required = true,
+      content =
+          @Content(
+              mediaType = MediaType.APPLICATION_JSON_VALUE,
+              schema = @Schema(implementation = RouteUpdateRequest.class)))
+  @ApiResponses({
+    @ApiResponse(
+        responseCode = "200",
+        description = "Favorite route updated successfully.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = RouteResponse.class))),
+    @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request payload or malformed route identifier.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized - Missing or invalid authentication token.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "404",
+        description = "User or favorite route not found.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "409",
+        description = "Conflict - A favorite route with the same name already exists.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class)))
+  })
   @PutMapping(ApiPaths.FavoriteRoutes.FAVORITE_ROUTE)
-    public ResponseEntity<RouteResponse> updateFavoriteRoute(
-          Authentication authentication,
-          @Parameter(
-                  description = "Unique identifier of the registered favorite route",
-                  required = true,
-                  example = "240e8d5c-2532-4006-8d0a-6d33052ba25b")
-          @PathVariable UUID routeId,
-          @RequestBody RouteUpdateRequest request
-          ){
-      return ResponseEntity.status(HttpStatus.OK).body(favoriteRouteService.updateFavoriteRoute(
-              UUID.fromString(authentication.getName()), routeId, request));
+  public ResponseEntity<RouteResponse> updateFavoriteRoute(
+      Authentication authentication,
+      @Parameter(
+              description = "Unique identifier of the registered favorite route",
+              required = true,
+              example = "240e8d5c-2532-4006-8d0a-6d33052ba25b")
+          @PathVariable
+          UUID routeId,
+      @RequestBody RouteUpdateRequest request) {
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(
+            favoriteRouteService.updateFavoriteRoute(
+                UUID.fromString(authentication.getName()), routeId, request));
   }
 
-    @Operation(
-            summary = "Delete a favorite route",
-            description = "Deletes the specified favorite route associated with the authenticated user.",
-            security = {@SecurityRequirement(name = "BearerAuth")}
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "Favorite route deleted successfully."
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid route identifier format.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Unauthorized - Missing or invalid authentication token.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "User or favorite route not found.",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class)
-                    )
-            )
-    })
+  @Operation(
+      summary = "Delete a favorite route",
+      description = "Deletes the specified favorite route associated with the authenticated user.",
+      security = {@SecurityRequirement(name = "BearerAuth")})
+  @ApiResponses({
+    @ApiResponse(responseCode = "204", description = "Favorite route deleted successfully."),
+    @ApiResponse(
+        responseCode = "400",
+        description = "Invalid route identifier format.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized - Missing or invalid authentication token.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "404",
+        description = "User or favorite route not found.",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class)))
+  })
   @DeleteMapping(ApiPaths.FavoriteRoutes.FAVORITE_ROUTE)
-    public ResponseEntity<Void> deleteFavoriteRoute(Authentication authentication,
-                                                    @Parameter(
-                                                            description = "Unique identifier of the registered favorite route",
-                                                            required = true,
-                                                            example = "240e8d5c-2532-4006-8d0a-6d33052ba25b")
-                                                    @PathVariable UUID routeId){
-      favoriteRouteService.deleteFavoriteRoute(UUID.fromString(authentication.getName()), routeId);
-      return ResponseEntity.noContent().build();
+  public ResponseEntity<Void> deleteFavoriteRoute(
+      Authentication authentication,
+      @Parameter(
+              description = "Unique identifier of the registered favorite route",
+              required = true,
+              example = "240e8d5c-2532-4006-8d0a-6d33052ba25b")
+          @PathVariable
+          UUID routeId) {
+    favoriteRouteService.deleteFavoriteRoute(UUID.fromString(authentication.getName()), routeId);
+    return ResponseEntity.noContent().build();
   }
 }

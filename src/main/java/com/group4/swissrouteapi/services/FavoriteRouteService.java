@@ -4,7 +4,6 @@ import com.group4.swissrouteapi.dtos.requests.FavoriteRouteRequest;
 import com.group4.swissrouteapi.dtos.requests.RouteUpdateRequest;
 import com.group4.swissrouteapi.dtos.responses.favorites.RouteResponse;
 import com.group4.swissrouteapi.dtos.responses.favorites.RoutesResponse;
-
 import java.util.UUID;
 
 /**

@@ -10,25 +10,41 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * RouteUpdateRequest
+ *
+ * <p>DTO representing a request to update an existing favorite route.
+ *
+ * <p>Contains optional fields for route details (name, origin, destination, and transport type).
+ * Fields may be partially provided to update only specific attributes of a route.
+ */
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RouteUpdateRequest {
-    private String name;
-    private String origin;
-    private String destination;
 
-    @JsonDeserialize(using = TransportationTypeDeserializer.class)
-    private TransportationType transportationType;
+  private String name;
+  private String origin;
+  private String destination;
 
-    @JsonIgnore
-    public boolean isEmpty() {
-        return
-                (name == null || name.isBlank()) &&
-                        (origin == null || origin.isBlank()) &&
-                        (destination == null || destination.isBlank()) &&
-                        transportationType == null;
-    }
+  @JsonDeserialize(using = TransportationTypeDeserializer.class)
+  private TransportationType transportationType;
+
+  /**
+   * Checks whether the request contains no meaningful update data.
+   *
+   * <p>Returns {@code true} if all fields are either {@code null} or blank, and {@code false}
+   * otherwise.
+   *
+   * @return {@code true} if the request has no update values, {@code false} otherwise
+   */
+  @JsonIgnore
+  public boolean isEmpty() {
+    return (name == null || name.isBlank())
+        && (origin == null || origin.isBlank())
+        && (destination == null || destination.isBlank())
+        && transportationType == null;
+  }
 }
