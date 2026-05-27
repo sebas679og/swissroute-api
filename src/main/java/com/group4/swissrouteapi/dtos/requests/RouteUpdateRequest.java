@@ -1,5 +1,6 @@
 package com.group4.swissrouteapi.dtos.requests;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.group4.swissrouteapi.utils.deserializer.TransportationTypeDeserializer;
 import com.group4.swissrouteapi.utils.enums.TransportationType;
@@ -22,7 +23,7 @@ public class RouteUpdateRequest {
     @JsonDeserialize(using = TransportationTypeDeserializer.class)
     private TransportationType transportationType;
 
-
+    @JsonIgnore
     public boolean isEmpty() {
         return
                 (name == null || name.isBlank()) &&
