@@ -2,11 +2,15 @@ package com.group4.swissrouteapi.services.impl;
 
 import com.group4.swissrouteapi.dtos.requests.FavoriteRouteRequest;
 import com.group4.swissrouteapi.dtos.responses.favorites.RouteResponse;
+import com.group4.swissrouteapi.dtos.responses.favorites.RoutesResponse;
+import com.group4.swissrouteapi.models.FavoriteRouteEntity;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.services.FavoriteRouteService;
 import com.group4.swissrouteapi.services.components.UserFinder;
 import com.group4.swissrouteapi.services.processors.FavoriteRouteProcessor;
 import com.group4.swissrouteapi.utils.mappers.FavoriteRouteMapper;
+
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,5 +38,17 @@ public class FavoriteRouteServiceImpl implements FavoriteRouteService {
             request.getOrigin(),
             request.getDestination(),
             request.getTransportationType()));
+  }
+
+  @Override
+  public RoutesResponse getFavoriteRoutes(UUID userId) {
+    UserEntity user = userFinder.findById(userId);
+    List<FavoriteRouteEntity> routes = favoriteRouteProcessor
+            .getAllFavoriteRoutes(user.getId());
+    return RoutesResponse.builder()
+            .favoriteRoutes(routes.stream()
+                    .map(favoriteRouteMapper::toFavoriteRouteResponse)
+                    .toList())
+            .build();
   }
 }
