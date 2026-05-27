@@ -17,6 +17,8 @@ public interface FavoriteRouteRepository extends JpaRepository<FavoriteRouteEnti
 
   boolean existsByUserIdAndName(UUID userId, String name);
 
+  boolean existsByUserIdAndNameAndIdNot(UUID userId, String name, UUID routeId);
+
   Optional<FavoriteRouteEntity> findByUserIdAndId(UUID userId, UUID routeId);
 
   List<FavoriteRouteEntity> findByUserId(UUID userId);

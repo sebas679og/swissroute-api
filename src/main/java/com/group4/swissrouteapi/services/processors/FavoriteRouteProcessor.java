@@ -1,6 +1,7 @@
 package com.group4.swissrouteapi.services.processors;
 
 import com.group4.swissrouteapi.exceptions.ConflictException;
+import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.models.FavoriteRouteEntity;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.repositories.FavoriteRouteRepository;
@@ -61,5 +62,42 @@ public class FavoriteRouteProcessor {
   @Transactional(readOnly = true)
   public List<FavoriteRouteEntity> getAllFavoriteRoutes(UUID userId){
     return favoriteRouteRepository.findByUserId(userId);
+  }
+
+  @Transactional
+  public FavoriteRouteEntity updateFavoriteRoute(
+          UUID userId,
+          UUID routeId,
+          String name,
+          String origin,
+          String destination,
+          TransportationType transportType
+  ) {
+
+    FavoriteRouteEntity route = favoriteRouteRepository
+            .findByUserIdAndId(userId, routeId)
+            .orElseThrow(() -> new NotFoundException("Route not found"));
+
+    if (name != null && favoriteRouteRepository.existsByUserIdAndNameAndIdNot(userId, name, routeId)) {
+      throw new ConflictException("Favorite route name already exists");
+    }
+
+    if (name != null) {
+      route.setName(name);
+    }
+
+    if (origin != null) {
+      route.setOrigin(origin);
+    }
+
+    if (destination != null) {
+      route.setDestination(destination);
+    }
+
+    if (transportType != null) {
+      route.setTransportType(transportType);
+    }
+
+    return favoriteRouteRepository.save(route);
   }
 }
