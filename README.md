@@ -160,6 +160,7 @@ http://localhost:8080/v3/api-docs
 | `GET`     | `/api/history`         | Returns list of connections search by user.                                    |
 | `DELETE`  | `/api/history/{id}`    | Delete a specific connection search from the history associated with the user. |
 | `DELETE`  | `/api/history`         | Delete all the user's connection search history.                               |
+| `POST`    | `/api/favorite-routes` | In charge of the registration of the user's favorite routes.                   |
 
 ---
 

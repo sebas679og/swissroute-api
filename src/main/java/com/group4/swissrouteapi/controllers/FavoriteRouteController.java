@@ -86,6 +86,13 @@ public class FavoriteRouteController {
                 mediaType = MediaType.APPLICATION_JSON_VALUE,
                 schema = @Schema(implementation = ErrorResponse.class))),
     @ApiResponse(
+        responseCode = "404",
+        description = "Not found - User not found",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
         responseCode = "409",
         description = "Conflict - name already registered",
         content =
