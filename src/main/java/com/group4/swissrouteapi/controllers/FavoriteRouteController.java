@@ -5,6 +5,7 @@ import com.group4.swissrouteapi.dtos.requests.FavoriteRouteRequest;
 import com.group4.swissrouteapi.dtos.responses.ErrorResponse;
 import com.group4.swissrouteapi.dtos.responses.favorites.RouteResponse;
 import com.group4.swissrouteapi.dtos.responses.favorites.RoutesResponse;
+import com.group4.swissrouteapi.dtos.responses.history.HistoryResponse;
 import com.group4.swissrouteapi.services.FavoriteRouteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -110,7 +111,36 @@ public class FavoriteRouteController {
             favoriteRouteService.addFavoriteRoute(
                 UUID.fromString(authentication.getName()), request));
   }
-  
+
+
+    @Operation(
+            summary = "Get Favorite Routes.",
+            description = "Returns a list of the favorite routes added by the user.",
+            security = {@SecurityRequirement(name = "BearerAuth")})
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description =
+                            "Successful response - User's Favorite Routes List.",
+                    content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = RoutesResponse.class))),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized - Missing or invalid authentication token",
+                    content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Not found - User not found",
+                    content =
+                    @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class)))
+    })
   @GetMapping(ApiPaths.FavoriteRoutes.FAVORITE_ROUTES)
     public ResponseEntity<RoutesResponse> getAllFavoriteRoutes(Authentication authentication){
       return ResponseEntity.status(HttpStatus.OK).body(favoriteRouteService.getFavoriteRoutes(UUID.fromString(authentication.getName())));
