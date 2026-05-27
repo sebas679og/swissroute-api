@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.group4.swissrouteapi.dtos.requests.FavoriteRouteRequest;
-import com.group4.swissrouteapi.dtos.responses.routes.FavoriteRouteResponse;
+import com.group4.swissrouteapi.dtos.responses.favorites.RegisterRouteResponse;
 import com.group4.swissrouteapi.exceptions.ConflictException;
 import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.models.FavoriteRouteEntity;
@@ -71,8 +71,8 @@ class FavoriteRouteServiceImplTest {
         .build();
   }
 
-  private FavoriteRouteResponse buildResponse(FavoriteRouteEntity entity) {
-    return FavoriteRouteResponse.builder()
+  private RegisterRouteResponse buildResponse(FavoriteRouteEntity entity) {
+    return RegisterRouteResponse.builder()
         .id(entity.getId())
         .name(entity.getName())
         .origin(entity.getOrigin())
@@ -96,7 +96,7 @@ class FavoriteRouteServiceImplTest {
       UserEntity user = buildUser();
       FavoriteRouteRequest request = buildRequest();
       FavoriteRouteEntity entity = buildEntity();
-      FavoriteRouteResponse expectedResponse = buildResponse(entity);
+      RegisterRouteResponse expectedResponse = buildResponse(entity);
 
       when(userFinder.findById(USER_ID)).thenReturn(user);
       when(favoriteRouteProcessor.saveFavoriteRoute(
@@ -108,7 +108,7 @@ class FavoriteRouteServiceImplTest {
           .thenReturn(entity);
       when(favoriteRouteMapper.toFavoriteRouteResponse(entity)).thenReturn(expectedResponse);
 
-      FavoriteRouteResponse result = favoriteRouteService.addFavoriteRoute(USER_ID, request);
+      RegisterRouteResponse result = favoriteRouteService.addFavoriteRoute(USER_ID, request);
 
       assertThat(result).isSameAs(expectedResponse);
     }

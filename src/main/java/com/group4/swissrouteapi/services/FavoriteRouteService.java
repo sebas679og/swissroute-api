@@ -1,7 +1,7 @@
 package com.group4.swissrouteapi.services;
 
 import com.group4.swissrouteapi.dtos.requests.FavoriteRouteRequest;
-import com.group4.swissrouteapi.dtos.responses.routes.FavoriteRouteResponse;
+import com.group4.swissrouteapi.dtos.responses.favorites.RegisterRouteResponse;
 import java.util.UUID;
 
 /**
@@ -11,5 +11,5 @@ import java.util.UUID;
  */
 public interface FavoriteRouteService {
 
-  FavoriteRouteResponse addFavoriteRoute(UUID userId, FavoriteRouteRequest request);
+  RegisterRouteResponse addFavoriteRoute(UUID userId, FavoriteRouteRequest request);
 }

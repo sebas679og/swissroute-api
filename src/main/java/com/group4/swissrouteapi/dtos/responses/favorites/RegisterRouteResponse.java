@@ -1,4 +1,4 @@
-package com.group4.swissrouteapi.dtos.responses.routes;
+package com.group4.swissrouteapi.dtos.responses.favorites;
 
 import com.group4.swissrouteapi.utils.enums.TransportationType;
 import java.time.Instant;
@@ -17,7 +17,7 @@ import lombok.Value;
  */
 @Value
 @Builder
-public class FavoriteRouteResponse {
+public class RegisterRouteResponse {
   UUID id;
   String name;
   String origin;
