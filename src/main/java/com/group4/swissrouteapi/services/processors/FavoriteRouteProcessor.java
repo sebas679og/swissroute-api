@@ -5,7 +5,7 @@ import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.models.FavoriteRouteEntity;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.repositories.FavoriteRouteRepository;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class FavoriteRouteProcessor {
       String name,
       String origin,
       String destination,
-      TransportationType transportType) {
+      TransportType transportType) {
     if (favoriteRouteRepository.existsByUserIdAndName(user.getId(), name)) {
       throw new ConflictException("Favorite route name already exists");
     }
@@ -87,7 +87,7 @@ public class FavoriteRouteProcessor {
       String name,
       String origin,
       String destination,
-      TransportationType transportType) {
+      TransportType transportType) {
 
     FavoriteRouteEntity route =
         favoriteRouteRepository

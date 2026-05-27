@@ -1,6 +1,6 @@
 package com.group4.swissrouteapi.models;
 
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -66,7 +66,7 @@ public class FavoriteRouteEntity {
 
   @Column(name = "transport_type")
   @Enumerated(EnumType.STRING)
-  private TransportationType transportType;
+  private TransportType transportType;
 
   @Column(
       name = "created_at",

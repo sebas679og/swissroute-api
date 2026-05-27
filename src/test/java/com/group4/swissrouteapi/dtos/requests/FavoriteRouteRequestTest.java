@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.group4.swissrouteapi.utils.deserializer.TransportationTypeDeserializer;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -47,7 +47,7 @@ class FavoriteRouteRequestTest {
           .name("Zurich–Bern Express")
           .origin("Zurich HB")
           .destination("Bern")
-          .transportationType(TransportationType.TRAIN)
+          .transportType(TransportType.TRAIN)
           .build();
     }
 
@@ -68,7 +68,7 @@ class FavoriteRouteRequestTest {
               .name("Route A")
               .origin("Geneva")
               .destination("Lausanne")
-              .transportationType(null)
+              .transportType(null)
               .build();
 
       assertThat(validator.validate(request)).isEmpty();
@@ -163,20 +163,20 @@ class FavoriteRouteRequestTest {
 
   @Nested
   @DisplayName("TransportationTypeDeserializer")
-  class TransportationTypeDeserializerTests {
+  class TransportTypeDeserializerTests {
 
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
       SimpleModule module = new SimpleModule();
-      module.addDeserializer(TransportationType.class, new TransportationTypeDeserializer());
+      module.addDeserializer(TransportType.class, new TransportationTypeDeserializer());
       objectMapper = new ObjectMapper().registerModule(module);
     }
 
     // Wraps the raw string in JSON quotes so Jackson treats it as a JSON string token.
-    private TransportationType deserialize(String value) throws JsonProcessingException {
-      return objectMapper.readValue("\"" + value + "\"", TransportationType.class);
+    private TransportType deserialize(String value) throws JsonProcessingException {
+      return objectMapper.readValue("\"" + value + "\"", TransportType.class);
     }
 
     // ── valid values ──────────────────────────────────────────────────────
@@ -185,7 +185,7 @@ class FavoriteRouteRequestTest {
     @ValueSource(strings = {"TRAIN", "TRAM", "SHIP", "BUS", "CABLEWAY"})
     @DisplayName("deserializes all exact uppercase enum names correctly")
     void deserializesExactUppercaseValues_correctly(String value) throws JsonProcessingException {
-      assertThat(deserialize(value)).isEqualTo(TransportationType.valueOf(value));
+      assertThat(deserialize(value)).isEqualTo(TransportType.valueOf(value));
     }
 
     @ParameterizedTest(name = "lowercase [{0}]")
@@ -193,7 +193,7 @@ class FavoriteRouteRequestTest {
     @DisplayName("deserializes lowercase values by normalizing to uppercase")
     void deserializesLowercaseValues_byNormalizingToUppercase(String value)
         throws JsonProcessingException {
-      assertThat(deserialize(value)).isEqualTo(TransportationType.valueOf(value.toUpperCase()));
+      assertThat(deserialize(value)).isEqualTo(TransportType.valueOf(value.toUpperCase()));
     }
 
     @ParameterizedTest(name = "mixed-case [{0}]")
@@ -201,8 +201,7 @@ class FavoriteRouteRequestTest {
     @DisplayName("deserializes mixed-case values by normalizing to uppercase")
     void deserializesMixedCaseValues_byNormalizingToUppercase(String value)
         throws JsonProcessingException {
-      assertThat(deserialize(value))
-          .isEqualTo(TransportationType.valueOf(value.trim().toUpperCase()));
+      assertThat(deserialize(value)).isEqualTo(TransportType.valueOf(value.trim().toUpperCase()));
     }
 
     @ParameterizedTest(name = "padded [{0}]")
@@ -210,7 +209,7 @@ class FavoriteRouteRequestTest {
     @DisplayName("deserializes values with surrounding whitespace by trimming first")
     void deserializesValues_withSurroundingWhitespace_byTrimming(String value)
         throws JsonProcessingException {
-      assertThat(deserialize(value)).isEqualTo(TransportationType.valueOf(value.trim()));
+      assertThat(deserialize(value)).isEqualTo(TransportType.valueOf(value.trim()));
     }
 
     // ── null / blank → null ───────────────────────────────────────────────
@@ -227,7 +226,7 @@ class FavoriteRouteRequestTest {
       // Uses objectMapper.writeValueAsString() to produce valid JSON-escaped strings,
       // since raw \t and \n are illegal unquoted control characters in JSON.
       String json = objectMapper.writeValueAsString("   ");
-      assertThat(objectMapper.readValue(json, TransportationType.class)).isNull();
+      assertThat(objectMapper.readValue(json, TransportType.class)).isNull();
     }
 
     // ── invalid values ────────────────────────────────────────────────────
@@ -266,13 +265,13 @@ class FavoriteRouteRequestTest {
               .name("Night Train")
               .origin("Zurich")
               .destination("Vienna")
-              .transportationType(TransportationType.TRAIN)
+              .transportType(TransportType.TRAIN)
               .build();
 
       assertThat(request.getName()).isEqualTo("Night Train");
       assertThat(request.getOrigin()).isEqualTo("Zurich");
       assertThat(request.getDestination()).isEqualTo("Vienna");
-      assertThat(request.getTransportationType()).isEqualTo(TransportationType.TRAIN);
+      assertThat(request.getTransportType()).isEqualTo(TransportType.TRAIN);
     }
 
     @Test

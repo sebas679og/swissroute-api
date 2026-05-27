@@ -19,7 +19,7 @@ import com.group4.swissrouteapi.models.FavoriteRouteEntity;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.services.components.UserFinder;
 import com.group4.swissrouteapi.services.processors.FavoriteRouteProcessor;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import com.group4.swissrouteapi.utils.mappers.FavoriteRouteMapper;
 import java.time.Instant;
 import java.util.List;
@@ -62,7 +62,7 @@ class FavoriteRouteServiceImplTest {
         .name("Zurich–Bern Express")
         .origin("Zurich HB")
         .destination("Bern")
-        .transportationType(TransportationType.TRAIN)
+        .transportType(TransportType.TRAIN)
         .build();
   }
 
@@ -72,7 +72,7 @@ class FavoriteRouteServiceImplTest {
         .name("Zurich–Bern Express")
         .origin("Zurich HB")
         .destination("Bern")
-        .transportType(TransportationType.TRAIN)
+        .transportType(TransportType.TRAIN)
         .createdAt(Instant.now())
         .build();
   }
@@ -110,7 +110,7 @@ class FavoriteRouteServiceImplTest {
               request.getName(),
               request.getOrigin(),
               request.getDestination(),
-              request.getTransportationType()))
+              request.getTransportType()))
           .thenReturn(entity);
       when(favoriteRouteMapper.toFavoriteRouteResponse(entity)).thenReturn(expected);
 
@@ -150,7 +150,7 @@ class FavoriteRouteServiceImplTest {
               request.getName(),
               request.getOrigin(),
               request.getDestination(),
-              request.getTransportationType()))
+              request.getTransportType()))
           .thenReturn(entity);
       when(favoriteRouteMapper.toFavoriteRouteResponse(entity))
           .thenReturn(buildRouteResponse(entity));
@@ -163,7 +163,7 @@ class FavoriteRouteServiceImplTest {
               request.getName(),
               request.getOrigin(),
               request.getDestination(),
-              request.getTransportationType());
+              request.getTransportType());
     }
 
     @Test
@@ -322,7 +322,7 @@ class FavoriteRouteServiceImplTest {
               request.getName(),
               request.getOrigin(),
               request.getDestination(),
-              request.getTransportationType()))
+              request.getTransportType()))
           .thenReturn(entity);
       when(favoriteRouteMapper.toFavoriteRouteResponse(entity)).thenReturn(expected);
 
@@ -341,12 +341,12 @@ class FavoriteRouteServiceImplTest {
               .name("Updated")
               .origin("Basel")
               .destination("Zurich")
-              .transportationType(TransportationType.BUS)
+              .transportType(TransportType.BUS)
               .build();
 
       when(userFinder.findById(USER_ID)).thenReturn(user);
       when(favoriteRouteProcessor.updateFavoriteRoute(
-              USER_ID, ROUTE_ID, "Updated", "Basel", "Zurich", TransportationType.BUS))
+              USER_ID, ROUTE_ID, "Updated", "Basel", "Zurich", TransportType.BUS))
           .thenReturn(entity);
       when(favoriteRouteMapper.toFavoriteRouteResponse(entity))
           .thenReturn(buildRouteResponse(entity));
@@ -354,8 +354,7 @@ class FavoriteRouteServiceImplTest {
       favoriteRouteService.updateFavoriteRoute(USER_ID, ROUTE_ID, request);
 
       verify(favoriteRouteProcessor)
-          .updateFavoriteRoute(
-              USER_ID, ROUTE_ID, "Updated", "Basel", "Zurich", TransportationType.BUS);
+          .updateFavoriteRoute(USER_ID, ROUTE_ID, "Updated", "Basel", "Zurich", TransportType.BUS);
     }
 
     @Test

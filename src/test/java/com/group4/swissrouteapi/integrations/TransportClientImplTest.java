@@ -19,7 +19,7 @@ import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStatio
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiCoordinate;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiStation;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
@@ -503,7 +503,7 @@ class TransportClientImplTest {
       mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
 
       transportClient.getConnections(
-          FROM, TO, null, null, List.of(TransportationType.TRAIN, TransportationType.BUS));
+          FROM, TO, null, null, List.of(TransportType.TRAIN, TransportType.BUS));
 
       RecordedRequest recorded = mockWebServer.takeRequest();
       String path = recorded.getPath();

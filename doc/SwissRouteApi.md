@@ -1425,7 +1425,7 @@ Authorization: Bearer {{JWT}}
   "name": "Home to work",
   "origin": "Geneve",
   "destination": "Zurich",
-  "transportationType": "TRAIN"
+  "transportType": "TRAIN"
 }
 ```
 
@@ -1438,13 +1438,13 @@ Authorization: Bearer {{JWT}}
 | `name`               | String | Yes      | Unique favorite route name |
 | `origin`             | String | Yes      | Origin station             |
 | `destination`        | String | Yes      | Destination station        |
-| `transportationType` | Enum   | No       | Transportation type filter |
+| `transportType` | Enum   | No       | Transportation type filter |
 
 ---
 
 #### Supported Transportation Types
 
-Allowed values for `transportationType`:
+Allowed values for `transportType`:
 
 * `TRAIN`
 * `TRAM`
@@ -1461,7 +1461,7 @@ Allowed values for `transportationType`:
 | `name`               | Must not be null, empty, or blank            |
 | `origin`             | Must not be null, empty, or blank            |
 | `destination`        | Must not be null, empty, or blank            |
-| `transportationType` | Optional, but must match allowed enum values |
+| `transportType` | Optional, but must match allowed enum values |
 
 ---
 
@@ -1520,7 +1520,7 @@ Occurs when required fields are missing or the transportation type is invalid.
 {
   "code": 400,
   "name": "BAD_REQUEST",
-  "description": "Field 'transportationType': invalid value 'plane'",
+  "description": "Field 'transportType': invalid value 'plane'",
   "timestamp": "2026-05-26T23:58:17.137Z"
 }
 ```
@@ -1735,7 +1735,7 @@ Authorization: Bearer {{JWT}}
   "name": "Home to work",
   "origin": "Basilea",
   "destination": "Berna",
-  "transportationType": "BUS"
+  "transportType": "BUS"
 }
 ```
 
@@ -1805,7 +1805,7 @@ Occurs when the path parameter format or request body validation fails.
 {
   "code": 400,
   "name": "BAD_REQUEST",
-  "description": "Field 'transportationType': invalid value 'plane'",
+  "description": "Field 'transportType': invalid value 'plane'",
   "timestamp": "2026-05-26T19:22:48.844Z"
 }
 ```

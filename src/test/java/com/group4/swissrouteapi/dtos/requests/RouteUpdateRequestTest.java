@@ -2,7 +2,7 @@ package com.group4.swissrouteapi.dtos.requests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class RouteUpdateRequestTest {
       assertThat(request.getName()).isNull();
       assertThat(request.getOrigin()).isNull();
       assertThat(request.getDestination()).isNull();
-      assertThat(request.getTransportationType()).isNull();
+      assertThat(request.getTransportType()).isNull();
     }
 
     @Test
@@ -39,25 +39,25 @@ class RouteUpdateRequestTest {
               .name("Night Train")
               .origin("Zurich")
               .destination("Bern")
-              .transportationType(TransportationType.TRAIN)
+              .transportType(TransportType.TRAIN)
               .build();
 
       assertThat(request.getName()).isEqualTo("Night Train");
       assertThat(request.getOrigin()).isEqualTo("Zurich");
       assertThat(request.getDestination()).isEqualTo("Bern");
-      assertThat(request.getTransportationType()).isEqualTo(TransportationType.TRAIN);
+      assertThat(request.getTransportType()).isEqualTo(TransportType.TRAIN);
     }
 
     @Test
     @DisplayName("all-args constructor assigns fields in declaration order")
     void allArgsConstructor_assignsFieldsCorrectly() {
       RouteUpdateRequest request =
-          new RouteUpdateRequest("Express", "Geneva", "Lausanne", TransportationType.TRAM);
+          new RouteUpdateRequest("Express", "Geneva", "Lausanne", TransportType.TRAM);
 
       assertThat(request.getName()).isEqualTo("Express");
       assertThat(request.getOrigin()).isEqualTo("Geneva");
       assertThat(request.getDestination()).isEqualTo("Lausanne");
-      assertThat(request.getTransportationType()).isEqualTo(TransportationType.TRAM);
+      assertThat(request.getTransportType()).isEqualTo(TransportType.TRAM);
     }
 
     @Test
@@ -67,12 +67,12 @@ class RouteUpdateRequestTest {
       request.setName("Updated Name");
       request.setOrigin("Basel");
       request.setDestination("Zurich");
-      request.setTransportationType(TransportationType.BUS);
+      request.setTransportType(TransportType.BUS);
 
       assertThat(request.getName()).isEqualTo("Updated Name");
       assertThat(request.getOrigin()).isEqualTo("Basel");
       assertThat(request.getDestination()).isEqualTo("Zurich");
-      assertThat(request.getTransportationType()).isEqualTo(TransportationType.BUS);
+      assertThat(request.getTransportType()).isEqualTo(TransportType.BUS);
     }
   }
 
@@ -101,7 +101,7 @@ class RouteUpdateRequestTest {
               .name("")
               .origin("")
               .destination("")
-              .transportationType(null)
+              .transportType(null)
               .build();
 
       assertThat(request.isEmpty()).isTrue();
@@ -115,7 +115,7 @@ class RouteUpdateRequestTest {
               .name("   ")
               .origin("   ")
               .destination("   ")
-              .transportationType(null)
+              .transportType(null)
               .build();
 
       assertThat(request.isEmpty()).isTrue();
@@ -185,7 +185,7 @@ class RouteUpdateRequestTest {
     @DisplayName("returns false when only transportationType is set")
     void returnsFalse_whenOnlyTransportationTypeIsSet() {
       RouteUpdateRequest request =
-          RouteUpdateRequest.builder().transportationType(TransportationType.SHIP).build();
+          RouteUpdateRequest.builder().transportType(TransportType.SHIP).build();
 
       assertThat(request.isEmpty()).isFalse();
     }
@@ -198,7 +198,7 @@ class RouteUpdateRequestTest {
               .name("Express")
               .origin("Geneva")
               .destination("Lausanne")
-              .transportationType(TransportationType.TRAM)
+              .transportType(TransportType.TRAM)
               .build();
 
       assertThat(request.isEmpty()).isFalse();
@@ -220,7 +220,7 @@ class RouteUpdateRequestTest {
               .name("   ")
               .origin("Basel")
               .destination("")
-              .transportationType(null)
+              .transportType(null)
               .build();
 
       assertThat(request.isEmpty()).isFalse();
@@ -235,7 +235,7 @@ class RouteUpdateRequestTest {
               .name(null)
               .origin("   ")
               .destination("Zurich")
-              .transportationType(null)
+              .transportType(null)
               .build();
 
       assertThat(request.isEmpty()).isFalse();
@@ -249,7 +249,7 @@ class RouteUpdateRequestTest {
               .name("   ")
               .origin("")
               .destination(null)
-              .transportationType(TransportationType.CABLEWAY)
+              .transportType(TransportType.CABLEWAY)
               .build();
 
       assertThat(request.isEmpty()).isFalse();

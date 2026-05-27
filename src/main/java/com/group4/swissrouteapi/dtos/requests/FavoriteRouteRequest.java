@@ -2,7 +2,7 @@ package com.group4.swissrouteapi.dtos.requests;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.group4.swissrouteapi.utils.deserializer.TransportationTypeDeserializer;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import lombok.Setter;
  * <p>DTO representing a request to create a user's favorite route.
  *
  * <p>Contains mandatory fields for route details (name, origin, destination) and an optional {@link
- * TransportationType} to specify the transport mode.
+ * TransportType} to specify the transport mode.
  */
 @Getter
 @Setter
@@ -35,5 +35,5 @@ public class FavoriteRouteRequest {
   private String destination;
 
   @JsonDeserialize(using = TransportationTypeDeserializer.class)
-  private TransportationType transportationType;
+  private TransportType transportType;
 }

@@ -38,7 +38,7 @@ public class FavoriteRouteServiceImpl implements FavoriteRouteService {
             request.getName(),
             request.getOrigin(),
             request.getDestination(),
-            request.getTransportationType()));
+            request.getTransportType()));
   }
 
   @Override
@@ -63,7 +63,7 @@ public class FavoriteRouteServiceImpl implements FavoriteRouteService {
             request.getName(),
             request.getOrigin(),
             request.getDestination(),
-            request.getTransportationType()));
+            request.getTransportType()));
   }
 
   @Override

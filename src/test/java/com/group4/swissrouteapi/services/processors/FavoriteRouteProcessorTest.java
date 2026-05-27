@@ -13,7 +13,7 @@ import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.models.FavoriteRouteEntity;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.repositories.FavoriteRouteRepository;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,7 +42,7 @@ class FavoriteRouteProcessorTest {
   private static final String ROUTE_NAME = "Zurich–Bern Express";
   private static final String ORIGIN = "Zurich HB";
   private static final String DESTINATION = "Bern";
-  private static final TransportationType TRANSPORT_TYPE = TransportationType.TRAIN;
+  private static final TransportType TRANSPORT_TYPE = TransportType.TRAIN;
 
   private UserEntity buildUser() {
     UserEntity user = new UserEntity();
@@ -375,12 +375,12 @@ class FavoriteRouteProcessorTest {
         when(favoriteRouteRepository.save(route)).thenReturn(route);
 
         favoriteRouteProcessor.updateFavoriteRoute(
-            USER_ID, ROUTE_ID, null, null, null, TransportationType.BUS);
+            USER_ID, ROUTE_ID, null, null, null, TransportType.BUS);
 
         assertThat(route.getName()).isEqualTo(ROUTE_NAME);
         assertThat(route.getOrigin()).isEqualTo(ORIGIN);
         assertThat(route.getDestination()).isEqualTo(DESTINATION);
-        assertThat(route.getTransportType()).isEqualTo(TransportationType.BUS);
+        assertThat(route.getTransportType()).isEqualTo(TransportType.BUS);
       }
 
       @Test
@@ -394,12 +394,12 @@ class FavoriteRouteProcessorTest {
         when(favoriteRouteRepository.save(route)).thenReturn(route);
 
         favoriteRouteProcessor.updateFavoriteRoute(
-            USER_ID, ROUTE_ID, "New Name", "Basel", "Zurich", TransportationType.BUS);
+            USER_ID, ROUTE_ID, "New Name", "Basel", "Zurich", TransportType.BUS);
 
         assertThat(route.getName()).isEqualTo("New Name");
         assertThat(route.getOrigin()).isEqualTo("Basel");
         assertThat(route.getDestination()).isEqualTo("Zurich");
-        assertThat(route.getTransportType()).isEqualTo(TransportationType.BUS);
+        assertThat(route.getTransportType()).isEqualTo(TransportType.BUS);
       }
 
       @Test
@@ -424,7 +424,7 @@ class FavoriteRouteProcessorTest {
         when(favoriteRouteRepository.save(route)).thenReturn(route);
 
         favoriteRouteProcessor.updateFavoriteRoute(
-            USER_ID, ROUTE_ID, null, null, null, TransportationType.TRAM);
+            USER_ID, ROUTE_ID, null, null, null, TransportType.TRAM);
 
         verify(favoriteRouteRepository, times(1)).save(route);
       }

@@ -5,7 +5,7 @@ import com.group4.swissrouteapi.exceptions.BadGatewayException;
 import com.group4.swissrouteapi.exceptions.ServiceUnavailableException;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnectionsResponse;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -76,11 +76,7 @@ public class TransportClientImpl implements TransportClient {
 
   @Override
   public ApiConnectionsResponse getConnections(
-      String from,
-      String to,
-      LocalDate date,
-      LocalTime time,
-      List<TransportationType> transportationType) {
+      String from, String to, LocalDate date, LocalTime time, List<TransportType> transportType) {
     final AtomicReference<URI> uriTracker = new AtomicReference<>();
 
     WebClient.RequestHeadersSpec<?> request =
@@ -97,9 +93,9 @@ public class TransportClientImpl implements TransportClient {
                   if (time != null) {
                     uriBuilder.queryParam("time", time.toString());
                   }
-                  if (transportationType != null && !transportationType.isEmpty()) {
+                  if (transportType != null && !transportType.isEmpty()) {
                     Object[] types =
-                        transportationType.stream()
+                        transportType.stream()
                             .map(type -> type.name().toLowerCase(Locale.ROOT))
                             .toArray();
                     uriBuilder.queryParam("transportations[]", types);

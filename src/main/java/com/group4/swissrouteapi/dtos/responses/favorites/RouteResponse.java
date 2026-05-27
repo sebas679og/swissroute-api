@@ -1,6 +1,6 @@
 package com.group4.swissrouteapi.dtos.responses.favorites;
 
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.Builder;
@@ -22,6 +22,6 @@ public class RouteResponse {
   String name;
   String origin;
   String destination;
-  TransportationType transportType;
+  TransportType transportType;
   Instant createdAt;
 }

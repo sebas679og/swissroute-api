@@ -3,7 +3,7 @@ package com.group4.swissrouteapi.dtos.requests;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.group4.swissrouteapi.utils.deserializer.TransportationTypeDeserializer;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public class RouteUpdateRequest {
   private String destination;
 
   @JsonDeserialize(using = TransportationTypeDeserializer.class)
-  private TransportationType transportationType;
+  private TransportType transportType;
 
   /**
    * Checks whether the request contains no meaningful update data.
@@ -45,6 +45,6 @@ public class RouteUpdateRequest {
     return (name == null || name.isBlank())
         && (origin == null || origin.isBlank())
         && (destination == null || destination.isBlank())
-        && transportationType == null;
+        && transportType == null;
   }
 }
