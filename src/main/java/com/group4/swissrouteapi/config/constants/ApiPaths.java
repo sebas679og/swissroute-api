@@ -86,6 +86,11 @@ public final class ApiPaths {
     public static final String FAVORITE_ROUTE = "/api/favorite-routes/{routeId}";
   }
 
+  public static final class FavoriteStations {
+    public static final String FAVORITE_STATIONS = "/api/favorite-stations";
+    public static final String FAVORITE_STATION = "/api/favorite-stations/{stationId}";
+  }
+
   /**
    * Docs
    *
