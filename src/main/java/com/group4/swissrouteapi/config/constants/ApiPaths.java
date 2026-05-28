@@ -87,6 +87,17 @@ public final class ApiPaths {
   }
 
   /**
+   * FavoriteStations
+   *
+   * <p>Static inner class that defines API path constants for managing the authenticated user's
+   * favorite stations.
+   */
+  public static final class FavoriteStations {
+    public static final String FAVORITE_STATIONS = "/api/favorite-stations";
+    public static final String FAVORITE_STATION = "/api/favorite-stations/{externalStationId}";
+  }
+
+  /**
    * Docs
    *
    * <p>Defines API paths related to documentation endpoints.

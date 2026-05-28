@@ -418,6 +418,108 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Favorite Stations",
+      "item": [
+        {
+          "name": "Add Station",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalStationId\": \"8503059\",\n  \"stationName\": \"Aarau\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/favorite-stations",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "favorite-stations"
+              ]
+            },
+            "description": "# ⭐ Add Favorite Station\n\n## 📌 Endpoint\n\n**POST**  \n`/api/favorite-stations`\n\n---\n\n## 📖 Description\n\nAdds a station to the authenticated user's list of favorite stations.\n\nFavorite stations allow users to quickly access frequently used stations for route and connection searches.\n\nEach station is uniquely identified by its external station identifier.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Request Body (JSON)\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| externalStationId | String | ✅ Yes | External identifier of the station |\n| stationName | String | ✅ Yes | Name of the station |\n\n---\n\n### Example Request\n\n``` http\nPOST /api/favorite-stations\nAuthorization: Bearer {{JWT}}\nContent-Type: application/json\n\n ```\n\n``` json\n{\n  \"externalStationId\": \"850309\",\n  \"stationName\": \"Aarau\"\n}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 201 Created\n\nThe favorite station was successfully added.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"externalStationId\": \"850309\",\n    \"stationName\": \"Aarau\",\n    \"createdAt\": \"2026-05-28T17:18:54.723Z\"\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid or missing fields.\n\n### Possible Causes\n\n- Missing required fields\n    \n- Blank values\n    \n- Malformed request body\n    \n- Invalid input format\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"externalStationId: External station id is required\",\n    \"timestamp\": \"2026-05-28T17:20:11.842Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n- Malformed token\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-28T17:21:07.117Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe authenticated user was not found.\n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"User not found\",\n    \"timestamp\": \"2026-05-28T17:22:35.993Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 409 Conflict\n\nThe station is already registered as favorite.\n\n### Example Response\n\n``` json\n{\n    \"code\": 409,\n    \"name\": \"CONFLICT\",\n    \"description\": \"externalStationId already registered\",\n    \"timestamp\": \"2026-05-28T17:23:44.221Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Stations",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/favorite-stations",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "favorite-stations"
+              ]
+            },
+            "description": "# ⭐ Get Favorite Stations\n\n## 📌 Endpoint\n\n**GET**  \n`/api/favorite-stations`\n\n---\n\n## 📖 Description\n\nRetrieves all favorite stations associated with the authenticated user.\n\nThe response includes the station identifier, station name, and the creation timestamp for each favorite station.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nFavorite stations were successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"favoriteStations\": [\n        {\n            \"externalStationId\": \"8430555\",\n            \"stationName\": \"Aarau\",\n            \"createdAt\": \"2026-05-28T16:36:08.181Z\"\n        },\n        {\n            \"externalStationId\": \"8503059\",\n            \"stationName\": \"Aarau\",\n            \"createdAt\": \"2026-05-28T16:35:45.563Z\"\n        }\n    ]\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-28T17:25:51.782Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe authenticated user was not found.\n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"User not found\",\n    \"timestamp\": \"2026-05-28T17:26:37.118Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Station",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/favorite-stations/{{externalStationId}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "favorite-stations",
+                "{{externalStationId}}"
+              ]
+            },
+            "description": "# 🗑️ Delete Favorite Station\n\n## 📌 Endpoint\n\n**DELETE**  \n`/api/favorite-stations/{externalStationId}`\n\n---\n\n## 📖 Description\n\nRemoves a station from the authenticated user's list of favorite stations.\n\nOnly stations belonging to the authenticated user can be deleted.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Path Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| externalStationId | String | ✅ Yes | External identifier of the favorite station |\n\n---\n\n### Example Request\n\n``` http\nDELETE /api/favorite-stations/850309\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 204 No Content\n\nThe favorite station was successfully removed.\n\n---\n\n## ❌ 400 Bad Request\n\nThe provided path parameter is invalid.\n\n### Possible Causes\n\n- Invalid station identifier\n    \n- Malformed URL parameter\n    \n- Empty path parameter\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Invalid path parameter for: 'externalStationId'\",\n    \"timestamp\": \"2026-05-28T17:29:11.340Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-28T17:29:58.822Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe user or favorite station was not found.\n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"User or stationId not found\",\n    \"timestamp\": \"2026-05-28T17:31:12.553Z\"\n}\n\n ```"
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "event": [
@@ -459,6 +561,10 @@
     },
     {
       "key": "routeId",
+      "value": ""
+    },
+    {
+      "key": "externalStationId",
       "value": ""
     }
   ]

@@ -25,6 +25,10 @@
   - [Get User Favorite Routes](#get-user-favorite-routes)
   - [Update Favorite Route](#update-favorite-route)
   - [Delete Favorite Route](#delete-favorite-route)
+-[Favorite Stations](#favorite-stations)
+  - [Create Favorite Station](#create-favorite-station)
+  - [Get Favorite Stations](#get-favorite-stations)
+  - [ Delete Favorite Station](#delete-favorite-station)
 
 ---
 
@@ -1433,12 +1437,12 @@ Authorization: Bearer {{JWT}}
 
 #### Request Fields
 
-| Field                | Type   | Required | Description                |
-|----------------------|--------|----------|----------------------------|
-| `name`               | String | Yes      | Unique favorite route name |
-| `origin`             | String | Yes      | Origin station             |
-| `destination`        | String | Yes      | Destination station        |
-| `transportType` | Enum   | No       | Transportation type filter |
+| Field             | Type   | Required | Description                |
+|-------------------|--------|----------|----------------------------|
+| `name`            | String | Yes      | Unique favorite route name |
+| `origin`          | String | Yes      | Origin station             |
+| `destination`     | String | Yes      | Destination station        |
+| `transportType`   | Enum   | No       | Transportation type filter |
 
 ---
 
@@ -1456,12 +1460,12 @@ Allowed values for `transportType`:
 
 #### Validation Rules
 
-| Field                | Validation                                   |
-|----------------------|----------------------------------------------|
-| `name`               | Must not be null, empty, or blank            |
-| `origin`             | Must not be null, empty, or blank            |
-| `destination`        | Must not be null, empty, or blank            |
-| `transportType` | Optional, but must match allowed enum values |
+| Field            | Validation                                   |
+|------------------|----------------------------------------------|
+| `name`           | Must not be null, empty, or blank            |
+| `origin`         | Must not be null, empty, or blank            |
+| `destination`    | Must not be null, empty, or blank            |
+| `transportType`  | Optional, but must match allowed enum values |
 
 ---
 
@@ -1964,3 +1968,362 @@ Occurs when the user or favorite route does not exist.
 
 * Users can delete only their own favorite routes.
 * Deletion is permanent and cannot be undone.
+
+---
+
+## Favorite Stations
+
+### Create Favorite Station
+
+Adds a station to the authenticated user's list of favorite stations.
+
+#### Endpoint
+
+```http
+POST /api/favorite-stations
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+#### Request Body
+
+All request fields are required.
+
+```json
+{
+  "externalStationId": "850309",
+  "stationName": "Aarau"
+}
+```
+
+---
+
+#### Request Fields
+
+| Field               | Type   | Required | Description                                    |
+|---------------------|--------|----------|------------------------------------------------|
+| `externalStationId` | String | Yes      | External station identifier from Transport API |
+| `stationName`       | String | Yes      | Station name                                   |
+
+---
+
+#### Validation Rules
+
+| Field               | Validation                        |
+|---------------------|-----------------------------------|
+| `externalStationId` | Must not be null, empty, or blank |
+| `stationName`       | Must not be null, empty, or blank |
+| `externalStationId` | Must be unique per user           |
+
+---
+
+#### Successful Response
+
+##### 201 — Created
+
+```json
+{
+  "externalStationId": "850309",
+  "stationName": "Aarau",
+  "createdAt": "2026-05-28T17:18:54.723Z"
+}
+```
+
+---
+
+##### Response Fields
+
+| Field               | Type     | Description                 |
+|---------------------|----------|-----------------------------|
+| `externalStationId` | String   | External station identifier |
+| `stationName`       | String   | Station name                |
+| `createdAt`         | DateTime | UTC creation timestamp      |
+
+---
+
+#### Error Responses
+
+##### 400 — Bad Request
+
+Occurs when request validation fails.
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "externalStationId: External station id is required; stationName: Station name is required",
+  "timestamp": "2026-05-28T17:18:54.723Z"
+}
+```
+
+---
+
+##### 401 — Unauthorized
+
+Occurs when authentication is missing, invalid, or expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-28T17:18:54.723Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when the authenticated user does not exist.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "User not found",
+  "timestamp": "2026-05-28T17:18:54.723Z"
+}
+```
+
+---
+
+##### 409 — Conflict
+
+Occurs when the station is already registered as favorite.
+
+```json
+{
+  "code": 409,
+  "name": "CONFLICT",
+  "description": "externalStationId already registered",
+  "timestamp": "2026-05-28T17:18:54.723Z"
+}
+```
+
+---
+
+#### Notes
+
+* Favorite stations are associated with the authenticated user.
+* Duplicate station registrations are not allowed.
+* All timestamps are returned in ISO-8601 UTC format.
+
+---
+
+### Get Favorite Stations
+
+Returns all favorite stations belonging to the authenticated user.
+
+#### Endpoint
+
+```http
+GET /api/favorite-stations
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+#### Successful Response
+
+#### 200 — OK
+
+```json
+{
+  "favoriteStations": [
+    {
+      "externalStationId": "8430555",
+      "stationName": "Aarau",
+      "createdAt": "2026-05-28T16:36:08.181Z"
+    },
+    {
+      "externalStationId": "84503055",
+      "stationName": "Aarau",
+      "createdAt": "2026-05-28T16:36:00.650Z"
+    },
+    {
+      "externalStationId": "8503059",
+      "stationName": "Aarau",
+      "createdAt": "2026-05-28T16:35:45.563Z"
+    }
+  ]
+}
+```
+
+---
+
+#### Response Fields
+
+| Field               | Type     | Description                 |
+|---------------------|----------|-----------------------------|
+| `externalStationId` | String   | External station identifier |
+| `stationName`       | String   | Station name                |
+| `createdAt`         | DateTime | UTC creation timestamp      |
+
+---
+
+#### Error Responses
+
+##### 401 — Unauthorized
+
+Occurs when authentication is missing, invalid, or expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-28T16:36:08.181Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when the authenticated user does not exist.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "User not found",
+  "timestamp": "2026-05-28T16:36:08.181Z"
+}
+```
+
+---
+
+#### Notes
+
+* Only stations belonging to the authenticated user are returned.
+* Results are ordered by creation date.
+* Timestamps are returned in ISO-8601 UTC format.
+
+---
+
+### Delete Favorite Station
+
+Deletes a favorite station belonging to the authenticated user.
+
+#### Endpoint
+
+```http
+DELETE /api/favorite-stations/{externalStationId}
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+# Path Parameters
+
+| Parameter           | Type   | Required | Description                 |
+|---------------------|--------|----------|-----------------------------|
+| `externalStationId` | String | Yes      | External station identifier |
+
+---
+
+#### Example Request
+
+```http
+DELETE /api/favorite-stations/850309
+```
+
+---
+
+#### Successful Response
+
+##### 204 — No Content
+
+The favorite station was successfully deleted.
+
+---
+
+#### Error Responses
+
+##### 400 — Bad Request
+
+Occurs when the path parameter is invalid or malformed.
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Invalid path parameter for: 'externalStationId'",
+  "timestamp": "2026-05-28T17:18:54.723Z"
+}
+```
+
+---
+
+##### 401 — Unauthorized
+
+Occurs when authentication is missing, invalid, or expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-28T17:18:54.723Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when the user or station identifier does not exist.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "Favorite station not found",
+  "timestamp": "2026-05-28T17:18:54.723Z"
+}
+```
+
+---
+
+#### Notes
+
+* Users can delete only their own favorite stations.
+* Deletion is permanent and cannot be undone.
+* All timestamps are returned in ISO-8601 UTC format.
+
+---

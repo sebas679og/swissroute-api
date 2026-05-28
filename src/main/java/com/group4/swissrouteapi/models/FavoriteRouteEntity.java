@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
@@ -44,7 +45,9 @@ import lombok.Setter;
     uniqueConstraints =
         @UniqueConstraint(
             name = "uk_favorite_routes_user_name",
-            columnNames = {"user_id", "name"}))
+            columnNames = {"user_id", "name"}),
+    indexes =
+        @Index(name = "idx_user_route_created", columnList = "user_id, name, created_at DESC"))
 public class FavoriteRouteEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
