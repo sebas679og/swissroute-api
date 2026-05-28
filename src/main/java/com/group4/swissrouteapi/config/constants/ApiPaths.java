@@ -86,6 +86,12 @@ public final class ApiPaths {
     public static final String FAVORITE_ROUTE = "/api/favorite-routes/{routeId}";
   }
 
+  /**
+   * FavoriteStations
+   *
+   * <p>Static inner class that defines API path constants for managing the authenticated user's
+   * favorite stations.
+   */
   public static final class FavoriteStations {
     public static final String FAVORITE_STATIONS = "/api/favorite-stations";
     public static final String FAVORITE_STATION = "/api/favorite-stations/{externalStationId}";

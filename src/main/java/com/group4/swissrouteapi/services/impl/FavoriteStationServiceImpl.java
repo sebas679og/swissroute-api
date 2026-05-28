@@ -14,6 +14,11 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * FavoriteStationServiceImpl
+ *
+ * <p>Concrete implementation of the {@link FavoriteStationService} interface.
+ */
 @Service
 @RequiredArgsConstructor
 public class FavoriteStationServiceImpl implements FavoriteStationService {

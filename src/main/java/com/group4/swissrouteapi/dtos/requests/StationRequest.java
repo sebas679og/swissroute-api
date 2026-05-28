@@ -5,6 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * StationRequest
+ *
+ * <p>DTO representing the request payload for creating or registering a user's favorite station.
+ */
 @Getter
 @Setter
 @Builder
