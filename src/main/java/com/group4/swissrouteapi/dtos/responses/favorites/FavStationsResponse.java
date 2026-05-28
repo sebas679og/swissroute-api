@@ -7,6 +7,6 @@ import java.util.List;
 
 @Value
 @Builder
-public class StationsResponse {
-    List<StationResponse> favoritesStations;
+public class FavStationsResponse {
+    List<StationResponse> favoriteStations;
 }

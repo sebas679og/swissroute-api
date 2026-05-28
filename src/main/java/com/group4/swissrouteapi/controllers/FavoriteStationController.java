@@ -3,7 +3,7 @@ package com.group4.swissrouteapi.controllers;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.dtos.requests.StationRequest;
 import com.group4.swissrouteapi.dtos.responses.favorites.StationResponse;
-import com.group4.swissrouteapi.dtos.responses.favorites.StationsResponse;
+import com.group4.swissrouteapi.dtos.responses.favorites.FavStationsResponse;
 import com.group4.swissrouteapi.services.FavoriteStationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -39,7 +39,7 @@ public class FavoriteStationController {
     }
 
     @GetMapping(ApiPaths.FavoriteStations.FAVORITE_STATIONS)
-    public ResponseEntity<StationsResponse> getFavoriteStations(Authentication authentication){
+    public ResponseEntity<FavStationsResponse> getFavoriteStations(Authentication authentication){
         return ResponseEntity.status(HttpStatus.OK).body(favoriteStationService.getFavoriteStation(UUID.fromString(authentication.getName())));
     }
 

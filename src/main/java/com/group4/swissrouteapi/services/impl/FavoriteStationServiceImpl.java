@@ -2,7 +2,7 @@ package com.group4.swissrouteapi.services.impl;
 
 import com.group4.swissrouteapi.dtos.requests.StationRequest;
 import com.group4.swissrouteapi.dtos.responses.favorites.StationResponse;
-import com.group4.swissrouteapi.dtos.responses.favorites.StationsResponse;
+import com.group4.swissrouteapi.dtos.responses.favorites.FavStationsResponse;
 import com.group4.swissrouteapi.models.FavoriteStationEntity;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.services.FavoriteStationService;
@@ -37,12 +37,12 @@ public class FavoriteStationServiceImpl implements FavoriteStationService {
     }
 
     @Override
-    public StationsResponse getFavoriteStation(UUID userId) {
+    public FavStationsResponse getFavoriteStation(UUID userId) {
         UserEntity user = getUser(userId);
         List<FavoriteStationEntity> stations =
                 stationsProcessor.getFavoriteStations(user.getId());
-        return StationsResponse.builder()
-                .favoritesStations(stations.stream()
+        return FavStationsResponse.builder()
+                .favoriteStations(stations.stream()
                         .map(stationMapper::toStationResponse)
                         .toList())
                 .build();
