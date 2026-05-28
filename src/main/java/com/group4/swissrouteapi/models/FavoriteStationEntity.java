@@ -6,10 +6,12 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
@@ -29,13 +31,22 @@ import lombok.Setter;
  * <p>Designed for persistence and retrieval using JPA/Hibernate, ensuring proper management of user
  * preferences and station data.
  */
-@Entity
-@Table(name = "favorite_stations")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(
+    name = "favorite_stations",
+    uniqueConstraints =
+        @UniqueConstraint(
+            name = "uk_user_external_station",
+            columnNames = {"user_id", "external_station_id"}),
+    indexes =
+        @Index(
+            name = "idx_user_station_created",
+            columnList = "user_id, external_station_id, created_at DESC"))
 public class FavoriteStationEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
