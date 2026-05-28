@@ -20,7 +20,7 @@ public class StationsProcessor {
 
     @Transactional
     public FavoriteStationEntity addFavoriteStation(UserEntity user, String externalStationId, String stationName){
-        if (!favoriteStationsRepository.existsByUserIdAndExternalStationId(user.getId(), externalStationId)) {
+        if (favoriteStationsRepository.existsByUserIdAndExternalStationId(user.getId(), externalStationId)) {
             throw new ConflictException("The station is already registered.");
         }
         return favoriteStationsRepository.save(
