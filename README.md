@@ -151,19 +151,22 @@ http://localhost:8080/v3/api-docs
 ### Endpoint Summary
 
 
-| Method   | Path                               | Description                                                                    |
-|----------|------------------------------------|--------------------------------------------------------------------------------|
-| `POST`   | `/api/users/register`              | Creates a new user account in the SwissRoute platform.                         |
-| `POST`   | `/api/users/login`                 | Authenticates a user and returns a JWT token.                                  |
-| `GET`    | `/api/stations`                    | Searches for stations based on a query string.                                 |
-| `GET`    | `/api/connections`                 | Searches for connections between two stations.                                 |
-| `GET`    | `/api/history`                     | Returns list of connections search by user.                                    |
-| `DELETE` | `/api/history/{id}`                | Delete a specific connection search from the history associated with the user. |
-| `DELETE` | `/api/history`                     | Delete all the user's connection search history.                               |
-| `POST`   | `/api/favorite-routes`             | In charge of the registration of the user's favorite routes.                   |
-| `GET`    | `/api/favorite-routes`             | Gets all of the user's favorite routes.                                        |
-| `PUT`    | `/api/favorite-routes/{routeId}`   | Update the user's favorite route by their id.                                  |
-| `DELETE` | `/api/favorite-routes/{routeId}`   | Delete the user's favorite route by its id.                                    |
+| Method   | Path                                         | Description                                                                    |
+|----------|----------------------------------------------|--------------------------------------------------------------------------------|
+| `POST`   | `/api/users/register`                        | Creates a new user account in the SwissRoute platform.                         |
+| `POST`   | `/api/users/login`                           | Authenticates a user and returns a JWT token.                                  |
+| `GET`    | `/api/stations`                              | Searches for stations based on a query string.                                 |
+| `GET`    | `/api/connections`                           | Searches for connections between two stations.                                 |
+| `GET`    | `/api/history`                               | Returns list of connections search by user.                                    |
+| `DELETE` | `/api/history/{id}`                          | Delete a specific connection search from the history associated with the user. |
+| `DELETE` | `/api/history`                               | Delete all the user's connection search history.                               |
+| `POST`   | `/api/favorite-routes`                       | In charge of the registration of the user's favorite routes.                   |
+| `GET`    | `/api/favorite-routes`                       | Gets all of the user's favorite routes.                                        |
+| `PUT`    | `/api/favorite-routes/{routeId}`             | Update the user's favorite route by their id.                                  |
+| `DELETE` | `/api/favorite-routes/{routeId}`             | Delete the user's favorite route by its id.                                    |
+| `POST`   | `/api/favorite-stations`                     | In charge of the user's favorite stations registry.                            |
+| `GET`    | `/api/favorite-stations`                     | Gets all the user's favorite station records.                                  |
+| `DELETE` | `/api/favorite-stations/{externalStationId}` | Deletes a user's favorite station record.                                      |
 
 ---
 
