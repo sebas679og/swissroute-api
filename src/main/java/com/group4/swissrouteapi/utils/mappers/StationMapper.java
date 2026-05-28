@@ -1,7 +1,9 @@
 package com.group4.swissrouteapi.utils.mappers;
 
+import com.group4.swissrouteapi.dtos.responses.favorites.StationResponse;
 import com.group4.swissrouteapi.dtos.responses.stations.Station;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiStation;
+import com.group4.swissrouteapi.models.FavoriteStationEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -32,4 +34,6 @@ public interface StationMapper {
   @Mapping(target = "longitude", source = "coordinate.y")
   @Mapping(target = "distance", source = "distance")
   Station toStations(ApiStation apiStation);
+
+  StationResponse toStationResponse(FavoriteStationEntity  favoriteStationEntity);
 }
