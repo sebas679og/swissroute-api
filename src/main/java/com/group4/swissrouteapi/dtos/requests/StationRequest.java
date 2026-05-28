@@ -10,9 +10,9 @@ import lombok.Setter;
 @Builder
 public class StationRequest {
 
-    @NotBlank(message = "The station ID is required")
-    private String externalStationId;
+  @NotBlank(message = "The station ID is required")
+  private String externalStationId;
 
-    @NotBlank(message = "The name of the station is required")
-    private String stationName;
+  @NotBlank(message = "The name of the station is required")
+  private String stationName;
 }

@@ -35,5 +35,5 @@ public interface StationMapper {
   @Mapping(target = "distance", source = "distance")
   Station toStations(ApiStation apiStation);
 
-  StationResponse toStationResponse(FavoriteStationEntity  favoriteStationEntity);
+  StationResponse toStationResponse(FavoriteStationEntity favoriteStationEntity);
 }
