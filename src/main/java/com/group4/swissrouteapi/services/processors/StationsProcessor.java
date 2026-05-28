@@ -38,9 +38,9 @@ public class StationsProcessor {
     }
 
     @Transactional
-    public void deleteFavoriteStation(UUID userId, UUID favoriteStationId){
+    public void deleteFavoriteStation(UUID userId, String externalStationId){
         FavoriteStationEntity station =
-                favoriteStationsRepository.findByIdAndUserId(userId, favoriteStationId)
+                favoriteStationsRepository.findByUserIdAndExternalStationId(userId, externalStationId)
                         .orElseThrow(() -> new NotFoundException("Station not found"));
         favoriteStationsRepository.delete(station);
     }

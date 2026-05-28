@@ -44,8 +44,8 @@ public class FavoriteStationController {
     }
 
     @DeleteMapping(ApiPaths.FavoriteStations.FAVORITE_STATION)
-    public ResponseEntity<Void> deleteFavoriteStations(Authentication authentication, @PathVariable UUID stationId){
-        favoriteStationService.removeFavoriteStation(UUID.fromString(authentication.getName()), stationId);
+    public ResponseEntity<Void> deleteFavoriteStations(Authentication authentication, @PathVariable String externalStationId){
+        favoriteStationService.removeFavoriteStation(UUID.fromString(authentication.getName()), externalStationId);
         return ResponseEntity.noContent().build();
     }
 }

@@ -13,5 +13,5 @@ public interface FavoriteStationsRepository extends JpaRepository<FavoriteStatio
 
     List<FavoriteStationEntity> findByUserId(UUID userId);
 
-    Optional<FavoriteStationEntity> findByIdAndUserId(UUID userId, UUID favoriteStationId);
+    Optional<FavoriteStationEntity> findByUserIdAndExternalStationId(UUID userId, String externalStationId);
 }

@@ -49,9 +49,9 @@ public class FavoriteStationServiceImpl implements FavoriteStationService {
     }
 
     @Override
-    public void removeFavoriteStation(UUID userId, UUID favoriteStationId) {
+    public void removeFavoriteStation(UUID userId, String externalStationId) {
         UserEntity user = getUser(userId);
-        stationsProcessor.deleteFavoriteStation(user.getId(), favoriteStationId);
+        stationsProcessor.deleteFavoriteStation(user.getId(), externalStationId);
     }
 
     private UserEntity getUser(UUID userId) {

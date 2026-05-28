@@ -12,5 +12,5 @@ public interface FavoriteStationService {
 
     StationsResponse getFavoriteStation(UUID userId);
 
-    void removeFavoriteStation(UUID userId, UUID favoriteStationId);
+    void removeFavoriteStation(UUID userId, String externalStationId);
 }
