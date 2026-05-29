@@ -95,6 +95,7 @@ public final class ApiPaths {
   public static final class FavoriteStations {
     public static final String FAVORITE_STATIONS = "/api/favorite-stations";
     public static final String FAVORITE_STATION = "/api/favorite-stations/{externalStationId}";
+    public static final String FAVORITE_STATION_BOARD = "/api/favorite-stations/{externalStationId}/station-board";
   }
 
   public static final class StationBoard {
