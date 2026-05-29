@@ -17,9 +17,9 @@ import com.group4.swissrouteapi.integrations.dto.responses.ApiCoordinate;
 import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnectionsResponse;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiEndpoint;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiJourney;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiPrognosis;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiEndpoint;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiJourney;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiPrognosis;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiSection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStations;
 import com.group4.swissrouteapi.models.UserEntity;
@@ -114,7 +114,7 @@ class ConnectionsServiceImplTest {
 
     ApiJourney journey =
         new ApiJourney(
-            "IC 1", "IC", null, "1", "1", "SBB", "Bern", List.of(departure, arrival), 2, 3);
+            departure, "IC 1", "IC", null, "1", "1", "SBB", "Bern", List.of(departure, arrival), 2, 3);
 
     ApiSection section = new ApiSection(journey, null, departure, arrival);
 

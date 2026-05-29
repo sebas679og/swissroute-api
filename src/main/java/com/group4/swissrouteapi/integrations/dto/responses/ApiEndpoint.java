@@ -1,6 +1,6 @@
-package com.group4.swissrouteapi.integrations.dto.responses.connections;
+package com.group4.swissrouteapi.integrations.dto.responses;
 
-import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.OffsetDateTime;
 
@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
  * <p>Record representing a transport API endpoint detail. Holds station information, arrival and
  * departure times, delay, platform, prognosis, real-time availability, and location data.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record ApiEndpoint(
     ApiStation station,
     OffsetDateTime arrival,
