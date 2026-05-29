@@ -72,4 +72,22 @@ public class StationsProcessor {
             .orElseThrow(() -> new NotFoundException("Station not found"));
     favoriteStationsRepository.delete(station);
   }
+
+  /**
+   * Retrieves a favorite station for the given user by its external identifier.
+   *
+   * <p>Executes a read-only transactional query to ensure consistency without modifying the
+   * persistence context. If the station does not exist, a {@link NotFoundException} is thrown.
+   *
+   * @param userId unique identifier of the user
+   * @param externalStationId external identifier of the station to retrieve
+   * @return the {@link FavoriteStationEntity} matching the provided user and station ID
+   * @throws NotFoundException if no station is found for the given user and external ID
+   */
+  @Transactional(readOnly = true)
+  public FavoriteStationEntity getNameAndExternalStationId(UUID userId, String externalStationId) {
+    return favoriteStationsRepository
+        .findByUserIdAndExternalStationId(userId, externalStationId)
+        .orElseThrow(() -> new NotFoundException("Station not found"));
+  }
 }

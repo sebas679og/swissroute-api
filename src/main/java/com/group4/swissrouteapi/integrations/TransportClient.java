@@ -23,5 +23,5 @@ public interface TransportClient {
       String from, String to, LocalDate date, LocalTime time, List<TransportType> transportType);
 
   ApiStationBoardResponse getStationBoard(
-      String id, String name, Integer limit, List<TransportType> transportType);
+      String name, String id, Integer limit, List<TransportType> transportType);
 }
