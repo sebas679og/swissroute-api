@@ -12,4 +12,4 @@ import com.group4.swissrouteapi.integrations.dto.responses.ApiJourney;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record ApiSection(
-        ApiJourney journey, Object walk, ApiEndpoint departure, ApiEndpoint arrival) {}
+    ApiJourney journey, Object walk, ApiEndpoint departure, ApiEndpoint arrival) {}

@@ -1,7 +1,6 @@
 package com.group4.swissrouteapi.integrations.dto.responses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.List;
 
 /**

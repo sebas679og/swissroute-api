@@ -7,16 +7,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.exceptions.BadGatewayException;
 import com.group4.swissrouteapi.exceptions.ServiceUnavailableException;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnection;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnectionsResponse;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiCoordinate;
 import com.group4.swissrouteapi.integrations.dto.responses.ApiEndpoint;
 import com.group4.swissrouteapi.integrations.dto.responses.ApiJourney;
 import com.group4.swissrouteapi.integrations.dto.responses.ApiPrognosis;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnection;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnectionsResponse;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiSection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStations;
-import com.group4.swissrouteapi.integrations.dto.responses.ApiCoordinate;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
-import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
 import com.group4.swissrouteapi.utils.enums.TransportType;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -100,10 +100,8 @@ class TransportClientImplTest {
   private String buildConnectionsResponse() throws Exception {
     ApiCoordinate coordinate = new ApiCoordinate("Point", 7.5886, 47.5596);
 
-    ApiStation fromStation =
-        new ApiStation("8503000", "Basel SBB", 1.0, coordinate, 34, null);
-    ApiStation toStation =
-        new ApiStation("8507000", "Bern", 1.0, coordinate, 21, null);
+    ApiStation fromStation = new ApiStation("8503000", "Basel SBB", 1.0, coordinate, 34, null);
+    ApiStation toStation = new ApiStation("8507000", "Bern", 1.0, coordinate, 21, null);
 
     ApiPrognosis prognosis = new ApiPrognosis(null, null, null, null, null);
 
@@ -152,7 +150,17 @@ class TransportClientImplTest {
       ApiEndpoint departure, ApiEndpoint arrival) {
     ApiJourney journey =
         new ApiJourney(
-                departure, "IC 1", "IC", null, "1", "1", "SBB", "Bern", List.of(departure, arrival), 2, 3);
+            departure,
+            "IC 1",
+            "IC",
+            null,
+            "1",
+            "1",
+            "SBB",
+            "Bern",
+            List.of(departure, arrival),
+            2,
+            3);
 
     ApiSection section = new ApiSection(journey, null, departure, arrival);
 

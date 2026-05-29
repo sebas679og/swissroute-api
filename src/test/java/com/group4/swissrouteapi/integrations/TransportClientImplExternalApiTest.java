@@ -53,8 +53,10 @@ class TransportClientImplExternalApiTest {
   @BeforeEach
   void setUp() {
     WebClient webClient =
-        WebClient.builder().baseUrl(BASE_URL).defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE).build();
-
+        WebClient.builder()
+            .baseUrl(BASE_URL)
+            .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+            .build();
 
     transportClient = new TransportClientImpl(webClient);
   }

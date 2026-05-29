@@ -14,12 +14,12 @@ import com.group4.swissrouteapi.dtos.responses.connections.Section;
 import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.integrations.TransportClient;
 import com.group4.swissrouteapi.integrations.dto.responses.ApiCoordinate;
-import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnection;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnectionsResponse;
 import com.group4.swissrouteapi.integrations.dto.responses.ApiEndpoint;
 import com.group4.swissrouteapi.integrations.dto.responses.ApiJourney;
 import com.group4.swissrouteapi.integrations.dto.responses.ApiPrognosis;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnection;
+import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnectionsResponse;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiSection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStations;
 import com.group4.swissrouteapi.models.UserEntity;
@@ -88,15 +88,11 @@ class ConnectionsServiceImplTest {
   }
 
   private ApiStation apiStation(String id, String name) {
-    return new ApiStation(
-        id, name, 1.0, new ApiCoordinate("Point", 7.58, 47.56), null, null);
+    return new ApiStation(id, name, 1.0, new ApiCoordinate("Point", 7.58, 47.56), null, null);
   }
 
   private ApiEndpoint apiEndpoint(
-      ApiStation station,
-      String platform,
-      OffsetDateTime departure,
-      OffsetDateTime arrival) {
+      ApiStation station, String platform, OffsetDateTime departure, OffsetDateTime arrival) {
     ApiPrognosis prognosis = new ApiPrognosis(null, null, null, null, null);
     return new ApiEndpoint(
         station, arrival, null, departure, null, 0, platform, prognosis, null, station);
@@ -114,7 +110,17 @@ class ConnectionsServiceImplTest {
 
     ApiJourney journey =
         new ApiJourney(
-            departure, "IC 1", "IC", null, "1", "1", "SBB", "Bern", List.of(departure, arrival), 2, 3);
+            departure,
+            "IC 1",
+            "IC",
+            null,
+            "1",
+            "1",
+            "SBB",
+            "Bern",
+            List.of(departure, arrival),
+            2,
+            3);
 
     ApiSection section = new ApiSection(journey, null, departure, arrival);
 

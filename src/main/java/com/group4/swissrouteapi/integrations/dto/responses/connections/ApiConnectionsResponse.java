@@ -2,7 +2,6 @@ package com.group4.swissrouteapi.integrations.dto.responses.connections;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
-
 import java.util.List;
 
 /**
@@ -13,7 +12,4 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record ApiConnectionsResponse(
-    List<ApiConnection> connections,
-    ApiStation from,
-    ApiStation to,
-    ApiStations stations) {}
+    List<ApiConnection> connections, ApiStation from, ApiStation to, ApiStations stations) {}

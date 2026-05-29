@@ -104,7 +104,8 @@ public class SecurityConfig {
                     .hasAuthority(AUTHORITY)
                     .requestMatchers(HttpMethod.DELETE, ApiPaths.FavoriteStations.FAVORITE_STATION)
                     .hasAuthority(AUTHORITY)
-                    .requestMatchers(HttpMethod.GET, ApiPaths.FavoriteStations.FAVORITE_STATION_BOARD)
+                    .requestMatchers(
+                        HttpMethod.GET, ApiPaths.FavoriteStations.FAVORITE_STATION_BOARD)
                     .hasAuthority(AUTHORITY)
                     .requestMatchers(HttpMethod.GET, ApiPaths.StationBoard.STATION_BOARD)
                     .hasAuthority(AUTHORITY)
