@@ -97,6 +97,10 @@ public final class ApiPaths {
     public static final String FAVORITE_STATION = "/api/favorite-stations/{externalStationId}";
   }
 
+  public static final class StationBoard {
+    public static final String STATION_BOARD = "/api/station-board";
+  }
+
   /**
    * Docs
    *
@@ -120,5 +124,6 @@ public final class ApiPaths {
   public static final class TransportApi {
     public static final String LOCATIONS = "/locations";
     public static final String CONNECTIONS = "/connections";
+    public static final String STATION_BOARD = "/stationboard";
   }
 }
