@@ -14,7 +14,7 @@ import java.util.List;
  * @param stationBoard list of upcoming journeys departing from the station
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record StationBoardResponse(
+public record ApiStationBoardResponse(
         ApiStation station,
         @JsonProperty("stationboard") List<ApiJourney> stationBoard
 ) {
