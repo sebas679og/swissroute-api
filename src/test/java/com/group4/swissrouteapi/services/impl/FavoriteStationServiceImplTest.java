@@ -3,18 +3,24 @@ package com.group4.swissrouteapi.services.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.group4.swissrouteapi.dtos.requests.StationBoardQueryParams;
 import com.group4.swissrouteapi.dtos.requests.StationRequest;
+import com.group4.swissrouteapi.dtos.responses.board.StationBoard;
+import com.group4.swissrouteapi.dtos.responses.board.StationsBoardResponse;
 import com.group4.swissrouteapi.dtos.responses.favorites.FavStationsResponse;
 import com.group4.swissrouteapi.dtos.responses.favorites.StationResponse;
 import com.group4.swissrouteapi.exceptions.ConflictException;
 import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.models.FavoriteStationEntity;
 import com.group4.swissrouteapi.models.UserEntity;
+import com.group4.swissrouteapi.services.StationBoardService;
 import com.group4.swissrouteapi.services.components.UserFinder;
 import com.group4.swissrouteapi.services.processors.StationsProcessor;
 import com.group4.swissrouteapi.utils.mappers.StationMapper;
@@ -39,6 +45,8 @@ class FavoriteStationServiceImplTest {
   @Mock private UserFinder userFinder;
 
   @Mock private StationsProcessor stationsProcessor;
+
+  @Mock private StationBoardService stationBoardService;
 
   @InjectMocks private FavoriteStationServiceImpl favoriteStationService;
 
@@ -319,6 +327,176 @@ class FavoriteStationServiceImplTest {
       assertThatThrownBy(() -> favoriteStationService.removeFavoriteStation(USER_ID, EXTERNAL_ID))
           .isInstanceOf(NotFoundException.class)
           .hasMessage("Station not found");
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // getStationBoardByFavoriteStation
+  // ─────────────────────────────────────────────────────────────────────────
+
+  @Nested
+  @DisplayName("getStationBoardByFavoriteStation")
+  class GetStationBoardByFavoriteStation {
+
+    private StationsBoardResponse buildStationsBoardResponse() {
+      return StationsBoardResponse.builder()
+          .stationBoards(
+              List.of(
+                  StationBoard.builder()
+                      .serviceName("IC 1")
+                      .category("IC")
+                      .destinationName("Bern")
+                      .build()))
+          .build();
+    }
+
+    @Test
+    @DisplayName("returns the StationsBoardResponse produced by stationBoardService")
+    void returnsStationsBoardResponse_producedByStationBoardService() {
+      UserEntity user = buildUser();
+      FavoriteStationEntity entity = buildEntity();
+      StationsBoardResponse expected = buildStationsBoardResponse();
+
+      when(userFinder.findById(USER_ID)).thenReturn(user);
+      when(stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID)).thenReturn(entity);
+      when(stationBoardService.getStationBoards(any(StationBoardQueryParams.class)))
+          .thenReturn(expected);
+
+      StationsBoardResponse result =
+          favoriteStationService.getStationBoardByFavoriteStation(USER_ID, EXTERNAL_ID);
+
+      assertThat(result).isSameAs(expected);
+    }
+
+    @Test
+    @DisplayName("resolves the user via UserFinder before delegating to the processor")
+    void resolvesUser_viaUserFinder_beforeDelegatingToProcessor() {
+      UserEntity user = buildUser();
+      FavoriteStationEntity entity = buildEntity();
+
+      when(userFinder.findById(USER_ID)).thenReturn(user);
+      when(stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID)).thenReturn(entity);
+      when(stationBoardService.getStationBoards(any())).thenReturn(buildStationsBoardResponse());
+
+      favoriteStationService.getStationBoardByFavoriteStation(USER_ID, EXTERNAL_ID);
+
+      verify(userFinder).findById(USER_ID);
+    }
+
+    @Test
+    @DisplayName("fetches the station entity using resolved user's id and externalStationId")
+    void fetchesStationEntity_usingResolvedUserIdAndExternalStationId() {
+      UserEntity user = buildUser();
+      FavoriteStationEntity entity = buildEntity();
+
+      when(userFinder.findById(USER_ID)).thenReturn(user);
+      when(stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID)).thenReturn(entity);
+      when(stationBoardService.getStationBoards(any())).thenReturn(buildStationsBoardResponse());
+
+      favoriteStationService.getStationBoardByFavoriteStation(USER_ID, EXTERNAL_ID);
+
+      verify(stationsProcessor).getNameAndExternalStationId(USER_ID, EXTERNAL_ID);
+    }
+
+    @Test
+    @DisplayName(
+        "builds StationBoardQueryParams with stationName and externalStationId from entity")
+    void buildsQueryParams_withStationNameAndExternalStationId_fromEntity() {
+      UserEntity user = buildUser();
+      FavoriteStationEntity entity = buildEntity(); // name=STATION_NAME, id=EXTERNAL_ID
+
+      when(userFinder.findById(USER_ID)).thenReturn(user);
+      when(stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID)).thenReturn(entity);
+      when(stationBoardService.getStationBoards(any())).thenReturn(buildStationsBoardResponse());
+
+      favoriteStationService.getStationBoardByFavoriteStation(USER_ID, EXTERNAL_ID);
+
+      verify(stationBoardService)
+          .getStationBoards(
+              argThat(
+                  params ->
+                      STATION_NAME.equals(params.getStation())
+                          && EXTERNAL_ID.equals(params.getId())));
+    }
+
+    @Test
+    @DisplayName("delegates to stationBoardService with query params built from the station entity")
+    void delegatesToStationBoardService_withQueryParamsFromEntity() {
+      UserEntity user = buildUser();
+      FavoriteStationEntity entity = buildEntity();
+
+      when(userFinder.findById(USER_ID)).thenReturn(user);
+      when(stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID)).thenReturn(entity);
+      when(stationBoardService.getStationBoards(any())).thenReturn(buildStationsBoardResponse());
+
+      favoriteStationService.getStationBoardByFavoriteStation(USER_ID, EXTERNAL_ID);
+
+      verify(stationBoardService, times(1)).getStationBoards(any(StationBoardQueryParams.class));
+    }
+
+    @Test
+    @DisplayName("does not interact with stationMapper during this operation")
+    void doesNotInteractWithStationMapper_duringOperation() {
+      UserEntity user = buildUser();
+      FavoriteStationEntity entity = buildEntity();
+
+      when(userFinder.findById(USER_ID)).thenReturn(user);
+      when(stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID)).thenReturn(entity);
+      when(stationBoardService.getStationBoards(any())).thenReturn(buildStationsBoardResponse());
+
+      favoriteStationService.getStationBoardByFavoriteStation(USER_ID, EXTERNAL_ID);
+
+      verifyNoInteractions(stationMapper);
+    }
+
+    @Test
+    @DisplayName("propagates NotFoundException when user is not found")
+    void propagatesNotFoundException_whenUserIsNotFound() {
+      when(userFinder.findById(USER_ID)).thenThrow(new NotFoundException("User not found"));
+
+      assertThatThrownBy(
+              () -> favoriteStationService.getStationBoardByFavoriteStation(USER_ID, EXTERNAL_ID))
+          .isInstanceOf(NotFoundException.class)
+          .hasMessage("User not found");
+
+      verifyNoInteractions(stationsProcessor, stationBoardService, stationMapper);
+    }
+
+    @Test
+    @DisplayName(
+        "propagates NotFoundException thrown by processor when station entity is not found")
+    void propagatesNotFoundException_thrownByProcessor_whenStationEntityIsNotFound() {
+      UserEntity user = buildUser();
+      when(userFinder.findById(USER_ID)).thenReturn(user);
+      when(stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID))
+          .thenThrow(new NotFoundException("Station not found"));
+
+      assertThatThrownBy(
+              () -> favoriteStationService.getStationBoardByFavoriteStation(USER_ID, EXTERNAL_ID))
+          .isInstanceOf(NotFoundException.class)
+          .hasMessage("Station not found");
+
+      verifyNoInteractions(stationBoardService, stationMapper);
+    }
+
+    @Test
+    @DisplayName(
+        "propagates NotFoundException thrown by stationBoardService when board is not found")
+    void propagatesNotFoundException_thrownByStationBoardService_whenBoardIsNotFound() {
+      UserEntity user = buildUser();
+      FavoriteStationEntity entity = buildEntity();
+
+      when(userFinder.findById(USER_ID)).thenReturn(user);
+      when(stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID)).thenReturn(entity);
+      when(stationBoardService.getStationBoards(any()))
+          .thenThrow(new NotFoundException("Station Board not found."));
+
+      assertThatThrownBy(
+              () -> favoriteStationService.getStationBoardByFavoriteStation(USER_ID, EXTERNAL_ID))
+          .isInstanceOf(NotFoundException.class)
+          .hasMessage("Station Board not found.");
+
+      verifyNoInteractions(stationMapper);
     }
   }
 }
