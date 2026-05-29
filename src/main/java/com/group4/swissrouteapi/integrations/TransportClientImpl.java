@@ -113,7 +113,7 @@ public class TransportClientImpl implements TransportClient {
 
   @Override
   public ApiStationBoardResponse getStationBoard(
-      String name, String id, Integer limit, List<TransportType> transportType) {
+      String station, String id, Integer limit, List<TransportType> transportType) {
     final AtomicReference<URI> uriTracker = new AtomicReference<>();
 
     WebClient.RequestHeadersSpec<?> request =
@@ -122,7 +122,7 @@ public class TransportClientImpl implements TransportClient {
             .uri(
                 uriBuilder -> {
                   uriBuilder.path(ApiPaths.TransportApi.STATION_BOARD);
-                  uriBuilder.queryParam("name", name);
+                  uriBuilder.queryParam("station", station);
                   if (id != null) {
                     uriBuilder.queryParam("id", id);
                   }
