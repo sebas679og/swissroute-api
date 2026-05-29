@@ -35,7 +35,7 @@ public class AbstractIntegrationTest {
 
   protected ApiTransportsLocationsStub transportsStubLocations;
   protected ApiTransportsConnectionsStub connectionsStub;
-  protected ApiTransportsStationsBoardStub  stationsBoardStub;
+  protected ApiTransportsStationsBoardStub stationsBoardStub;
 
   @DynamicPropertySource
   static void overrideProperties(DynamicPropertyRegistry registry) {

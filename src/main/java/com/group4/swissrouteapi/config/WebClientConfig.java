@@ -49,7 +49,11 @@ public class WebClientConfig {
                                 properties.getWriteTimeoutMs(), TimeUnit.MILLISECONDS)));
     ExchangeStrategies strategies =
         ExchangeStrategies.builder()
-            .codecs(config -> config.defaultCodecs().maxInMemorySize(properties.getMemorySize() * 1024 * 1024))
+            .codecs(
+                config ->
+                    config
+                        .defaultCodecs()
+                        .maxInMemorySize(properties.getMemorySize() * 1024 * 1024))
             .build();
 
     return WebClient.builder()
