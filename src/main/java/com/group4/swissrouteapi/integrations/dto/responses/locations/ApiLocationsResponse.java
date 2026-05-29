@@ -1,5 +1,7 @@
 package com.group4.swissrouteapi.integrations.dto.responses.locations;
 
+import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
+
 import java.util.List;
 
 /**

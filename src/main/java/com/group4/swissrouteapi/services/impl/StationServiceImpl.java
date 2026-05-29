@@ -5,7 +5,7 @@ import com.group4.swissrouteapi.dtos.responses.stations.StationsResponse;
 import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.integrations.TransportClient;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
-import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiStation;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
 import com.group4.swissrouteapi.services.StationService;
 import com.group4.swissrouteapi.utils.mappers.StationMapper;
 import java.util.List;

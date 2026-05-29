@@ -1,4 +1,6 @@
-package com.group4.swissrouteapi.integrations.dto.responses.locations;
+package com.group4.swissrouteapi.integrations.dto.responses;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Station
@@ -11,6 +13,7 @@ package com.group4.swissrouteapi.integrations.dto.responses.locations;
  * <p>Implemented as a Java {@code record}, providing concise syntax, immutability, and built-in
  * methods such as {@code equals}, {@code hashCode}, and {@code toString}.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record ApiStation(
     String id,
     String name,

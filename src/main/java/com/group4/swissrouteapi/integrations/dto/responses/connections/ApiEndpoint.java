@@ -1,5 +1,7 @@
 package com.group4.swissrouteapi.integrations.dto.responses.connections;
 
+import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
+
 import java.time.OffsetDateTime;
 
 /**
@@ -9,7 +11,7 @@ import java.time.OffsetDateTime;
  * departure times, delay, platform, prognosis, real-time availability, and location data.
  */
 public record ApiEndpoint(
-    ApiStationConnection station,
+    ApiStation station,
     OffsetDateTime arrival,
     Long arrivalTimestamp,
     OffsetDateTime departure,
@@ -18,4 +20,4 @@ public record ApiEndpoint(
     String platform,
     ApiPrognosis prognosis,
     Object realtimeAvailability,
-    ApiStationConnection location) {}
+    ApiStation location) {}

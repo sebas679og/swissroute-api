@@ -1,5 +1,7 @@
 package com.group4.swissrouteapi.integrations.dto.responses.connections;
 
+import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
+
 import java.util.List;
 
 /**
@@ -10,6 +12,6 @@ import java.util.List;
  */
 public record ApiConnectionsResponse(
     List<ApiConnection> connections,
-    ApiStationConnection from,
-    ApiStationConnection to,
+    ApiStation from,
+    ApiStation to,
     ApiStations stations) {}

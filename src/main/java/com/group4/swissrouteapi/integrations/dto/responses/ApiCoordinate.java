@@ -1,4 +1,4 @@
-package com.group4.swissrouteapi.integrations.dto.responses.locations;
+package com.group4.swissrouteapi.integrations.dto.responses;
 
 /**
  * Coordinate
