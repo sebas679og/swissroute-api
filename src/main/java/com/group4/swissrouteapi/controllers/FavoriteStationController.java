@@ -3,11 +3,13 @@ package com.group4.swissrouteapi.controllers;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.dtos.requests.StationRequest;
 import com.group4.swissrouteapi.dtos.responses.ErrorResponse;
+import com.group4.swissrouteapi.dtos.responses.board.StationsBoardResponse;
 import com.group4.swissrouteapi.dtos.responses.favorites.FavStationsResponse;
 import com.group4.swissrouteapi.dtos.responses.favorites.StationResponse;
 import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.services.FavoriteStationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -202,11 +204,105 @@ public class FavoriteStationController {
   })
   @DeleteMapping(ApiPaths.FavoriteStations.FAVORITE_STATION)
   public ResponseEntity<Void> deleteFavoriteStations(
-      Authentication authentication, @PathVariable String externalStationId) {
+      Authentication authentication,
+      @PathVariable
+          @Parameter(
+              description = "External identifier of the user's favorite station",
+              required = true,
+              example = "8503000")
+          String externalStationId) {
 
     favoriteStationService.removeFavoriteStation(
         UUID.fromString(authentication.getName()), externalStationId);
 
     return ResponseEntity.noContent().build();
+  }
+
+  /**
+   * Handles HTTP GET requests to retrieve the station board (departures and arrivals) for a user's
+   * favorite station.
+   *
+   * <p>Delegates the retrieval logic to {@link FavoriteStationService}, ensuring that the response
+   * is scoped to the currently authenticated user and the provided external station identifier.
+   *
+   * @param authentication the Spring Security authentication object containing the user's identity
+   * @param externalStationId external identifier of the user's favorite station (e.g., SBB station
+   *     code)
+   * @return a {@link ResponseEntity} containing the {@link StationsBoardResponse} with HTTP status
+   *     {@link org.springframework.http.HttpStatus#OK}
+   */
+  @Operation(
+      summary = "Get station departures from favorite station",
+      description =
+          """
+            Returns the upcoming departures for one of the user's favorite stations.
+
+            The station is retrieved from the authenticated user's saved favorite stations.
+
+            Response includes:
+
+            - Service name
+            - Train category
+            - Final destination
+            - Departure time
+        """,
+      security = {@SecurityRequirement(name = "BearerAuth")})
+  @ApiResponses({
+    @ApiResponse(
+        responseCode = "200",
+        description = "Favorite station board retrieved successfully",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = StationsBoardResponse.class))),
+    @ApiResponse(
+        responseCode = "400",
+        description = "Invalid station identifier",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized - Missing or invalid authentication token",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "404",
+        description = "User or favorite station not found",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "502",
+        description = "Error communicating with external transport provider",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class))),
+    @ApiResponse(
+        responseCode = "503",
+        description = "External transport service unavailable",
+        content =
+            @Content(
+                mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = ErrorResponse.class)))
+  })
+  @GetMapping(ApiPaths.FavoriteStations.FAVORITE_STATION_BOARD)
+  public ResponseEntity<StationsBoardResponse> getStationBoardByFavoriteStationId(
+      Authentication authentication,
+      @PathVariable
+          @Parameter(
+              description = "External identifier of the user's favorite station",
+              required = true,
+              example = "8503000")
+          String externalStationId) {
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(
+            favoriteStationService.getStationBoardByFavoriteStation(
+                UUID.fromString(authentication.getName()), externalStationId));
   }
 }
