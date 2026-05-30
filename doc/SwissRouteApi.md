@@ -28,7 +28,10 @@
 -[Favorite Stations](#favorite-stations)
   - [Create Favorite Station](#create-favorite-station)
   - [Get Favorite Stations](#get-favorite-stations)
-  - [ Delete Favorite Station](#delete-favorite-station)
+  - [Delete Favorite Station](#delete-favorite-station)
+  - [Get Station Board by Favorite Station](#get-station-board-by-favorite-station)
+- [Station Board](#station-board)
+  - [Get Station Board](#get-station-board)
 
 ---
 
@@ -2327,3 +2330,392 @@ Occurs when the user or station identifier does not exist.
 * All timestamps are returned in ISO-8601 UTC format.
 
 ---
+
+### Get Station Board by Favorite Station
+
+Returns the departure board information for a station previously registered as a favorite by the authenticated user.
+
+#### Endpoint
+
+```http
+GET /api/favorite-stations/{externalStationId}/station-board
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+#### Path Parameters
+
+| Parameter           | Type   | Required | Description                 |
+|---------------------|--------|----------|-----------------------------|
+| `externalStationId` | String | Yes      | Favorite station identifier |
+
+---
+
+#### Example Request
+
+```http
+GET /api/favorite-stations/8503059/station-board
+```
+
+---
+
+#### Successful Response
+
+##### 200 — OK
+
+```json
+{
+  "stationBoards": [
+    {
+      "serviceName": "008978",
+      "category": "S",
+      "destinationName": "Zofingen",
+      "departureTime": "2026-05-29T19:01:00Z"
+    },
+    {
+      "serviceName": "008680",
+      "category": "S",
+      "destinationName": "Olten",
+      "departureTime": "2026-05-29T19:08:00Z"
+    },
+    {
+      "serviceName": "002189",
+      "category": "IR",
+      "destinationName": "Zürich HB",
+      "departureTime": "2026-05-29T19:15:00Z"
+    }
+  ]
+}
+```
+
+---
+
+#### Response Fields
+
+| Field             | Type     | Description                            |
+|-------------------|----------|----------------------------------------|
+| `serviceName`     | String   | Service identifier                     |
+| `category`        | String   | Service category (IC, IR, RE, S, etc.) |
+| `destinationName` | String   | Final destination                      |
+| `departureTime`   | DateTime | Scheduled departure time in UTC        |
+
+---
+
+#### Error Responses
+
+##### 400 — Bad Request
+
+Occurs when the path parameter is invalid.
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Invalid path parameter for: 'externalStationId'",
+  "timestamp": "2026-05-29T19:01:00Z"
+}
+```
+
+---
+
+##### 401 — Unauthorized
+
+Occurs when authentication is missing, invalid, or expired.
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-29T19:01:00Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when the user or favorite station cannot be found.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "Station board not found",
+  "timestamp": "2026-05-29T19:01:00Z"
+}
+```
+
+---
+
+##### 502 — Bad Gateway
+
+Occurs when the external Transport API rejects the request.
+
+```json
+{
+  "code": 502,
+  "name": "BAD_GATEWAY",
+  "description": "Api Transport rejected the request",
+  "timestamp": "2026-05-29T19:01:00Z"
+}
+```
+
+---
+
+##### 503 — Service Unavailable
+
+Occurs when the external Transport API is unavailable.
+
+```json
+{
+  "code": 503,
+  "name": "SERVICE_UNAVAILABLE",
+  "description": "Api Transport is unavailable",
+  "timestamp": "2026-05-29T19:01:00Z"
+}
+```
+
+---
+
+#### Notes
+
+* Only stations registered as favorites by the authenticated user can be queried.
+* Departure times are returned in UTC format.
+* Results are obtained from the external Swiss Public Transport API.
+
+---
+
+## Station Board
+
+### Get Station Board
+
+Returns upcoming departures for a station.
+
+#### Endpoint
+
+```http
+GET /api/station-board
+```
+
+#### Access
+
+Restricted — Requires authenticated user with valid JWT token.
+
+---
+
+#### Authorization
+
+```http
+Authorization: Bearer {{JWT}}
+```
+
+---
+
+#### Query Parameters
+
+| Parameter        | Type       | Required | Description                            |
+|------------------|------------|----------|----------------------------------------|
+| `station`        | String     | Yes      | Station name                           |
+| `id`             | String     | No       | Station identifier                     |
+| `limit`          | Integer    | No       | Maximum number of departures to return |
+| `transportTypes` | List<Enum> | No       | Transportation types filter            |
+
+---
+
+#### Supported Transportation Types
+
+* `TRAIN`
+* `TRAM`
+* `SHIP`
+* `BUS`
+* `CABLEWAY`
+
+---
+
+#### Example Requests
+
+##### Search by Station Name
+
+```http
+GET /api/station-board?station=Aarau
+```
+
+##### Search by Station Name and Limit
+
+```http
+GET /api/station-board?station=Aarau&limit=10
+```
+
+##### Search with Transportation Filters
+
+```http
+GET /api/station-board?station=Aarau&transportTypes=TRAIN,BUS
+```
+
+---
+
+#### Successful Response
+
+##### 200 — OK
+
+```json
+{
+  "stationBoards": [
+    {
+      "serviceName": "008978",
+      "category": "S",
+      "destinationName": "Zofingen",
+      "departureTime": "2026-05-29T19:01:00Z"
+    },
+    {
+      "serviceName": "008680",
+      "category": "S",
+      "destinationName": "Olten",
+      "departureTime": "2026-05-29T19:08:00Z"
+    },
+    {
+      "serviceName": "002189",
+      "category": "IR",
+      "destinationName": "Zürich HB",
+      "departureTime": "2026-05-29T19:15:00Z"
+    }
+  ]
+}
+```
+
+---
+
+#### Response Fields
+
+| Field             | Type     | Description                     |
+|-------------------|----------|---------------------------------|
+| `serviceName`     | String   | Service identifier              |
+| `category`        | String   | Service category                |
+| `destinationName` | String   | Final destination               |
+| `departureTime`   | DateTime | Scheduled departure time in UTC |
+
+---
+
+#### Validation Rules
+
+| Parameter        | Validation                              |
+|------------------|-----------------------------------------|
+| `station`        | Required and cannot be blank            |
+| `limit`          | Must be greater than 0                  |
+| `transportTypes` | Must contain only supported enum values |
+
+---
+
+#### Error Responses
+
+##### 400 — Bad Request
+
+Occurs when request parameters are invalid.
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "station: Station is required",
+  "timestamp": "2026-05-29T19:01:00Z"
+}
+```
+
+###### Invalid Transportation Type
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "Field 'transportTypes': invalid value 'plane'",
+  "timestamp": "2026-05-29T19:01:00Z"
+}
+```
+
+###### Invalid Limit
+
+```json
+{
+  "code": 400,
+  "name": "BAD_REQUEST",
+  "description": "limit: must be greater than 0",
+  "timestamp": "2026-05-29T19:01:00Z"
+}
+```
+
+---
+
+##### 401 — Unauthorized
+
+```json
+{
+  "code": 401,
+  "name": "UNAUTHORIZED",
+  "description": "Authentication required or token expired",
+  "timestamp": "2026-05-29T19:01:00Z"
+}
+```
+
+---
+
+##### 404 — Not Found
+
+Occurs when the user or station board information cannot be found.
+
+```json
+{
+  "code": 404,
+  "name": "NOT_FOUND",
+  "description": "Station board not found",
+  "timestamp": "2026-05-29T19:01:00Z"
+}
+```
+
+---
+
+##### 502 — Bad Gateway
+
+```json
+{
+  "code": 502,
+  "name": "BAD_GATEWAY",
+  "description": "Api Transport rejected the request",
+  "timestamp": "2026-05-29T19:01:00Z"
+}
+```
+
+---
+
+##### 503 — Service Unavailable
+
+```json
+{
+  "code": 503,
+  "name": "SERVICE_UNAVAILABLE",
+  "description": "Api Transport is unavailable",
+  "timestamp": "2026-05-29T19:01:00Z"
+}
+```
+
+---
+
+#### Notes
+
+* The endpoint retrieves departure information from the Swiss Public Transport API.
+* Results are sorted by departure time.
+* `limit` controls the maximum number of departures returned.
+* Transportation filters are optional and may be combined.
+* Departure times are returned in ISO-8601 UTC format.
