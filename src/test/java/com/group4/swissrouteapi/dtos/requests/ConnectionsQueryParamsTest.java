@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -310,9 +309,11 @@ class ConnectionsQueryParamsTest {
     @DisplayName("should be equal when all fields match")
     void shouldBeEqualWhenAllFieldsMatch() {
       ConnectionsQueryParams a =
-          new ConnectionsQueryParams(VALID_FROM, VALID_TO, null, null, new ArrayList<>(), new ArrayList<>());
+          new ConnectionsQueryParams(
+              VALID_FROM, VALID_TO, null, null, new ArrayList<>(), new ArrayList<>());
       ConnectionsQueryParams b =
-          new ConnectionsQueryParams(VALID_FROM, VALID_TO, null, null, new ArrayList<>(), new ArrayList<>());
+          new ConnectionsQueryParams(
+              VALID_FROM, VALID_TO, null, null, new ArrayList<>(), new ArrayList<>());
 
       assertThat(a).isEqualTo(b);
     }
@@ -344,9 +345,9 @@ class ConnectionsQueryParamsTest {
     }
   }
 
-// ===========================================================================
-// via field
-// ===========================================================================
+  // ===========================================================================
+  // via field
+  // ===========================================================================
 
   @Nested
   @DisplayName("via field")
@@ -372,11 +373,11 @@ class ConnectionsQueryParamsTest {
     @DisplayName("should accept an empty via list explicitly")
     void shouldAcceptEmptyViaList() {
       ConnectionsQueryParams params =
-              ConnectionsQueryParams.builder()
-                      .from(VALID_FROM)
-                      .to(VALID_TO)
-                      .via(new ArrayList<>())
-                      .build();
+          ConnectionsQueryParams.builder()
+              .from(VALID_FROM)
+              .to(VALID_TO)
+              .via(new ArrayList<>())
+              .build();
 
       assertThat(validate(params)).isEmpty();
     }
@@ -385,11 +386,11 @@ class ConnectionsQueryParamsTest {
     @DisplayName("should pass when via has exactly one location")
     void shouldPassWhenViaHasOneLocation() {
       ConnectionsQueryParams params =
-              ConnectionsQueryParams.builder()
-                      .from(VALID_FROM)
-                      .to(VALID_TO)
-                      .via(List.of("Olten"))
-                      .build();
+          ConnectionsQueryParams.builder()
+              .from(VALID_FROM)
+              .to(VALID_TO)
+              .via(List.of("Olten"))
+              .build();
 
       assertThat(validate(params)).isEmpty();
     }
@@ -398,11 +399,11 @@ class ConnectionsQueryParamsTest {
     @DisplayName("should pass when via has exactly 5 locations")
     void shouldPassWhenViaHasFiveLocations() {
       ConnectionsQueryParams params =
-              ConnectionsQueryParams.builder()
-                      .from(VALID_FROM)
-                      .to(VALID_TO)
-                      .via(List.of("Olten", "Basel SBB", "Lausanne", "Geneva", "Biel"))
-                      .build();
+          ConnectionsQueryParams.builder()
+              .from(VALID_FROM)
+              .to(VALID_TO)
+              .via(List.of("Olten", "Basel SBB", "Lausanne", "Geneva", "Biel"))
+              .build();
 
       assertThat(validate(params)).isEmpty();
       assertThat(params.getVia()).hasSize(5);
@@ -412,11 +413,11 @@ class ConnectionsQueryParamsTest {
     @DisplayName("should fail when via has more than 5 locations")
     void shouldFailWhenViaExceedsFiveLocations() {
       ConnectionsQueryParams params =
-              ConnectionsQueryParams.builder()
-                      .from(VALID_FROM)
-                      .to(VALID_TO)
-                      .via(List.of("Olten", "Basel SBB", "Lausanne", "Geneva", "Biel", "Thun"))
-                      .build();
+          ConnectionsQueryParams.builder()
+              .from(VALID_FROM)
+              .to(VALID_TO)
+              .via(List.of("Olten", "Basel SBB", "Lausanne", "Geneva", "Biel", "Thun"))
+              .build();
 
       String message = singleMessage(validate(params));
 
@@ -427,11 +428,11 @@ class ConnectionsQueryParamsTest {
     @DisplayName("should report violation on the 'via' property path when size exceeded")
     void shouldReportViolationOnViaPropertyPath() {
       ConnectionsQueryParams params =
-              ConnectionsQueryParams.builder()
-                      .from(VALID_FROM)
-                      .to(VALID_TO)
-                      .via(List.of("Olten", "Basel SBB", "Lausanne", "Geneva", "Biel", "Thun"))
-                      .build();
+          ConnectionsQueryParams.builder()
+              .from(VALID_FROM)
+              .to(VALID_TO)
+              .via(List.of("Olten", "Basel SBB", "Lausanne", "Geneva", "Biel", "Thun"))
+              .build();
 
       ConstraintViolation<ConnectionsQueryParams> violation = validate(params).iterator().next();
 
@@ -442,16 +443,11 @@ class ConnectionsQueryParamsTest {
     @ValueSource(ints = {0, 1, 3, 5})
     @DisplayName("should pass for via lists within the allowed size")
     void shouldPassForViaListsWithinAllowedSize(int size) {
-      List<String> via = IntStream.range(0, size)
-              .mapToObj(i -> "Station" + i)
-              .collect(Collectors.toList());
+      List<String> via =
+          IntStream.range(0, size).mapToObj(i -> "Station" + i).collect(Collectors.toList());
 
       ConnectionsQueryParams params =
-              ConnectionsQueryParams.builder()
-                      .from(VALID_FROM)
-                      .to(VALID_TO)
-                      .via(via)
-                      .build();
+          ConnectionsQueryParams.builder().from(VALID_FROM).to(VALID_TO).via(via).build();
 
       assertThat(validate(params)).isEmpty();
     }
@@ -460,11 +456,11 @@ class ConnectionsQueryParamsTest {
     @DisplayName("should produce violation for via independently of other field violations")
     void shouldProduceViaViolationIndependentlyOfOtherViolations() {
       ConnectionsQueryParams params =
-              ConnectionsQueryParams.builder()
-                      .from(VALID_FROM)
-                      .to(VALID_TO)
-                      .via(List.of("Olten", "Basel SBB", "Lausanne", "Geneva", "Biel", "Thun"))
-                      .build();
+          ConnectionsQueryParams.builder()
+              .from(VALID_FROM)
+              .to(VALID_TO)
+              .via(List.of("Olten", "Basel SBB", "Lausanne", "Geneva", "Biel", "Thun"))
+              .build();
 
       Set<ConstraintViolation<ConnectionsQueryParams>> violations = validate(params);
 

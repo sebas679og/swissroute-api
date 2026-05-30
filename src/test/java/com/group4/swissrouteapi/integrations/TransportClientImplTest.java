@@ -25,7 +25,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -577,7 +576,8 @@ class TransportClientImplTest {
     void shouldIncludeViaParamsWhenProvided() throws Exception {
       mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
 
-      transportClient.getConnections(FROM, TO, null, null, List.of(), List.of("Olten", "Basel SBB"));
+      transportClient.getConnections(
+          FROM, TO, null, null, List.of(), List.of("Olten", "Basel SBB"));
 
       RecordedRequest recorded = mockWebServer.takeRequest();
       String path = recorded.getPath();
@@ -623,9 +623,8 @@ class TransportClientImplTest {
     void shouldIncludeAllViaLocations(int size) throws Exception {
       mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
 
-      List<String> vias = IntStream.range(0, size)
-              .mapToObj(i -> "Station" + i)
-              .collect(Collectors.toList());
+      List<String> vias =
+          IntStream.range(0, size).mapToObj(i -> "Station" + i).collect(Collectors.toList());
 
       transportClient.getConnections(FROM, TO, null, null, List.of(), vias);
 

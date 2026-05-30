@@ -160,10 +160,10 @@ class ConnectionsServiceImplTest {
 
   private ConnectionsQueryParams buildParamsWithVia() {
     return ConnectionsQueryParams.builder()
-            .from(FROM)
-            .to(TO)
-            .via(List.of("Olten", "Basel SBB"))
-            .build();
+        .from(FROM)
+        .to(TO)
+        .via(List.of("Olten", "Basel SBB"))
+        .build();
   }
 
   // ===========================================================================
@@ -180,7 +180,8 @@ class ConnectionsServiceImplTest {
       ApiConnection apiConn = buildApiConnection();
       Connection mapped = buildMappedConnection();
 
-      when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
+      when(transportClient.getConnections(
+              FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(mapped);
       when(userFinder.findById(USER_ID)).thenReturn(buildUser);
@@ -199,7 +200,8 @@ class ConnectionsServiceImplTest {
       Connection mapped1 = buildMappedConnection();
       Connection mapped2 = buildMappedConnection();
 
-      when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
+      when(transportClient.getConnections(
+              FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
           .thenReturn(buildApiResponse(List.of(apiConn1, apiConn2)));
       when(connectionsMapper.toConnectionResponse(apiConn1)).thenReturn(mapped1);
       when(connectionsMapper.toConnectionResponse(apiConn2)).thenReturn(mapped2);
@@ -216,7 +218,8 @@ class ConnectionsServiceImplTest {
     void shouldDelegateMappingToMapper() {
       ApiConnection apiConn = buildApiConnection();
 
-      when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
+      when(transportClient.getConnections(
+              FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
@@ -232,7 +235,8 @@ class ConnectionsServiceImplTest {
     void shouldPassAllOptionalParamsToClient() {
       ApiConnection apiConn = buildApiConnection();
 
-      when(transportClient.getConnections(FROM, TO, DATE, TIME, List.of(TransportType.TRAIN), new ArrayList<>()))
+      when(transportClient.getConnections(
+              FROM, TO, DATE, TIME, List.of(TransportType.TRAIN), new ArrayList<>()))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
       when(userFinder.findById(USER_ID)).thenReturn(buildUser);
@@ -240,7 +244,8 @@ class ConnectionsServiceImplTest {
 
       connectionsService.getConnections(buildParamsWithOptionals(), USER_ID);
 
-      verify(transportClient).getConnections(FROM, TO, DATE, TIME, List.of(TransportType.TRAIN), new ArrayList<>());
+      verify(transportClient)
+          .getConnections(FROM, TO, DATE, TIME, List.of(TransportType.TRAIN), new ArrayList<>());
     }
 
     @Test
@@ -248,7 +253,8 @@ class ConnectionsServiceImplTest {
     void shouldPassNullDateAndTimeWhenNotProvided() {
       ApiConnection apiConn = buildApiConnection();
 
-      when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
+      when(transportClient.getConnections(
+              FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
           .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
       when(userFinder.findById(USER_ID)).thenReturn(buildUser);
@@ -256,7 +262,8 @@ class ConnectionsServiceImplTest {
 
       connectionsService.getConnections(buildParams(), USER_ID);
 
-      verify(transportClient).getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>());
+      verify(transportClient)
+          .getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>());
     }
   }
 
@@ -271,7 +278,8 @@ class ConnectionsServiceImplTest {
     @Test
     @DisplayName("should throw NotFoundException when the API returns a null response")
     void shouldThrowNotFoundWhenApiReturnsNull() {
-      when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
+      when(transportClient.getConnections(
+              FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
           .thenReturn(null);
 
       assertThatThrownBy(() -> connectionsService.getConnections(buildParams(), USER_ID))
@@ -282,7 +290,8 @@ class ConnectionsServiceImplTest {
     @Test
     @DisplayName("should throw NotFoundException when the API returns a null connections list")
     void shouldThrowNotFoundWhenConnectionsListIsNull() {
-      when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
+      when(transportClient.getConnections(
+              FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
           .thenReturn(buildApiResponse(null));
 
       assertThatThrownBy(() -> connectionsService.getConnections(buildParams(), USER_ID))
@@ -293,7 +302,8 @@ class ConnectionsServiceImplTest {
     @Test
     @DisplayName("should throw NotFoundException when the API returns an empty connections list")
     void shouldThrowNotFoundWhenConnectionsListIsEmpty() {
-      when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
+      when(transportClient.getConnections(
+              FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
           .thenReturn(buildApiResponse(Collections.emptyList()));
 
       assertThatThrownBy(() -> connectionsService.getConnections(buildParams(), USER_ID))
@@ -304,7 +314,8 @@ class ConnectionsServiceImplTest {
     @Test
     @DisplayName("should not call the mapper when no connections are found")
     void shouldNotCallMapperWhenNoConnectionsFound() {
-      when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
+      when(transportClient.getConnections(
+              FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
           .thenReturn(buildApiResponse(Collections.emptyList()));
 
       assertThatThrownBy(() -> connectionsService.getConnections(buildParams(), USER_ID))
@@ -314,9 +325,9 @@ class ConnectionsServiceImplTest {
     }
   }
 
-// ===========================================================================
-// via parameter
-// ===========================================================================
+  // ===========================================================================
+  // via parameter
+  // ===========================================================================
 
   @Nested
   @DisplayName("getConnections() - via parameter")
@@ -329,7 +340,7 @@ class ConnectionsServiceImplTest {
       List<String> vias = List.of("Olten", "Basel SBB");
 
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), vias))
-              .thenReturn(buildApiResponse(List.of(apiConn)));
+          .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
       when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, buildUser);
@@ -344,15 +355,17 @@ class ConnectionsServiceImplTest {
     void shouldPassEmptyViaWhenNotProvided() {
       ApiConnection apiConn = buildApiConnection();
 
-      when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
-              .thenReturn(buildApiResponse(List.of(apiConn)));
+      when(transportClient.getConnections(
+              FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
+          .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
       when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, buildUser);
 
       connectionsService.getConnections(buildParams(), USER_ID);
 
-      verify(transportClient).getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>());
+      verify(transportClient)
+          .getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>());
     }
 
     @Test
@@ -363,7 +376,7 @@ class ConnectionsServiceImplTest {
       List<String> vias = List.of("Olten", "Basel SBB");
 
       when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), vias))
-              .thenReturn(buildApiResponse(List.of(apiConn)));
+          .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(mapped);
       when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, buildUser);
@@ -379,7 +392,8 @@ class ConnectionsServiceImplTest {
       ApiConnection apiConn = buildApiConnection();
       List<String> vias = List.of("Olten");
 
-      ConnectionsQueryParams params = ConnectionsQueryParams.builder()
+      final ConnectionsQueryParams params =
+          ConnectionsQueryParams.builder()
               .from(FROM)
               .to(TO)
               .date(DATE)
@@ -389,14 +403,15 @@ class ConnectionsServiceImplTest {
               .build();
 
       when(transportClient.getConnections(FROM, TO, DATE, TIME, List.of(TransportType.TRAIN), vias))
-              .thenReturn(buildApiResponse(List.of(apiConn)));
+          .thenReturn(buildApiResponse(List.of(apiConn)));
       when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
       when(userFinder.findById(USER_ID)).thenReturn(buildUser);
       doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, buildUser);
 
       connectionsService.getConnections(params, USER_ID);
 
-      verify(transportClient).getConnections(FROM, TO, DATE, TIME, List.of(TransportType.TRAIN), vias);
+      verify(transportClient)
+          .getConnections(FROM, TO, DATE, TIME, List.of(TransportType.TRAIN), vias);
     }
   }
 }

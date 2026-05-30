@@ -20,7 +20,12 @@ public interface TransportClient {
   ApiLocationsResponse getLocationsByCoordinates(double latitude, double longitude);
 
   ApiConnectionsResponse getConnections(
-      String from, String to, LocalDate date, LocalTime time, List<TransportType> transportType, List<String> via);
+      String from,
+      String to,
+      LocalDate date,
+      LocalTime time,
+      List<TransportType> transportType,
+      List<String> via);
 
   ApiStationBoardResponse getStationBoard(
       String station, String id, Integer limit, List<TransportType> transportType);

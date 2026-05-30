@@ -197,27 +197,46 @@ public class ApiTransportsConnectionsStub {
                     .withBodyFile("api-transports/connections/connections-not-found.json")));
   }
 
-  public void stubConnectionsByVia(
-          String from, String to, List<String> via) {
+  /**
+   * Stubs a connections response filtered by origin, destination, and one or more intermediate
+   * "via" stations.
+   *
+   * <p>This method registers a WireMock stub for the {@link ApiPaths.TransportApi#CONNECTIONS}
+   * endpoint, simulating a successful response when the query includes multiple {@code via[]}
+   * parameters.
+   *
+   * <p>Responsibilities:
+   *
+   * <ul>
+   *   <li>Ensures the request includes both {@code from} and {@code to} parameters.
+   *   <li>Iterates over the provided list of via stations and adds them as query parameters.
+   *   <li>Returns a predefined JSON response file representing connections filtered by intermediate
+   *       stations.
+   * </ul>
+   *
+   * @param from the origin station identifier
+   * @param to the destination station identifier
+   * @param via list of intermediate station identifiers to filter connections by
+   */
+  public void stubConnectionsByVia(String from, String to, List<String> via) {
     MappingBuilder stub =
-            get(urlPathEqualTo(ApiPaths.TransportApi.CONNECTIONS))
-                    .withQueryParam("from", equalTo(from))
-                    .withQueryParam("to", equalTo(to));
+        get(urlPathEqualTo(ApiPaths.TransportApi.CONNECTIONS))
+            .withQueryParam("from", equalTo(from))
+            .withQueryParam("to", equalTo(to));
 
     stub =
-            via.stream()
-                    .reduce(
-                            stub,
-                            (builder, type) -> builder.withQueryParam("via[]", equalTo(type)),
-                            (a, b) -> b);
+        via.stream()
+            .reduce(
+                stub,
+                (builder, type) -> builder.withQueryParam("via[]", equalTo(type)),
+                (a, b) -> b);
 
     wireMock.stubFor(
-            stub.willReturn(
-                    aResponse()
-                            .withStatus(HttpStatus.OK.value())
-                            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                            .withBodyFile(
-                                    "api-transports/connections/connections-by-vias.json")));
+        stub.willReturn(
+            aResponse()
+                .withStatus(HttpStatus.OK.value())
+                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .withBodyFile("api-transports/connections/connections-by-vias.json")));
   }
 
   public void reset() {

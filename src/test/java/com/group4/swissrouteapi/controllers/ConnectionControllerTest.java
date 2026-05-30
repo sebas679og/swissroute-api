@@ -216,19 +216,18 @@ public class ConnectionControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldReturn200OkWhenOneWaypointIsProvided() throws Exception {
       String via1 = "Bern";
-      connectionsStub.stubConnectionsByVia(
-              FROM, TO, List.of(via1));
+      connectionsStub.stubConnectionsByVia(FROM, TO, List.of(via1));
 
       mockMvc
-              .perform(
-                      get(ApiPaths.Connection.CONNECTIONS)
-                              .param("from", FROM)
-                              .param("to", TO)
-                              .param("via", via1)
-                              .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
-              .andExpect(status().isOk())
-              .andExpect(jsonPath("$.connections").isArray())
-              .andExpect(jsonPath("$.connections", hasSize(greaterThan(0))));
+          .perform(
+              get(ApiPaths.Connection.CONNECTIONS)
+                  .param("from", FROM)
+                  .param("to", TO)
+                  .param("via", via1)
+                  .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.connections").isArray())
+          .andExpect(jsonPath("$.connections", hasSize(greaterThan(0))));
     }
 
     @Test
@@ -238,23 +237,22 @@ public class ConnectionControllerTest extends AbstractIntegrationTest {
       String via3 = "Aarau";
       String via4 = "Setle";
       String via5 = "Varter";
-      connectionsStub.stubConnectionsByVia(
-              FROM, TO, List.of(via1, via2, via3, via4, via5));
+      connectionsStub.stubConnectionsByVia(FROM, TO, List.of(via1, via2, via3, via4, via5));
 
       mockMvc
-              .perform(
-                      get(ApiPaths.Connection.CONNECTIONS)
-                              .param("from", FROM)
-                              .param("to", TO)
-                              .param("via", via1)
-                              .param("via", via2)
-                              .param("via", via3)
-                              .param("via", via4)
-                              .param("via", via5)
-                              .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
-              .andExpect(status().isOk())
-              .andExpect(jsonPath("$.connections").isArray())
-              .andExpect(jsonPath("$.connections", hasSize(greaterThan(0))));
+          .perform(
+              get(ApiPaths.Connection.CONNECTIONS)
+                  .param("from", FROM)
+                  .param("to", TO)
+                  .param("via", via1)
+                  .param("via", via2)
+                  .param("via", via3)
+                  .param("via", via4)
+                  .param("via", via5)
+                  .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.connections").isArray())
+          .andExpect(jsonPath("$.connections", hasSize(greaterThan(0))));
     }
 
     @Test
@@ -460,22 +458,22 @@ public class ConnectionControllerTest extends AbstractIntegrationTest {
       String via6 = "Berlin";
 
       mockMvc
-              .perform(
-                      get(ApiPaths.Connection.CONNECTIONS)
-                              .param("from", FROM)
-                              .param("to", TO)
-                              .param("via", via1)
-                              .param("via", via2)
-                              .param("via", via3)
-                              .param("via", via4)
-                              .param("via", via5)
-                              .param("via", via6)
-                              .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
-              .andExpect(status().isBadRequest())
-              .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
-              .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
-              .andExpect(jsonPath("$.description").exists())
-              .andExpect(jsonPath("$.timestamp").exists());
+          .perform(
+              get(ApiPaths.Connection.CONNECTIONS)
+                  .param("from", FROM)
+                  .param("to", TO)
+                  .param("via", via1)
+                  .param("via", via2)
+                  .param("via", via3)
+                  .param("via", via4)
+                  .param("via", via5)
+                  .param("via", via6)
+                  .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+          .andExpect(status().isBadRequest())
+          .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
+          .andExpect(jsonPath("$.name").value(HttpStatus.BAD_REQUEST.name()))
+          .andExpect(jsonPath("$.description").exists())
+          .andExpect(jsonPath("$.timestamp").exists());
     }
   }
 }
