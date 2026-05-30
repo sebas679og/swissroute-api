@@ -5,7 +5,8 @@ import com.group4.swissrouteapi.exceptions.BadGatewayException;
 import com.group4.swissrouteapi.exceptions.ServiceUnavailableException;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnectionsResponse;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.integrations.dto.responses.stationboard.ApiStationBoardResponse;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -80,7 +81,8 @@ public class TransportClientImpl implements TransportClient {
       String to,
       LocalDate date,
       LocalTime time,
-      List<TransportationType> transportationType) {
+      List<TransportType> transportType,
+      List<String> vias) {
     final AtomicReference<URI> uriTracker = new AtomicReference<>();
 
     WebClient.RequestHeadersSpec<?> request =
@@ -97,9 +99,49 @@ public class TransportClientImpl implements TransportClient {
                   if (time != null) {
                     uriBuilder.queryParam("time", time.toString());
                   }
-                  if (transportationType != null && !transportationType.isEmpty()) {
+                  if (transportType != null && !transportType.isEmpty()) {
                     Object[] types =
-                        transportationType.stream()
+                        transportType.stream()
+                            .map(type -> type.name().toLowerCase(Locale.ROOT))
+                            .toArray();
+                    uriBuilder.queryParam("transportations[]", types);
+                  }
+                  if (vias != null && !vias.isEmpty()) {
+                    Object[] via = vias.stream().map(String::trim).toArray();
+
+                    uriBuilder.queryParam("via[]", via);
+                  }
+                  URI builtUri = uriBuilder.build();
+                  uriTracker.set(builtUri);
+                  return builtUri;
+                });
+
+    String fullUrlPath =
+        uriTracker.get() != null ? uriTracker.get().toString() : ApiPaths.TransportApi.CONNECTIONS;
+    return executeRequest(request, ApiConnectionsResponse.class, fullUrlPath);
+  }
+
+  @Override
+  public ApiStationBoardResponse getStationBoard(
+      String station, String id, Integer limit, List<TransportType> transportType) {
+    final AtomicReference<URI> uriTracker = new AtomicReference<>();
+
+    WebClient.RequestHeadersSpec<?> request =
+        transportWebClient
+            .get()
+            .uri(
+                uriBuilder -> {
+                  uriBuilder.path(ApiPaths.TransportApi.STATION_BOARD);
+                  uriBuilder.queryParam("station", station);
+                  if (id != null) {
+                    uriBuilder.queryParam("id", id);
+                  }
+                  if (limit != null) {
+                    uriBuilder.queryParam("limit", limit);
+                  }
+                  if (transportType != null && !transportType.isEmpty()) {
+                    Object[] types =
+                        transportType.stream()
                             .map(type -> type.name().toLowerCase(Locale.ROOT))
                             .toArray();
                     uriBuilder.queryParam("transportations[]", types);
@@ -111,7 +153,7 @@ public class TransportClientImpl implements TransportClient {
 
     String fullUrlPath =
         uriTracker.get() != null ? uriTracker.get().toString() : ApiPaths.TransportApi.CONNECTIONS;
-    return executeRequest(request, ApiConnectionsResponse.class, fullUrlPath);
+    return executeRequest(request, ApiStationBoardResponse.class, fullUrlPath);
   }
 
   private <T> T executeRequest(

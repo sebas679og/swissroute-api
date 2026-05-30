@@ -42,6 +42,8 @@ public class SecurityConfig {
 
   private final JsonWriter jsonWriter;
 
+  private static final String AUTHORITY = "AUTH_JWT";
+
   /**
    * Configures the application's security filter chain.
    *
@@ -67,10 +69,9 @@ public class SecurityConfig {
         .exceptionHandling(
             exception ->
                 exception.authenticationEntryPoint(
-                    (request, response, authException) -> {
-                      jsonWriter.sendError(
-                          response, HttpStatus.UNAUTHORIZED, "Authentication required");
-                    }))
+                    (request, response, authException) ->
+                        jsonWriter.sendError(
+                            response, HttpStatus.UNAUTHORIZED, "Authentication required")))
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers(ApiPaths.Docs.SWAGGER_UI, ApiPaths.Docs.API_DOCS)
@@ -80,9 +81,34 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, ApiPaths.Auth.LOGIN)
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, ApiPaths.Station.STATIONS)
-                    .hasAuthority("AUTH_JWT")
+                    .hasAuthority(AUTHORITY)
                     .requestMatchers(HttpMethod.GET, ApiPaths.Connection.CONNECTIONS)
-                    .hasAuthority("AUTH_JWT")
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.GET, ApiPaths.History.HISTORY)
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.DELETE, ApiPaths.History.HISTORY_ITEM)
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.DELETE, ApiPaths.History.HISTORY)
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.POST, ApiPaths.FavoriteRoutes.FAVORITE_ROUTES)
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.GET, ApiPaths.FavoriteRoutes.FAVORITE_ROUTES)
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.PUT, ApiPaths.FavoriteRoutes.FAVORITE_ROUTE)
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.DELETE, ApiPaths.FavoriteRoutes.FAVORITE_ROUTE)
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.POST, ApiPaths.FavoriteStations.FAVORITE_STATIONS)
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.GET, ApiPaths.FavoriteStations.FAVORITE_STATIONS)
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.DELETE, ApiPaths.FavoriteStations.FAVORITE_STATION)
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(
+                        HttpMethod.GET, ApiPaths.FavoriteStations.FAVORITE_STATION_BOARD)
+                    .hasAuthority(AUTHORITY)
+                    .requestMatchers(HttpMethod.GET, ApiPaths.StationBoard.STATION_BOARD)
+                    .hasAuthority(AUTHORITY)
                     .anyRequest()
                     .authenticated())
         .addFilterBefore(bearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

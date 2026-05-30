@@ -1,9 +1,10 @@
 package com.group4.swissrouteapi.dtos.requests;
 
-import com.group4.swissrouteapi.utils.enums.TransportationType;
+import com.group4.swissrouteapi.utils.enums.TransportType;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -65,5 +66,17 @@ public class ConnectionsQueryParams {
               allowableValues = {"train", "tram", "ship", "bus", "cableway"}),
       arraySchema = @Schema(example = "[\"train\", \"bus\"]"))
   @Builder.Default
-  private List<TransportationType> transportations = new ArrayList<>();
+  private List<TransportType> transportations = new ArrayList<>();
+
+  @ArraySchema(
+      schema = @Schema(type = "string", example = "Olten"),
+      maxItems = 5,
+      arraySchema =
+          @Schema(
+              description =
+                  "Specifies up to five via locations. When specifying several vias, "
+                      + "array notation (via=via1&via=via2) is required."))
+  @Size(max = 5, message = "A maximum of 5 via locations is allowed")
+  @Builder.Default
+  private List<String> via = new ArrayList<>();
 }

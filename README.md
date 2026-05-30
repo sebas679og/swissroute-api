@@ -1,9 +1,6 @@
 # SwissRoute 🚆
 
-Backend REST API for planning and tracking public transport trips **within Switzerland**. Built with Java + Spring Boot +
-PostgreSQL, it acts as a business layer on top of the [Swiss Public Transport API](https://transport.opendata.ch/docs.html),
-allowing registered users to search connections, save favorite routes and stations, consult station boards, and keep a
-history of their planned trips.
+Backend REST API for planning and tracking public transport trips **within Switzerland**. Built with Java 21, Spring Boot, and PostgreSQL, SwissRoute acts as a business layer on top of the [Swiss Public Transport API](https://transport.opendata.ch/docs.html), allowing registered users to search connections, save favorite routes and stations, consult station boards, and keep a history of their planned trips.
 
 > **Geographic scope:** SwissRoute is exclusively designed for the Swiss public transport network. All features — connection searches, station lookups, and timetables — rely on the Swiss Public Transport API (`transport.opendata.ch`), which only covers destinations and routes within Switzerland.
 
@@ -12,7 +9,8 @@ history of their planned trips.
 ## Table of Contents
 
 - [Tech Stack](#tech-stack)
-- [Database Model](#database-model)
+- [Entity Relationship Diagram](#entity-relationship-diagram)
+- [Database Migrations](#database-migrations)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Environment Configuration](#environment-configuration)
@@ -32,6 +30,7 @@ history of their planned trips.
 | Framework        | Spring Boot 3.5.x           |
 | Database         | PostgreSQL                  |
 | ORM              | Spring Data JPA / Hibernate |
+| Migrations       | Flyway                      |
 | HTTP Client      | WebClient (Spring WebFlux)  |
 | Documentation    | Swagger / OpenAPI 3         |
 | Security         | Spring Security + JWT       |
@@ -40,41 +39,46 @@ history of their planned trips.
 
 ---
 
-## Database Model
+## Entity Relationship Diagram
+
+The following diagram shows the data model that supports all SwissRoute features: user accounts, favorite routes, favorite stations, and connection search history.
+
+![ER Diagram](doc/entity-relationship-model.png)
+
+For a detailed description of each entity and its relationships, refer to the [full API documentation](doc/SwissRouteApi.md).
+
+---
+
+## Database Migrations
+
+SwissRoute uses **Flyway** to manage the database schema. All migrations are versioned SQL scripts located under `src/main/resources/db/migration` and follow the naming convention `V{version}__{description}.sql`.
+
+Flyway runs automatically on application startup — no manual steps are required. When the application starts for the first time, Flyway will:
+
+1. Create the `flyway_schema_history` table if it does not exist.
+2. Apply all pending migration scripts in version order.
+3. Mark each migration as applied in the history table.
+
+On subsequent startups, only new (unapplied) migrations are executed. Already-applied migrations are never re-run.
+
+### Migration Script Location
 
 ```
-usuarios
-├── id             UUID PK
-├── name         VARCHAR NOT NULL
-├── email          VARCHAR UNIQUE NOT NULL
-├── password       VARCHAR NOT NULL
-├── base_city    VARCHAR
-└── created_at     TIMESTAMP DEFAULT NOW()
-
-rutas_favoritas
-├── id             UUID PK
-├── usuario_id     UUID FK → usuarios.id
-├── nombre         VARCHAR NOT NULL
-├── origen         VARCHAR NOT NULL
-├── destino        VARCHAR NOT NULL
-├── tipo_transporte VARCHAR
-└── created_at     TIMESTAMP DEFAULT NOW()
-
-historial_busquedas
-├── id             UUID PK
-├── usuario_id     UUID FK → usuarios.id
-├── origen         VARCHAR NOT NULL
-├── destino        VARCHAR NOT NULL
-├── fecha_consulta TIMESTAMP NOT NULL
-└── num_resultados INT
-
-estaciones_favoritas
-├── id                 UUID PK
-├── usuario_id         UUID FK → usuarios.id
-├── estacion_id_externo VARCHAR NOT NULL
-├── nombre_estacion    VARCHAR NOT NULL
-└── created_at         TIMESTAMP DEFAULT NOW()
+src/
+└── main/
+    └── resources/
+        └── db/
+            └── migration/
+                └── V1__initial_schema.sql
 ```
+
+### Important Rules
+
+> [!IMPORTANT]
+> Never modify or delete an already-applied migration script. Flyway validates the checksum of each applied migration on startup — any change will cause the application to fail. To correct a past migration, always create a **new** versioned script.
+
+> [!TIP]
+> When adding a new database change (table, column, index, constraint), create a new migration script with the next version number. Include the corresponding Flyway script in the same PR as the feature that requires it.
 
 ---
 
@@ -84,8 +88,9 @@ estaciones_favoritas
 
 | Tool            | Minimum Version |
 |-----------------|-----------------|
-| Git             | 2.54.x          |
-| Docker o Podman | 29.4.x          |
+| Git             | 2.x             |
+| Docker          | 24.x            |
+| Docker Compose  | 2.x             |
 | Java (JDK)      | 21              |
 | Maven           | 3.9.x           |
 
@@ -99,8 +104,10 @@ A `.env.template` file is provided at the repository root. Copy it and fill in t
 cp .env.template .env
 ```
 
+Key variables include database credentials, the Swiss Public Transport API base URL (`https://transport.opendata.ch/v1`), and JWT secrets.
+
 > [!IMPORTANT]
-> Never commit your `.env` file. It is already listed in `.gitignore`.
+> Never commit your `.env` file. It is already listed in `.gitignore`. If it appears in `git status`, do not stage or commit it.
 
 ---
 
@@ -111,6 +118,8 @@ Spin up the application and its PostgreSQL database with a single command:
 ```bash
 docker-compose up --build
 ```
+
+Flyway migrations will run automatically on startup. The API will be available at `http://localhost:8080` once the container is healthy.
 
 To run in detached mode:
 
@@ -124,13 +133,14 @@ To stop all containers:
 docker-compose down
 ```
 
-To also remove volumes (wipes database data):
+To also remove volumes (wipes all database data, including applied migrations):
 
 ```bash
 docker-compose down -v
 ```
 
-The API will be available at `http://localhost:8080`.
+> [!WARNING]
+> Running `docker-compose down -v` drops all database volumes. On the next startup, Flyway will re-apply all migrations from scratch, resulting in an empty database.
 
 ---
 
@@ -148,15 +158,32 @@ The raw OpenAPI spec (JSON) is available at:
 http://localhost:8080/v3/api-docs
 ```
 
+The complete reference documentation for all endpoints, request/response schemas, and error codes is available at:
+
+```
+doc/SwissRouteApi.md
+```
+
 ### Endpoint Summary
 
-
-| Method | Path                  | Description                                            |
-|--------|-----------------------|--------------------------------------------------------|
-| `POST` | `/api/users/register` | Creates a new user account in the SwissRoute platform. |
-| `POST` | `/api/users/login`    | Authenticates a user and returns a JWT token.          |
-| `GET`  | `/api/stations`       | Searches for stations based on a query string.         |
-| `GET`  | `/api/connections`    | Searches for connections between two stations.         |
+| Method   | Path                                                        | Auth | Description                                              |
+|----------|-------------------------------------------------------------|------|----------------------------------------------------------|
+| `POST`   | `/api/users/register`                                       | No   | Creates a new user account.                              |
+| `POST`   | `/api/users/login`                                          | No   | Authenticates a user and returns a JWT token.            |
+| `GET`    | `/api/stations`                                             | Yes  | Searches for stations by name or coordinates.            |
+| `GET`    | `/api/connections`                                          | Yes  | Searches for connections between two stations.           |
+| `GET`    | `/api/history`                                              | Yes  | Returns the authenticated user's connection search history. |
+| `DELETE` | `/api/history/{id}`                                         | Yes  | Deletes a specific entry from the user's search history. |
+| `DELETE` | `/api/history`                                              | Yes  | Clears all of the user's connection search history.      |
+| `POST`   | `/api/favorite-routes`                                      | Yes  | Saves a new favorite route for the authenticated user.   |
+| `GET`    | `/api/favorite-routes`                                      | Yes  | Returns all favorite routes for the authenticated user.  |
+| `PUT`    | `/api/favorite-routes/{routeId}`                            | Yes  | Updates a favorite route by its ID.                      |
+| `DELETE` | `/api/favorite-routes/{routeId}`                            | Yes  | Deletes a favorite route by its ID.                      |
+| `POST`   | `/api/favorite-stations`                                    | Yes  | Saves a new favorite station for the authenticated user. |
+| `GET`    | `/api/favorite-stations`                                    | Yes  | Returns all favorite stations for the authenticated user.|
+| `DELETE` | `/api/favorite-stations/{externalStationId}`                | Yes  | Deletes a favorite station record.                       |
+| `GET`    | `/api/favorite-stations/{externalStationId}/station-board`  | Yes  | Gets departures for a user's saved favorite station.     |
+| `GET`    | `/api/station-board`                                        | Yes  | Gets station departures via query filters.               |
 
 ---
 
@@ -165,18 +192,15 @@ http://localhost:8080/v3/api-docs
 SwissRoute integrates with the **Swiss Public Transport API** (`https://transport.opendata.ch/v1`). No API key is required.
 
 > [!IMPORTANT]
-> This API exclusively covers **public transportation within Switzerland**. It does not support routes, stations, or connections outside Swiss territory. All location searches, connection lookups, and station boards are limited to the Swiss public transport network (trains, buses, trams, boats, and cable cars operated within Switzerland).
+> This API exclusively covers **public transportation within Switzerland**. Stations, routes, and connections outside Swiss territory are not available.
 
-| Endpoint            | Used by           |
-|---------------------|-------------------|
-| `GET /locations`    | Station search    |
-| `GET /connections`  | Connection search |
-| `GET /stationboard` | Station board     |
+| Endpoint            | Used by                    |
+|---------------------|----------------------------|
+| `GET /locations`    | Station search             |
+| `GET /connections`  | Connection search          |
+| `GET /stationboard` | Station board (departures) |
 
 Full documentation: [transport.opendata.ch/docs.html](https://transport.opendata.ch/docs.html)
-
-> [!TIP]
-> Start by mapping the external DTOs (`Connection`, `Stop`, `Journey`, `Section`, `Prognosis`) before building the service layer. The external API is well-documented and the object model is consistent.
 
 ---
 
@@ -194,13 +218,13 @@ Run tests only (skipping linters):
 ./mvnw -B clean verify "-Dspotless.check.skip=true" "-Dcheckstyle.skip=true" "-Dpmd.skip=true"
 ```
 
-Run all integration test with the external Transport API (requires internet connection):
+Run integration tests against the external Transport API (requires internet connection):
 
 ```bash
 ./mvnw -B verify "-Dspotless.check.skip=true" "-Dcheckstyle.skip=true" "-Dpmd.skip=true" "-Dtransport.integration.tests=true"
-````
+```
 
-Apply code formatter before pushing:
+Apply the code formatter before pushing:
 
 ```bash
 ./mvnw spotless:apply
@@ -211,7 +235,3 @@ Apply code formatter before pushing:
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for branch conventions, commit format, linting requirements, and the PR process before opening your first pull request.
-
-## Documentation
-
-The complete documentation of the API can be found at the following location: [doc/SwissRouteApi.md](doc/SwissRouteApi.md)

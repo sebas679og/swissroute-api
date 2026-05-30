@@ -35,6 +35,7 @@ public class AbstractIntegrationTest {
 
   protected ApiTransportsLocationsStub transportsStubLocations;
   protected ApiTransportsConnectionsStub connectionsStub;
+  protected ApiTransportsStationsBoardStub stationsBoardStub;
 
   @DynamicPropertySource
   static void overrideProperties(DynamicPropertyRegistry registry) {
@@ -45,11 +46,13 @@ public class AbstractIntegrationTest {
   void setUpBase() {
     transportsStubLocations = new ApiTransportsLocationsStub(wireMockExtension);
     connectionsStub = new ApiTransportsConnectionsStub(wireMockExtension);
+    stationsBoardStub = new ApiTransportsStationsBoardStub(wireMockExtension);
   }
 
   @AfterEach
   void tearDown() {
     transportsStubLocations.reset();
     connectionsStub.reset();
+    stationsBoardStub.reset();
   }
 }

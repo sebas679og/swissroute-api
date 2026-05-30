@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.group4.swissrouteapi.AbstractIntegrationTest;
-import com.group4.swissrouteapi.UserDataProvider;
 import com.group4.swissrouteapi.models.UserEntity;
+import com.group4.swissrouteapi.providers.UserDataProvider;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

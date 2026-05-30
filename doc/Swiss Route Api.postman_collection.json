@@ -138,7 +138,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{BASE_URL}}/api/connections?from=Lausanne&to=Genève&date=2026-05-25&time=23:18&transportations=train",
+              "raw": "{{BASE_URL}}/api/connections?from=Lausanne&to=Genève&date=2026-05-25&time=23:18&transportations=train&via",
               "host": [
                 "{{BASE_URL}}"
               ],
@@ -166,10 +166,450 @@
                 {
                   "key": "transportations",
                   "value": "train"
+                },
+                {
+                  "key": "via",
+                  "value": null,
+                  "type": "text"
                 }
               ]
             },
-            "description": "# 🚆 Search Connections Between Stations\n\n## 📌 Endpoint\n\n**GET**  \n`/api/connections`\n\n---\n\n## 📖 Description\n\nRetrieves available transport connections between two stations.\n\nThe endpoint supports optional filtering by:\n\n- Date\n    \n- Time\n    \n- Transportation types\n    \n\nEach connection includes route details such as:\n\n- Duration\n    \n- Products/services\n    \n- Route sections\n    \n- Departure and arrival information\n    \n- Platform details\n    \n\nThe data is obtained from the external transport provider and normalized before being returned to authenticated users.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Query Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| from | String | ✅ Yes | Origin station |\n| to | String | ✅ Yes | Destination station |\n| date | Date (`yyyy-MM-dd`) | ❌ No | Travel date |\n| time | Time (`HH:mm`) | ❌ No | Desired departure time |\n| transportations | Enum List | ❌ No | Transportation types filter |\n\n---\n\n## Supported Transportation Types\n\nThe `transportations` parameter accepts one or multiple values:\n\n- `TRAIN`\n    \n- `TRAM`\n    \n- `SHIP`\n    \n- `BUS`\n    \n- `CABLEWAY`\n    \n\n---\n\n## Example Request — Basic Search\n\n``` http\nGET /api/connections?from=Lausanne&to=Genève\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n## Example Request — With Filters\n\n``` http\nGET /api/connections?from=Lausanne&to=Genève&date=2026-05-25&time=21:30&transportations=TRAIN,BUS\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nConnections were successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"connections\": [\n        {\n            \"origin\": \"Lausanne\",\n            \"destination\": \"Genève\",\n            \"duration\": \"00d00:54:00\",\n            \"products\": [\n                \"RE33\"\n            ],\n            \"sections\": [\n                {\n                    \"category\": \"RE\",\n                    \"number\": \"33\",\n                    \"operator\": \"SBB\",\n                    \"destination\": \"Genève-Aéroport\",\n                    \"departureStation\": \"Lausanne\",\n                    \"departureTime\": \"2026-05-25T21:30:00Z\",\n                    \"arrivalStation\": \"Genève\",\n                    \"arrivalTime\": \"2026-05-25T22:24:00Z\",\n                    \"platform\": \"7\"\n                }\n            ]\n        },\n        {\n            \"origin\": \"Lausanne\",\n            \"destination\": \"Genève\",\n            \"duration\": \"00d00:49:00\",\n            \"products\": [\n                \"IR 95\"\n            ],\n            \"sections\": [\n                {\n                    \"category\": \"IR\",\n                    \"number\": \"95\",\n                    \"operator\": \"SBB\",\n                    \"destination\": \"Genève\",\n                    \"departureStation\": \"Lausanne\",\n                    \"departureTime\": \"2026-05-25T21:50:00Z\",\n                    \"arrivalStation\": \"Genève\",\n                    \"arrivalTime\": \"2026-05-25T22:39:00Z\",\n                    \"platform\": \"8\"\n                }\n            ]\n        }\n    ]\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid query parameters.\n\n### Possible Causes\n\n- Missing required parameters (`from`, `to`)\n    \n- Invalid date format\n    \n- Invalid time format\n    \n- Invalid transportation type\n    \n- Malformed query parameters\n    \n\n---\n\n### Example — Missing Stations\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"to: Destination station must not be blank; from: Origin station must not be blank\",\n    \"timestamp\": \"2026-05-24T00:22:20.931Z\"\n}\n\n ```\n\n---\n\n### Example — Invalid Date\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Field 'date': invalid value '2026-05-25-34'\",\n    \"timestamp\": \"2026-05-24T00:22:43.142Z\"\n}\n\n ```\n\n---\n\n### Example — Invalid Time\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Field 'time': invalid value '23:18:2321'\",\n    \"timestamp\": \"2026-05-24T00:23:31.985Z\"\n}\n\n ```\n\n---\n\n### Example — Invalid Transportation Type\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Field 'transportations': invalid value 'buseta'\",\n    \"timestamp\": \"2026-05-24T00:23:56.045Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"code\": 401,\n  \"name\": \"UNAUTHORIZED\",\n  \"description\": \"Authentication required or token expired\",\n  \"timestamp\": \"2026-05-22T00:33:35.539Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nNo connections were found for the provided parameters.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"No connections found for the given parameters\",\n    \"timestamp\": \"2026-05-24T00:24:29.585Z\"\n}\n\n ```\n\n---\n\n## 🔌 502 Bad Gateway\n\nError while communicating with the external transport provider.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"code\": 502,\n  \"name\": \"BAD_GATEWAY\",\n  \"description\": \"Api Transport rejected the request\",\n  \"timestamp\": \"2026-05-22T00:34:33.657Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Invalid response from transport API\n    \n- External provider processing error\n    \n- Request rejected by provider\n    \n\n---\n\n## 🚨 503 Service Unavailable\n\nThe external transport provider is currently unavailable.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"code\": 503,\n  \"name\": \"SERVICE_UNAVAILABLE\",\n  \"description\": \"Api Transport is unavailable\",\n  \"timestamp\": \"2026-05-22T00:34:33.657Z\"\n}\n\n ```\n\n### Possible Causes\n\n- External API downtime\n    \n- Network connectivity issues\n    \n- Timeout while contacting the provider\n    \n\n---\n\n💡 **Tip (architecture level 🔥):**  \nThis endpoint centralizes route planning logic and abstracts the external transport provider, allowing clients to:\n\n- Search connections consistently\n    \n- Filter transportation methods\n    \n- Retrieve normalized scheduling information\n    \n- Avoid direct dependency on external transport APIs"
+            "description": "# 🚆 Search Connections Between Stations\n\n## 📌 Endpoint\n\n**GET**  \n`/api/connections`\n\n---\n\n## 📖 Description\n\nRetrieves available transport connections between two stations.\n\nThe endpoint supports optional filtering by:\n\n- Date\n    \n- Time\n    \n- Transportation types\n    \n\nEach connection includes route details such as:\n\n- Duration\n    \n- Products/services\n    \n- Route sections\n    \n- Departure and arrival information\n    \n- Platform details\n    \n\nThe data is obtained from the external transport provider and normalized before being returned to authenticated users.\n\n---\n\n## 📖 Additional Behavior\n\nEvery successful connection search is persisted into the `search_history` database table for audit and personalization purposes.\n\nThe following information is stored:\n\n| Field | Description |\n| --- | --- |\n| `user_id` | Authenticated user identifier extracted from JWT token |\n| `origin` | Value provided in the `from` parameter |\n| `destination` | Value provided in the `to` parameter |\n| `resultCount` | Total number of connections returned by the API |\n| `searchedAt` | Exact search timestamp in UTC format |\n\nThis allows the system to maintain a historical record of user searches for future features such as analytics, recommendations, or search history retrieval.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Query Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| from | String | ✅ Yes | Origin station |\n| to | String | ✅ Yes | Destination station |\n| date | Date (`yyyy-MM-dd`) | ❌ No | Travel date |\n| time | Time (`HH:mm`) | ❌ No | Desired departure time |\n| transportations | Enum List | ❌ No | Transportation types filter |\n| via | String | ❌ No | Specifies up to five via locations. |\n\n---\n\n## Supported Transportation Types\n\nThe `transportations` parameter accepts one or multiple values:\n\n- `TRAIN`\n    \n- `TRAM`\n    \n- `SHIP`\n    \n- `BUS`\n    \n- `CABLEWAY`\n    \n\n---\n\n## Example Request — Basic Search\n\n``` http\nGET /api/connections?from=Lausanne&to=Genève\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n## Example Request — With Filters\n\n``` http\nGET /api/connections?from=Lausanne&to=Genève&date=2026-05-25&time=21:30&transportations=TRAIN,BUS\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nConnections were successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"connections\": [\n        {\n            \"origin\": \"Lausanne\",\n            \"destination\": \"Genève\",\n            \"duration\": \"00d00:54:00\",\n            \"products\": [\n                \"RE33\"\n            ],\n            \"sections\": [\n                {\n                    \"category\": \"RE\",\n                    \"number\": \"33\",\n                    \"operator\": \"SBB\",\n                    \"destination\": \"Genève-Aéroport\",\n                    \"departureStation\": \"Lausanne\",\n                    \"departureTime\": \"2026-05-25T21:30:00Z\",\n                    \"arrivalStation\": \"Genève\",\n                    \"arrivalTime\": \"2026-05-25T22:24:00Z\",\n                    \"platform\": \"7\"\n                }\n            ]\n        },\n        {\n            \"origin\": \"Lausanne\",\n            \"destination\": \"Genève\",\n            \"duration\": \"00d00:49:00\",\n            \"products\": [\n                \"IR 95\"\n            ],\n            \"sections\": [\n                {\n                    \"category\": \"IR\",\n                    \"number\": \"95\",\n                    \"operator\": \"SBB\",\n                    \"destination\": \"Genève\",\n                    \"departureStation\": \"Lausanne\",\n                    \"departureTime\": \"2026-05-25T21:50:00Z\",\n                    \"arrivalStation\": \"Genève\",\n                    \"arrivalTime\": \"2026-05-25T22:39:00Z\",\n                    \"platform\": \"8\"\n                }\n            ]\n        }\n    ]\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid query parameters.\n\n### Possible Causes\n\n- Missing required parameters (`from`, `to`)\n    \n- Invalid date format\n    \n- Invalid time format\n    \n- Invalid transportation type\n    \n- Malformed query parameters\n    \n\n---\n\n### Example — Missing Stations\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"to: Destination station must not be blank; from: Origin station must not be blank\",\n    \"timestamp\": \"2026-05-24T00:22:20.931Z\"\n}\n\n ```\n\n---\n\n### Example — Invalid Date\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Field 'date': invalid value '2026-05-25-34'\",\n    \"timestamp\": \"2026-05-24T00:22:43.142Z\"\n}\n\n ```\n\n---\n\n### Example — Invalid Time\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Field 'time': invalid value '23:18:2321'\",\n    \"timestamp\": \"2026-05-24T00:23:31.985Z\"\n}\n\n ```\n\n---\n\n### Example — Invalid Transportation Type\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Field 'transportations': invalid value 'buseta'\",\n    \"timestamp\": \"2026-05-24T00:23:56.045Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"code\": 401,\n  \"name\": \"UNAUTHORIZED\",\n  \"description\": \"Authentication required or token expired\",\n  \"timestamp\": \"2026-05-22T00:33:35.539Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nNo connections were found for the provided parameters.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"No connections found for the given parameters\",\n    \"timestamp\": \"2026-05-24T00:24:29.585Z\"\n}\n\n ```\n\n### User Not Found\n\n``` json\n{\n  \"code\": 404,\n  \"name\": \"NOT_FOUND\",\n  \"description\": \"user not found\",\n  \"timestamp\": \"2026-05-24T00:24:29.585Z\"\n}\n\n ```\n\n---\n\n## 🔌 502 Bad Gateway\n\nError while communicating with the external transport provider.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"code\": 502,\n  \"name\": \"BAD_GATEWAY\",\n  \"description\": \"Api Transport rejected the request\",\n  \"timestamp\": \"2026-05-22T00:34:33.657Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Invalid response from transport API\n    \n- External provider processing error\n    \n- Request rejected by provider\n    \n\n---\n\n## 🚨 503 Service Unavailable\n\nThe external transport provider is currently unavailable.\n\n### Response Body (JSON)\n\n``` json\n{\n  \"code\": 503,\n  \"name\": \"SERVICE_UNAVAILABLE\",\n  \"description\": \"Api Transport is unavailable\",\n  \"timestamp\": \"2026-05-22T00:34:33.657Z\"\n}\n\n ```\n\n### Possible Causes\n\n- External API downtime\n    \n- Network connectivity issues\n    \n- Timeout while contacting the provider\n    \n\n---\n\n💡 **Tip (architecture level 🔥):**  \nThis endpoint centralizes route planning logic and abstracts the external transport provider, allowing clients to:\n\n- Search connections consistently\n    \n- Filter transportation methods\n    \n- Retrieve normalized scheduling information\n    \n- Avoid direct dependency on external transport APIs"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "History",
+      "item": [
+        {
+          "name": "Get History",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/history?page=1&size=20",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "# 📚 Get Search History\n\n## 📌 Endpoint\n\n**GET**  \n`/api/history?page=1&size=20`\n\n---\n\n## 📖 Description\n\nRetrieves the paginated search history of the authenticated user.\n\nEach record represents a previously executed connection search and includes:\n\n- Origin station\n    \n- Destination station\n    \n- Number of results returned\n    \n- Search timestamp\n    \n\nThe history is ordered by the most recent searches.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Query Parameters\n\n| Parameter | Type | Required | Default | Description |\n| --- | --- | --- | --- | --- |\n| page | Integer | ❌ No | `1` | Page number (starts at `1`) |\n| size | Integer | ❌ No | `20` | Number of items per page |\n\n---\n\n## Pagination Rules\n\n- `page` must be greater than or equal to `1`\n    \n- `size` minimum value: `1`\n    \n- `size` maximum value: `50`\n    \n\n---\n\n### Example Request\n\n``` http\nGET /api/history?page=1&size=20\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nSearch history was successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"history\": [\n        {\n            \"id\": \"13fbb325-04cb-41a0-a5aa-9b61f55b66d3\",\n            \"origin\": \"Lausanne\",\n            \"destination\": \"Genève\",\n            \"resultCount\": 4,\n            \"searchedAt\": \"2026-05-25T20:57:38.072Z\"\n        },\n        {\n            \"id\": \"5dabc735-6249-4ebc-9e94-39a1a73c3a56\",\n            \"origin\": \"Lausanne\",\n            \"destination\": \"Genève\",\n            \"resultCount\": 4,\n            \"searchedAt\": \"2026-05-25T20:57:28.993Z\"\n        }\n    ],\n    \"page\": 1,\n    \"size\": 20,\n    \"totalElements\": 2,\n    \"totalPages\": 1\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid pagination parameters.\n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"page: Page must be greater than or equal to 1; size: Size must be less than or equal to 50\",\n    \"timestamp\": \"2026-05-25T20:58:26.857Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Invalid page number\n    \n- Invalid page size\n    \n- Negative values\n    \n- Size greater than allowed limit\n    \n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n  \"code\": 401,\n  \"name\": \"UNAUTHORIZED\",\n  \"description\": \"Authentication required or token expired\",\n  \"timestamp\": \"2026-05-25T00:33:35.539Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nThe authenticated user was not found.\n\n### Example Response\n\n``` json\n{\n  \"code\": 404,\n  \"name\": \"NOT_FOUND\",\n  \"description\": \"User not found\",\n  \"timestamp\": \"2026-05-25T00:34:33.657Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Item",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/history/{{ITEM_ID}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "history",
+                "{{ITEM_ID}}"
+              ]
+            },
+            "description": "# 🗑️ Delete Search History Item\n\n## 📌 Endpoint\n\n**DELETE**  \n`/api/history/{ITEM_ID}`\n\n---\n\n## 📖 Description\n\nDeletes a specific search history item belonging to the authenticated user.\n\nOnly the owner of the history entry can delete it.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Path Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| ITEM_ID | UUID | ✅ Yes | Unique identifier of the history item |\n\n---\n\n### Example Request\n\n``` http\nDELETE /api/history/13fbb325-04cb-41a0-a5aa-9b61f55b66d3\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 204 No Content\n\nThe history item was successfully deleted.\n\n---\n\n## ❌ 400 Bad Request\n\nThe provided path parameter is invalid.\n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Invalid path parameter for: 'itemId'\",\n    \"timestamp\": \"2026-05-25T20:44:37.866Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Invalid UUID format\n    \n- Malformed path parameter\n    \n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n  \"code\": 401,\n  \"name\": \"UNAUTHORIZED\",\n  \"description\": \"Authentication required or token expired\",\n  \"timestamp\": \"2026-05-22T00:33:35.539Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe specified history item does not exist.\n\n### Example Response\n\n``` json\n{\n  \"code\": 404,\n  \"name\": \"NOT_FOUND\",\n  \"description\": \"Item id not found\",\n  \"timestamp\": \"2026-05-24T00:24:29.585Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Clear History",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/history",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "history"
+              ]
+            },
+            "description": "# 🧹 Clear Search History\n\n## 📌 Endpoint\n\n**DELETE**  \n`/api/history`\n\n---\n\n## 📖 Description\n\nDeletes the entire search history of the authenticated user.\n\nThis operation permanently removes all stored connection searches associated with the user account.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 204 No Content\n\nThe search history was successfully cleared.\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n  \"code\": 401,\n  \"name\": \"UNAUTHORIZED\",\n  \"description\": \"Authentication required or token expired\",\n  \"timestamp\": \"2026-05-22T00:33:35.539Z\"\n}\n\n ```\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nThe authenticated user was not found.\n\n### Example Response\n\n``` json\n{\n  \"code\": 404,\n  \"name\": \"NOT_FOUND\",\n  \"description\": \"user not found\",\n  \"timestamp\": \"2026-05-24T00:24:29.585Z\"\n}\n\n ```"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Favorite Routes",
+      "item": [
+        {
+          "name": "Add Favorite Route",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Home to work\",\n  \"origin\": \"Geneve\",\n  \"destination\": \"Zurich\",\n  \"transportationType\": \"TRAIN\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/favorite-routes",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "favorite-routes"
+              ]
+            },
+            "description": "# ⭐ Register Favorite Route\n\n## 📌 Endpoint\n\n**POST**  \n`/api/favorite-routes`\n\n---\n\n## 📖 Description\n\nRegisters a favorite route for the authenticated user.\n\nFavorite routes allow users to quickly save and reuse frequently searched routes such as:\n\n- Home to work\n    \n- Daily commute\n    \n- Frequent travel destinations\n    \n\nEach favorite route is associated with the authenticated user and includes:\n\n- Route name\n    \n- Origin station\n    \n- Destination station\n    \n- Preferred transportation type (optional)\n    \n\nThe route name must be unique in the system.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Request Body (JSON)\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| name | String | ✅ Yes | Unique favorite route name |\n| origin | String | ✅ Yes | Origin station |\n| destination | String | ✅ Yes | Destination station |\n| transportationType | Enum | ❌ No | Preferred transportation type |\n\n---\n\n## Supported Transportation Types\n\nThe `transportationType` field accepts the following values:\n\n- `TRAIN`\n    \n- `TRAM`\n    \n- `SHIP`\n    \n- `BUS`\n    \n- `CABLEWAY`\n    \n\nThe value is case-insensitive.\n\n---\n\n## Example Request\n\n``` http\nPOST /api/favorite-routes\nAuthorization: Bearer {{JWT}}\nContent-Type: application/json\n\n ```\n\n``` json\n{\n  \"name\": \"Home to work\",\n  \"origin\": \"Geneve\",\n  \"destination\": \"Zurich\",\n  \"transportationType\": \"TRAIN\"\n}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 201 Created\n\nThe favorite route was successfully created.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"id\": \"028abc30-423b-4b17-8bb8-87647d860b6a\",\n    \"name\": \"Home to work\",\n    \"origin\": \"Geneve\",\n    \"destination\": \"Zurich\",\n    \"transportType\": \"TRAIN\",\n    \"createdAt\": \"2026-05-26T23:58:17.137Z\"\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid or missing fields.\n\n### Possible Causes\n\n- Missing required fields\n    \n- Blank values\n    \n- Invalid transportation type\n    \n- Malformed request body\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"name: Name is required; origin: Origin is required\",\n    \"timestamp\": \"2026-05-26T23:59:10.245Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Malformed token\n    \n- Invalid token signature\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-26T23:59:58.731Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe authenticated user was not found in the system.\n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"User not registered\",\n    \"timestamp\": \"2026-05-27T00:00:14.117Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 409 Conflict\n\nThe favorite route name already exists.\n\n### Possible Causes\n\n- Duplicate route name\n    \n- Unique constraint violation\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 409,\n    \"name\": \"CONFLICT\",\n    \"description\": \"Favorite route name already exists\",\n    \"timestamp\": \"2026-05-27T00:01:20.552Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Favorite Routes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/favorite-routes",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "favorite-routes"
+              ]
+            },
+            "description": "# ⭐ Get Favorite Routes\n\n## 📌 Endpoint\n\n**GET**  \n`/api/favorite-routes`\n\n---\n\n## 📖 Description\n\nRetrieves all favorite routes associated with the authenticated user.\n\nFavorite routes allow users to quickly access frequently used routes and preferred transportation configurations.\n\nEach route includes:\n\n- Route identifier\n    \n- Route name\n    \n- Origin station\n    \n- Destination station\n    \n- Preferred transportation type\n    \n- Creation timestamp\n    \n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nFavorite routes were successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"favoriteRoutes\": [\n        {\n            \"id\": \"5690feae-e7be-4be8-8d79-b52bca6ed0cf\",\n            \"name\": \"Ruta1\",\n            \"origin\": \"Geneve\",\n            \"destination\": \"Zurich\",\n            \"transportType\": \"TRAIN\",\n            \"createdAt\": \"2026-05-26T19:22:48.844Z\"\n        },\n        {\n            \"id\": \"873f2e86-6ca7-4660-a36d-38c557a9f732\",\n            \"name\": \"Ruta4\",\n            \"origin\": \"Geneve\",\n            \"destination\": \"Zurich\",\n            \"transportType\": null,\n            \"createdAt\": \"2026-05-26T19:35:11.605Z\"\n        }\n    ]\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n- Malformed token\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-27T00:12:44.115Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe authenticated user was not found.\n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"User not found\",\n    \"timestamp\": \"2026-05-27T00:13:21.992Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Favorite Route",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Home to work\",\n  \"origin\": \"Basilea\",\n  \"destination\": \"Berna\",\n  \"transportationType\": \"BUS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/favorite-routes/{{routeId}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "favorite-routes",
+                "{{routeId}}"
+              ]
+            },
+            "description": "# ✏️ Update Favorite Route\n\n## 📌 Endpoint\n\n**PUT**  \n`/api/favorite-routes/{routeId}`\n\n---\n\n## 📖 Description\n\nUpdates an existing favorite route belonging to the authenticated user.\n\nThe endpoint allows partial or full updates of the route information.\n\nAt least one field must be provided in the request body.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Path Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| routeId | UUID | ✅ Yes | Unique identifier of the favorite route |\n\n---\n\n## Request Body (JSON)\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| name | String | ❌ No | Favorite route name |\n| origin | String | ❌ No | Origin station |\n| destination | String | ❌ No | Destination station |\n| transportationType | Enum | ❌ No | Preferred transportation type |\n\n---\n\n## Supported Transportation Types\n\n- `TRAIN`\n    \n- `TRAM`\n    \n- `SHIP`\n    \n- `BUS`\n    \n- `CABLEWAY`\n    \n\n---\n\n### Example Request\n\n``` http\nPUT /api/favorite-routes/5690feae-e7be-4be8-8d79-b52bca6ed0cf\nAuthorization: Bearer {{JWT}}\nContent-Type: application/json\n\n ```\n\n``` json\n{\n  \"name\": \"Home to work\",\n  \"origin\": \"Basilea\",\n  \"destination\": \"Berna\",\n  \"transportationType\": \"BUS\"\n}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nThe favorite route was successfully updated.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"id\": \"5690feae-e7be-4be8-8d79-b52bca6ed0cf\",\n    \"name\": \"Home to work\",\n    \"origin\": \"Basilea\",\n    \"destination\": \"Berna\",\n    \"transportType\": \"BUS\",\n    \"createdAt\": \"2026-05-26T19:22:48.844Z\"\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid or malformed data.\n\n### Possible Causes\n\n- Invalid UUID format\n    \n- Invalid request body\n    \n- All fields are null or empty\n    \n- Invalid transportation type\n    \n- Malformed JSON body\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"At least one field must be provided\",\n    \"timestamp\": \"2026-05-27T00:18:37.553Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-27T00:19:02.191Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe user or favorite route was not found.\n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"Favorite route not found\",\n    \"timestamp\": \"2026-05-27T00:20:14.008Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 409 Conflict\n\nThe provided route name already exists in another favorite route.\n\n### Example Response\n\n``` json\n{\n    \"code\": 409,\n    \"name\": \"CONFLICT\",\n    \"description\": \"Favorite route name already exists\",\n    \"timestamp\": \"2026-05-27T00:21:28.940Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Favorite Route",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/favorite-routes/{{routeId}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "favorite-routes",
+                "{{routeId}}"
+              ]
+            },
+            "description": "# 🗑️ Delete Favorite Route\n\n## 📌 Endpoint\n\n**DELETE**  \n`/api/favorite-routes/{routeId}`\n\n---\n\n## 📖 Description\n\nDeletes a favorite route belonging to the authenticated user.\n\nOnly routes owned by the authenticated user can be deleted.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Path Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| routeId | UUID | ✅ Yes | Unique identifier of the favorite route |\n\n---\n\n### Example Request\n\n``` http\nDELETE /api/favorite-routes/5690feae-e7be-4be8-8d79-b52bca6ed0cf\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 204 No Content\n\nThe favorite route was successfully deleted.\n\n---\n\n## ❌ 400 Bad Request\n\nThe provided route ID is invalid.\n\n### Possible Causes\n\n- Invalid UUID format\n    \n- Malformed path parameter\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Invalid path parameter for: 'routeId'\",\n    \"timestamp\": \"2026-05-27T00:24:18.002Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-27T00:24:58.231Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe user or favorite route was not found.\n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"Favorite route not found\",\n    \"timestamp\": \"2026-05-27T00:25:47.117Z\"\n}\n\n ```"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Favorite Stations",
+      "item": [
+        {
+          "name": "Add Station",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalStationId\": \"8502113\",\n  \"stationName\": \"Aarau\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/favorite-stations",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "favorite-stations"
+              ]
+            },
+            "description": "# ⭐ Add Favorite Station\n\n## 📌 Endpoint\n\n**POST**  \n`/api/favorite-stations`\n\n---\n\n## 📖 Description\n\nAdds a station to the authenticated user's list of favorite stations.\n\nFavorite stations allow users to quickly access frequently used stations for route and connection searches.\n\nEach station is uniquely identified by its external station identifier.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Request Body (JSON)\n\n| Field | Type | Required | Description |\n| --- | --- | --- | --- |\n| externalStationId | String | ✅ Yes | External identifier of the station |\n| stationName | String | ✅ Yes | Name of the station |\n\n---\n\n### Example Request\n\n``` http\nPOST /api/favorite-stations\nAuthorization: Bearer {{JWT}}\nContent-Type: application/json\n\n ```\n\n``` json\n{\n  \"externalStationId\": \"850309\",\n  \"stationName\": \"Aarau\"\n}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 201 Created\n\nThe favorite station was successfully added.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"externalStationId\": \"850309\",\n    \"stationName\": \"Aarau\",\n    \"createdAt\": \"2026-05-28T17:18:54.723Z\"\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid or missing fields.\n\n### Possible Causes\n\n- Missing required fields\n    \n- Blank values\n    \n- Malformed request body\n    \n- Invalid input format\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"externalStationId: External station id is required\",\n    \"timestamp\": \"2026-05-28T17:20:11.842Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n- Malformed token\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-28T17:21:07.117Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe authenticated user was not found.\n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"User not found\",\n    \"timestamp\": \"2026-05-28T17:22:35.993Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 409 Conflict\n\nThe station is already registered as favorite.\n\n### Example Response\n\n``` json\n{\n    \"code\": 409,\n    \"name\": \"CONFLICT\",\n    \"description\": \"externalStationId already registered\",\n    \"timestamp\": \"2026-05-28T17:23:44.221Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Stations",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/favorite-stations",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "favorite-stations"
+              ]
+            },
+            "description": "# ⭐ Get Favorite Stations\n\n## 📌 Endpoint\n\n**GET**  \n`/api/favorite-stations`\n\n---\n\n## 📖 Description\n\nRetrieves all favorite stations associated with the authenticated user.\n\nThe response includes the station identifier, station name, and the creation timestamp for each favorite station.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nFavorite stations were successfully retrieved.\n\n### Response Body (JSON)\n\n``` json\n{\n    \"favoriteStations\": [\n        {\n            \"externalStationId\": \"8430555\",\n            \"stationName\": \"Aarau\",\n            \"createdAt\": \"2026-05-28T16:36:08.181Z\"\n        },\n        {\n            \"externalStationId\": \"8503059\",\n            \"stationName\": \"Aarau\",\n            \"createdAt\": \"2026-05-28T16:35:45.563Z\"\n        }\n    ]\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-28T17:25:51.782Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe authenticated user was not found.\n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"User not found\",\n    \"timestamp\": \"2026-05-28T17:26:37.118Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Station",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/favorite-stations/{{externalStationId}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "favorite-stations",
+                "{{externalStationId}}"
+              ]
+            },
+            "description": "# 🗑️ Delete Favorite Station\n\n## 📌 Endpoint\n\n**DELETE**  \n`/api/favorite-stations/{externalStationId}`\n\n---\n\n## 📖 Description\n\nRemoves a station from the authenticated user's list of favorite stations.\n\nOnly stations belonging to the authenticated user can be deleted.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Path Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| externalStationId | String | ✅ Yes | External identifier of the favorite station |\n\n---\n\n### Example Request\n\n``` http\nDELETE /api/favorite-stations/850309\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 204 No Content\n\nThe favorite station was successfully removed.\n\n---\n\n## ❌ 400 Bad Request\n\nThe provided path parameter is invalid.\n\n### Possible Causes\n\n- Invalid station identifier\n    \n- Malformed URL parameter\n    \n- Empty path parameter\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"Invalid path parameter for: 'externalStationId'\",\n    \"timestamp\": \"2026-05-28T17:29:11.340Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Example Response\n\n``` json\n{\n    \"code\": 401,\n    \"name\": \"UNAUTHORIZED\",\n    \"description\": \"Authentication required or token expired\",\n    \"timestamp\": \"2026-05-28T17:29:58.822Z\"\n}\n\n ```\n\n---\n\n## ⚠️ 404 Not Found\n\nThe user or favorite station was not found.\n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"User or stationId not found\",\n    \"timestamp\": \"2026-05-28T17:31:12.553Z\"\n}\n\n ```"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Stations Borad By Favorites",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/favorite-stations/{{externalStationId}}/station-board",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "favorite-stations",
+                "{{externalStationId}}",
+                "station-board"
+              ]
+            },
+            "description": "# 🚉 Get Station Board from Favorite Station\n\n## 📌 Endpoint\n\n**GET**  \n`api/favorite-stations/{externalStationId}/station-board`\n\n---\n\n## 📖 Description\n\nRetrieves the upcoming departures for a station previously registered as a favorite by the authenticated user.\n\nThe endpoint uses the favorite station identifier stored in the system and queries the external transport provider to obtain the latest departure board information.\n\nThis allows users to quickly access departure schedules without manually searching for the station.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Path Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| externalStationId | String | ✅ Yes | External identifier of the favorite station |\n\n---\n\n### Example Request\n\n``` http\nGET /api/favorite-stations/8503059/station-board\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nThe station board was successfully retrieved.\n\n### Response Body\n\n``` json\n{\n    \"stationBoards\": [\n        {\n            \"serviceName\": \"008978\",\n            \"category\": \"S\",\n            \"destinationName\": \"Zofingen\",\n            \"departureTime\": \"2026-05-29T19:01:00Z\"\n        },\n        {\n            \"serviceName\": \"002189\",\n            \"category\": \"IR\",\n            \"destinationName\": \"Zürich HB\",\n            \"departureTime\": \"2026-05-29T19:15:00Z\"\n        }\n    ]\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe provided station identifier is invalid.\n\n### Possible Causes\n\n- Malformed path parameter\n    \n- Invalid station identifier format\n    \n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nThe requested resource could not be found.\n\n### Possible Causes\n\n- Favorite station does not exist\n    \n- User not found\n    \n- No station board information available\n    \n\n---\n\n## 🔌 502 Bad Gateway\n\nError while communicating with the external transport service.\n\n### Possible Causes\n\n- External API rejected the request\n    \n- Unexpected response from transport provider\n    \n\n---\n\n## 🚨 503 Service Unavailable\n\nThe external transport service is currently unavailable.\n\n### Possible Causes\n\n- Service downtime\n    \n- Network connectivity issues\n    \n- Timeout while requesting station board information"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Station Board",
+      "item": [
+        {
+          "name": "Get Stations Board",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{JWT}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/station-board?station=Aarau&id=8502113&limit&transportType",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "station-board"
+              ],
+              "query": [
+                {
+                  "key": "station",
+                  "value": "Aarau"
+                },
+                {
+                  "key": "id",
+                  "value": "8502113"
+                },
+                {
+                  "key": "limit",
+                  "value": null
+                },
+                {
+                  "key": "transportType",
+                  "value": null
+                },
+                {
+                  "key": null,
+                  "value": "",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "# 🚉 Station Board Search\n\n## 📌 Endpoint\n\n**GET**  \n`/api/station-board`\n\n---\n\n## 📖 Description\n\nRetrieves upcoming departures for a station.\n\nThe station can be searched by name and optionally refined using the station identifier.\n\nResults may be limited and filtered by transportation type to provide a more focused departure board.\n\nThis endpoint provides real-time departure information obtained from the external transport service.\n\n---\n\n# 🔐 Access\n\nThis endpoint is **protected**.\n\nAuthentication is required using a **valid JWT token**.\n\n### Authorization Header\n\n``` http\nAuthorization: Bearer {{JWT}}\n\n ```\n\n**Allowed roles:**\n\n- Authenticated users\n    \n\n---\n\n# 📥 Request\n\n## Query Parameters\n\n| Parameter | Type | Required | Description |\n| --- | --- | --- | --- |\n| station | String | ✅ Yes | Station name to search |\n| id | String | ❌ No | Specific station identifier |\n| limit | Integer | ❌ No | Maximum number of departures to return |\n| transportType | Array | ❌ No | Transportation types to include in the results |\n\n### Supported Transport Types\n\n| Value |\n| --- |\n| TRAIN |\n| TRAM |\n| BUS |\n| SHIP |\n| CABLEWAY |\n\n---\n\n### Example Request\n\n``` http\nGET /api/station-board?station=Aarau&limit=10\nAuthorization: Bearer {{JWT}}\n\n ```\n\n### Example with Transportation Filter\n\n``` http\nGET /api/station-board?station=Aarau&transportType=TRAIN&transportType=TRAM\nAuthorization: Bearer {{JWT}}\n\n ```\n\n---\n\n# 📤 Responses\n\n---\n\n## ✅ 200 OK\n\nThe station board was successfully retrieved.\n\n### Response Body\n\n``` json\n{\n    \"stationBoards\": [\n        {\n            \"serviceName\": \"008978\",\n            \"category\": \"S\",\n            \"destinationName\": \"Zofingen\",\n            \"departureTime\": \"2026-05-29T19:01:00Z\"\n        },\n        {\n            \"serviceName\": \"002189\",\n            \"category\": \"IR\",\n            \"destinationName\": \"Zürich HB\",\n            \"departureTime\": \"2026-05-29T19:15:00Z\"\n        }\n    ]\n}\n\n ```\n\n---\n\n## ❌ 400 Bad Request\n\nThe request contains invalid query parameters.\n\n### Possible Causes\n\n- Missing required `station` parameter\n    \n- Invalid query parameter format\n    \n- Invalid transportation type value\n    \n- Invalid limit value\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 400,\n    \"name\": \"BAD_REQUEST\",\n    \"description\": \"station: Station is required\",\n    \"timestamp\": \"2026-05-29T19:00:00Z\"\n}\n\n ```\n\n---\n\n## 🔐 401 Unauthorized\n\nAuthentication credentials were not provided or are invalid.\n\n### Possible Causes\n\n- Missing JWT token\n    \n- Expired token\n    \n- Invalid token signature\n    \n\n---\n\n## ⚠️ 404 Not Found\n\nNo station board information could be found.\n\n### Possible Causes\n\n- Station not found\n    \n- No departures available for the provided criteria\n    \n- User not found\n    \n\n### Example Response\n\n``` json\n{\n    \"code\": 404,\n    \"name\": \"NOT_FOUND\",\n    \"description\": \"Station board not found\",\n    \"timestamp\": \"2026-05-29T19:00:00Z\"\n}\n\n ```\n\n---\n\n## 🔌 502 Bad Gateway\n\nError while communicating with the external transport service.\n\n### Possible Causes\n\n- External API rejected the request\n    \n- Invalid response received from transport provider\n    \n\n---\n\n## 🚨 503 Service Unavailable\n\nThe external transport service is currently unavailable.\n\n### Possible Causes\n\n- Service downtime\n    \n- Network connectivity issues\n    \n- Timeout while querying departures"
           },
           "response": []
         }
@@ -207,6 +647,18 @@
     },
     {
       "key": "JWT",
+      "value": ""
+    },
+    {
+      "key": "ITEM_ID",
+      "value": ""
+    },
+    {
+      "key": "routeId",
+      "value": ""
+    },
+    {
+      "key": "externalStationId",
       "value": ""
     }
   ]

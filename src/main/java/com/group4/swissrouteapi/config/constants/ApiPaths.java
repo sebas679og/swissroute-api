@@ -56,6 +56,59 @@ public final class ApiPaths {
   }
 
   /**
+   * History
+   *
+   * <p>Utility class holding API path constants for history endpoints.
+   *
+   * <p>Provides:
+   *
+   * <ul>
+   *   <li>{@link #HISTORY} → Base path for retrieving history records ({@code /api/history}).
+   *   <li>{@link #HISTORY_ITEM} → Path for deleting a specific history record by ID ({@code
+   *       /api/history/{itemId}}).
+   * </ul>
+   *
+   * <p>Declared as {@code static final} to group constants in a type-safe manner.
+   */
+  public static final class History {
+    public static final String HISTORY = "/api/history";
+    public static final String HISTORY_ITEM = "/api/history/{itemId}";
+  }
+
+  /**
+   * FavoriteRoutes
+   *
+   * <p>Static holder class for API endpoint path constants related to favorite routes
+   * functionality.
+   */
+  public static final class FavoriteRoutes {
+    public static final String FAVORITE_ROUTES = "/api/favorite-routes";
+    public static final String FAVORITE_ROUTE = "/api/favorite-routes/{routeId}";
+  }
+
+  /**
+   * FavoriteStations
+   *
+   * <p>Static inner class that defines API path constants for managing the authenticated user's
+   * favorite stations.
+   */
+  public static final class FavoriteStations {
+    public static final String FAVORITE_STATIONS = "/api/favorite-stations";
+    public static final String FAVORITE_STATION = "/api/favorite-stations/{externalStationId}";
+    public static final String FAVORITE_STATION_BOARD =
+        "/api/favorite-stations/{externalStationId}/station-board";
+  }
+
+  /**
+   * StationBoard
+   *
+   * <p>Static inner class that defines API path constants for accessing station board information.
+   */
+  public static final class StationBoard {
+    public static final String STATION_BOARD = "/api/station-board";
+  }
+
+  /**
    * Docs
    *
    * <p>Defines API paths related to documentation endpoints.
@@ -78,5 +131,6 @@ public final class ApiPaths {
   public static final class TransportApi {
     public static final String LOCATIONS = "/locations";
     public static final String CONNECTIONS = "/connections";
+    public static final String STATION_BOARD = "/stationboard";
   }
 }

@@ -69,13 +69,12 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
               .getPayload();
 
       String userId = claims.getSubject();
-      String email = claims.get("email", String.class);
 
       if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
         List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("AUTH_JWT"));
 
         UsernamePasswordAuthenticationToken authentication =
-            new UsernamePasswordAuthenticationToken(email, null, authorities);
+            new UsernamePasswordAuthenticationToken(userId, null, authorities);
 
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

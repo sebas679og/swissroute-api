@@ -24,4 +24,5 @@ public class ApiTransportProperties {
   private Integer connectTimeoutMs;
   private Integer readTimeoutMs;
   private Integer writeTimeoutMs;
+  private Integer memorySize;
 }
