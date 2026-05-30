@@ -733,13 +733,14 @@ Authorization: Bearer {{JWT}}
 
 ### Query Parameters
 
-| Parameter         | Type   | Required | Description                        |
-|-------------------|--------|----------|------------------------------------|
-| `from`            | String | Yes      | Origin station name                |
-| `to`              | String | Yes      | Destination station name           |
-| `date`            | String | No       | Travel date in `yyyy-MM-dd` format |
-| `time`            | String | No       | Travel time in `HH:mm` format      |
-| `transportations` | Enum[] | No       | Transport types filter             |
+| Parameter         | Type   | Required | Description                                                 |
+|-------------------|--------|----------|-------------------------------------------------------------|
+| `from`            | String | Yes      | Origin station name                                         |
+| `to`              | String | Yes      | Destination station name                                    |
+| `date`            | String | No       | Travel date in `yyyy-MM-dd` format                          |
+| `time`            | String | No       | Travel time in `HH:mm` format                               |
+| `transportations` | Enum[] | No       | Transport types filter                                      |
+| `via`             | String | No       | Specify the intermediate stops, a maximum of 5 are allowed. |
 
 ---
 

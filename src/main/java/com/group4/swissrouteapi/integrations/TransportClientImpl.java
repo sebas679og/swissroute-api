@@ -77,7 +77,12 @@ public class TransportClientImpl implements TransportClient {
 
   @Override
   public ApiConnectionsResponse getConnections(
-      String from, String to, LocalDate date, LocalTime time, List<TransportType> transportType) {
+      String from,
+      String to,
+      LocalDate date,
+      LocalTime time,
+      List<TransportType> transportType,
+      List<String> vias) {
     final AtomicReference<URI> uriTracker = new AtomicReference<>();
 
     WebClient.RequestHeadersSpec<?> request =
@@ -100,6 +105,11 @@ public class TransportClientImpl implements TransportClient {
                             .map(type -> type.name().toLowerCase(Locale.ROOT))
                             .toArray();
                     uriBuilder.queryParam("transportations[]", types);
+                  }
+                  if (vias != null && !vias.isEmpty()) {
+                    Object[] via = vias.stream().map(String::trim).toArray();
+
+                    uriBuilder.queryParam("via[]", via);
                   }
                   URI builtUri = uriBuilder.build();
                   uriTracker.set(builtUri);
