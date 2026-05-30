@@ -12,7 +12,7 @@ history of their planned trips.
 ## Table of Contents
 
 - [Tech Stack](#tech-stack)
-- [Database Model](#database-model)
+- [Entity Relationship Diagram](#entity-relationship-diagram)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Environment Configuration](#environment-configuration)
@@ -40,41 +40,9 @@ history of their planned trips.
 
 ---
 
-## Database Model
+## Entity Relationship Diagram
 
-```
-usuarios
-├── id             UUID PK
-├── name         VARCHAR NOT NULL
-├── email          VARCHAR UNIQUE NOT NULL
-├── password       VARCHAR NOT NULL
-├── base_city    VARCHAR
-└── created_at     TIMESTAMP DEFAULT NOW()
-
-rutas_favoritas
-├── id             UUID PK
-├── usuario_id     UUID FK → usuarios.id
-├── nombre         VARCHAR NOT NULL
-├── origen         VARCHAR NOT NULL
-├── destino        VARCHAR NOT NULL
-├── tipo_transporte VARCHAR
-└── created_at     TIMESTAMP DEFAULT NOW()
-
-historial_busquedas
-├── id             UUID PK
-├── usuario_id     UUID FK → usuarios.id
-├── origen         VARCHAR NOT NULL
-├── destino        VARCHAR NOT NULL
-├── fecha_consulta TIMESTAMP NOT NULL
-└── num_resultados INT
-
-estaciones_favoritas
-├── id                 UUID PK
-├── usuario_id         UUID FK → usuarios.id
-├── estacion_id_externo VARCHAR NOT NULL
-├── nombre_estacion    VARCHAR NOT NULL
-└── created_at         TIMESTAMP DEFAULT NOW()
-```
+![ER Diagram](doc/entity-relationship-model.png)
 
 ---
 
