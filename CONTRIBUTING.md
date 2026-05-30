@@ -7,15 +7,16 @@ Thank you for being part of this project. This document defines the workflows, c
 ## Table of Contents
 
 - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Clone the Repository](#clone-the-repository)
-    - [Environment Configuration](#environment-configuration)
-    - [Running the Full Stack](#running-the-full-stack)
+  - [Prerequisites](#prerequisites)
+  - [Clone the Repository](#clone-the-repository)
+  - [Environment Configuration](#environment-configuration)
+  - [Running the Full Stack](#running-the-full-stack)
 - [Development Workflow](#development-workflow)
-    - [Branch Strategy](#branch-strategy)
-    - [Branch Naming Conventions](#branch-naming-conventions)
-    - [Keeping Your Branch Up to Date](#keeping-your-branch-up-to-date)
+  - [Branch Strategy](#branch-strategy)
+  - [Branch Naming Conventions](#branch-naming-conventions)
+  - [Keeping Your Branch Up to Date](#keeping-your-branch-up-to-date)
 - [Commit Conventions](#commit-conventions)
+- [Database Migrations](#database-migrations)
 - [Linters and Tests](#linters-and-tests)
 - [Pull Requests](#pull-requests)
 - [Versioning](#versioning)
@@ -57,7 +58,7 @@ The project uses a `.env` file at the repository root to supply secrets and envi
 cp .env.template .env
 ```
 
-2. Open `.env` and edit the values as needed. Key variables include database credentials, the base URL of the Swiss Public Transport API (`https://transport.opendata.ch/v1`), and any JWT secrets if authentication is enabled.
+2. Open `.env` and edit the values as needed. Key variables include database credentials, the base URL of the Swiss Public Transport API (`https://transport.opendata.ch/v1`), and JWT secrets.
 
 > [!IMPORTANT]
 > `.env` is already listed in `.gitignore`. If it ever shows up in `git status`, do not stage or commit it.
@@ -72,6 +73,8 @@ Once your `.env` is ready, spin up the application and its PostgreSQL database w
 docker-compose up --build
 ```
 
+Flyway will automatically apply all pending database migrations on startup — no manual setup is required.
+
 To run in detached mode (background):
 
 ```bash
@@ -84,7 +87,7 @@ To stop and remove all containers:
 docker-compose down
 ```
 
-To also remove volumes (wipes database data):
+To also remove volumes (wipes database data and migration history):
 
 ```bash
 docker-compose down -v
@@ -115,7 +118,7 @@ feat/* ──► dev ──► main
 | `feat/*`, `fix/*`, etc. | Short-lived branches for individual changes.                    |
 
 **Key rules:**
-- **Never push directly to `main`**
+- **Never push directly to `main`.**
 - All work happens on a feature/fix branch and enters the codebase through a reviewed pull request into `dev`.
 - `main` is only updated from `dev` when the team decides to release.
 
@@ -265,6 +268,48 @@ test: add integration tests for StationBoardService
 
 ---
 
+## Database Migrations
+
+SwissRoute uses **Flyway** to manage the database schema. All migration scripts are located under `src/main/resources/db/migration` and follow the naming convention:
+
+```
+V{version}__{description}.sql
+```
+
+Flyway runs automatically when the application starts. No manual intervention is required.
+
+### Rules for Contributors
+
+> [!IMPORTANT]
+> **Never modify or delete an already-applied migration.** Flyway stores a checksum for each applied script in the `flyway_schema_history` table. If you alter an applied migration, the application will fail on startup with a checksum mismatch error. To fix or extend a past migration, always create a **new** versioned script.
+
+- Every database change (new table, column, index, constraint, seed data) must be accompanied by a Flyway migration script.
+- The migration script must be included in the **same PR** as the feature that requires it.
+- Scripts must be self-contained and idempotent where possible.
+- Commit the migration script as a separate, dedicated commit using the `chore` type:
+
+```bash
+git add src/main/resources/db/migration/V5__add_column_to_users.sql
+git commit -m "chore: add Flyway migration to add column to users table"
+```
+
+### Verifying Migrations Locally
+
+After adding a new migration, start the application and check the logs for Flyway output:
+
+```
+Flyway Community Edition ... by Redgate
+Database: jdbc:postgresql://localhost:5432/swissroute (PostgreSQL ...)
+Successfully validated 5 migrations (execution time 00:00.012s)
+Current version of schema "public": 4
+Migrating schema "public" to version "5 - add column to users table"
+Successfully applied 1 migration to schema "public"
+```
+
+If Flyway reports a validation error, do **not** push until it is resolved.
+
+---
+
 ## Linters and Tests
 
 Before opening any PR, it is **mandatory** to run Spotless locally to ensure that the code follows the project's defined style.
@@ -312,7 +357,7 @@ Runs tests while skipping Spotless, Checkstyle, and PMD validations:
 
 ### Linters + Tests Together
 
-Runs the formatter and tests in a single step:
+Runs the formatter and all tests in a single step:
 
 ```bash
 ./mvnw -B clean verify
@@ -354,7 +399,8 @@ Before requesting a review, verify the following:
 - [ ] All existing tests pass locally (`./mvnw verify`).
 - [ ] New functionality includes at least the minimum required tests.
 - [ ] Swagger/OpenAPI annotations are updated if endpoints changed.
-- [ ] Database changes include the corresponding Flyway or Liquibase migration script.
+- [ ] Database changes include a new, versioned Flyway migration script under `src/main/resources/db/migration/`.
+- [ ] No existing migration scripts have been modified or deleted.
 - [ ] DTOs are defined and used for all request/response payloads (no entity exposure).
 - [ ] WebClient calls to the Swiss Transport API handle error responses gracefully.
 - [ ] The `pom.xml` version has been bumped appropriately (see [Versioning](#versioning)).
@@ -374,7 +420,7 @@ SwissRoute follows **[Semantic Versioning](https://semver.org/)** (`MAJOR.MINOR.
 | New feature (backwards-compatible) | Minor        | `0.1.0 → 0.2.0` |
 | Breaking change                    | Major        | `0.1.0 → 1.0.0` |
 
-**Always bump the version before opening a PR**. Use the Maven Versions plugin to avoid manual edits:
+**Always bump the version before opening a PR.** Use the Maven Versions plugin to avoid manual edits:
 
 ```bash
 ./mvnw versions:set "-DnewVersion=0.2.0" "-DgenerateBackupPoms=false"
@@ -387,4 +433,4 @@ git add pom.xml
 git commit -m "chore: bump version to 0.2.0"
 ```
 
-> Keeping the version bump in its own commit makes it easy to identify in the history and avoids cluttering the meaningful change commits.
+> Keeping the version bump in its own commit makes it easy to identify in the history and avoids cluttering meaningful change commits.
