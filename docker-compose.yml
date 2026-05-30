@@ -22,6 +22,7 @@ services:
       - swissroute-api-network
 
   swissroute-api:
+    #image: ghcr.io/sebas679og/swiss-route:1.0.0
     build:
       context: .
       dockerfile: Dockerfile
