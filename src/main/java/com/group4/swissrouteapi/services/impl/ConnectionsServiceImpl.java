@@ -40,7 +40,8 @@ public class ConnectionsServiceImpl implements ConnectionsService {
             requestParams.getTo(),
             requestParams.getDate(),
             requestParams.getTime(),
-            requestParams.getTransportations());
+            requestParams.getTransportations(),
+            requestParams.getVia());
 
     if (api == null || api.connections() == null || api.connections().isEmpty()) {
       throw new NotFoundException("No connections found for the given parameters");
