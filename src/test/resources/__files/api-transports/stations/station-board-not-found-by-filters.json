@@ -1,0 +1,14 @@
+{
+  "station": {
+    "id": "8502113",
+    "name": "Aarau",
+    "score": null,
+    "coordinate": {
+      "type": "WGS84",
+      "x": 47.391352,
+      "y": 8.05127
+    },
+    "distance": null
+  },
+  "stationboard": []
+}

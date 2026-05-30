@@ -2,7 +2,7 @@ package com.group4.swissrouteapi.utils.mappers;
 
 import com.group4.swissrouteapi.dtos.responses.favorites.StationResponse;
 import com.group4.swissrouteapi.dtos.responses.stations.Station;
-import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiStation;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
 import com.group4.swissrouteapi.models.FavoriteStationEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

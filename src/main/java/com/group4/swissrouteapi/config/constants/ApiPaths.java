@@ -95,6 +95,17 @@ public final class ApiPaths {
   public static final class FavoriteStations {
     public static final String FAVORITE_STATIONS = "/api/favorite-stations";
     public static final String FAVORITE_STATION = "/api/favorite-stations/{externalStationId}";
+    public static final String FAVORITE_STATION_BOARD =
+        "/api/favorite-stations/{externalStationId}/station-board";
+  }
+
+  /**
+   * StationBoard
+   *
+   * <p>Static inner class that defines API path constants for accessing station board information.
+   */
+  public static final class StationBoard {
+    public static final String STATION_BOARD = "/api/station-board";
   }
 
   /**
@@ -120,5 +131,6 @@ public final class ApiPaths {
   public static final class TransportApi {
     public static final String LOCATIONS = "/locations";
     public static final String CONNECTIONS = "/connections";
+    public static final String STATION_BOARD = "/stationboard";
   }
 }

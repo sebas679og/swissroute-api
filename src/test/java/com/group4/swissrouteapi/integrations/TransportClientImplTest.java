@@ -7,18 +7,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group4.swissrouteapi.config.constants.ApiPaths;
 import com.group4.swissrouteapi.exceptions.BadGatewayException;
 import com.group4.swissrouteapi.exceptions.ServiceUnavailableException;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiCoordinate;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiEndpoint;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiJourney;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiPrognosis;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnectionsResponse;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiCoordinateConnection;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiEndpoint;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiJourney;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiPrognosis;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiSection;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStationConnection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStations;
-import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiCoordinate;
 import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiLocationsResponse;
-import com.group4.swissrouteapi.integrations.dto.responses.locations.ApiStation;
+import com.group4.swissrouteapi.integrations.dto.responses.stationboard.ApiStationBoardResponse;
 import com.group4.swissrouteapi.utils.enums.TransportType;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -95,17 +94,43 @@ class TransportClientImplTest {
     return objectMapper.writeValueAsString(response);
   }
 
+  private String buildStationsJson() throws Exception {
+    ApiCoordinate coordinate = new ApiCoordinate("Point", 7.5886, 47.5596);
+    ApiStation station = new ApiStation("8502113", "Aarau", 1.0, coordinate, 34, null);
+    ApiEndpoint departure = getApiEndpoint(station);
+
+    ApiJourney journey =
+        new ApiJourney(
+            departure, "IC 1", "IC", null, "1", "1", "SBB", "Bern", List.of(departure), 2, 3);
+
+    ApiStationBoardResponse response = new ApiStationBoardResponse(station, List.of(journey));
+    return objectMapper.writeValueAsString(response);
+  }
+
+  private static @NonNull ApiEndpoint getApiEndpoint(ApiStation station) {
+    ApiPrognosis prognosis = new ApiPrognosis(null, null, null, null, null);
+    return new ApiEndpoint(
+        station,
+        OffsetDateTime.parse("2024-10-10T08:00:00+02:00"),
+        1728547200L,
+        OffsetDateTime.parse("2024-10-10T08:00:00+02:00"),
+        1728547200L,
+        0,
+        "3",
+        prognosis,
+        null,
+        station);
+  }
+
   // ---------------------------------------------------------------------------
   // Helper — builds a minimal but complete ApiConnectionsResponse JSON string
   // ---------------------------------------------------------------------------
 
   private String buildConnectionsResponse() throws Exception {
-    ApiCoordinateConnection coordinate = new ApiCoordinateConnection("Point", 7.5886, 47.5596);
+    ApiCoordinate coordinate = new ApiCoordinate("Point", 7.5886, 47.5596);
 
-    ApiStationConnection fromStation =
-        new ApiStationConnection("8503000", "Basel SBB", 1.0, coordinate, 34);
-    ApiStationConnection toStation =
-        new ApiStationConnection("8507000", "Bern", 1.0, coordinate, 21);
+    ApiStation fromStation = new ApiStation("8503000", "Basel SBB", 1.0, coordinate, 34, null);
+    ApiStation toStation = new ApiStation("8507000", "Bern", 1.0, coordinate, 21, null);
 
     ApiPrognosis prognosis = new ApiPrognosis(null, null, null, null, null);
 
@@ -133,7 +158,7 @@ class TransportClientImplTest {
   }
 
   private static @NonNull ApiConnection getApiConnection(
-      ApiStationConnection toStation, ApiPrognosis prognosis, ApiEndpoint departure) {
+      ApiStation toStation, ApiPrognosis prognosis, ApiEndpoint departure) {
     ApiEndpoint arrival =
         new ApiEndpoint(
             toStation,
@@ -154,7 +179,17 @@ class TransportClientImplTest {
       ApiEndpoint departure, ApiEndpoint arrival) {
     ApiJourney journey =
         new ApiJourney(
-            "IC 1", "IC", null, "1", "1", "SBB", "Bern", List.of(departure, arrival), 2, 3);
+            departure,
+            "IC 1",
+            "IC",
+            null,
+            "1",
+            "1",
+            "SBB",
+            "Bern",
+            List.of(departure, arrival),
+            2,
+            3);
 
     ApiSection section = new ApiSection(journey, null, departure, arrival);
 
@@ -530,6 +565,173 @@ class TransportClientImplTest {
 
       RecordedRequest recorded = mockWebServer.takeRequest();
       assertThat(recorded.getPath()).doesNotContain("transportations");
+    }
+  }
+
+  // ===========================================================================
+  // get() stationBoard
+  // ===========================================================================
+  @Nested
+  @DisplayName("getStationBoard()")
+  class GetStationBoardTest {
+
+    private static final String STATION = "Aarau";
+    private static final String ID = "8502113";
+    private static final Integer LIMIT = 10;
+    private static final List<TransportType> TYPES =
+        List.of(TransportType.TRAIN, TransportType.BUS);
+
+    // ── success ───────────────────────────────────────────────────────────────
+
+    @Test
+    @DisplayName("returns mapped response when API returns 200 with full payload")
+    void returnsApiStationBoardResponse_whenApiReturns200() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildStationsJson()));
+
+      ApiStationBoardResponse result = transportClient.getStationBoard(STATION, ID, LIMIT, TYPES);
+
+      assertThat(result).isNotNull();
+      assertThat(result.station()).isNotNull();
+      assertThat(result.station().id()).isEqualTo(ID);
+      assertThat(result.station().name()).isEqualTo(STATION);
+      assertThat(result.stationBoard()).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("stationboard entries contain the expected journey data")
+    void stationBoardEntries_containExpectedJourneyData() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildStationsJson()));
+
+      ApiStationBoardResponse result = transportClient.getStationBoard(STATION, ID, LIMIT, TYPES);
+
+      ApiJourney journey = result.stationBoard().get(0);
+      assertThat(journey.name()).isEqualTo("IC 1");
+      assertThat(journey.category()).isEqualTo("IC");
+      assertThat(journey.operator()).isEqualTo("SBB");
+      assertThat(journey.to()).isEqualTo("Bern");
+    }
+
+    // ── request — URI construction ────────────────────────────────────────────
+
+    @Test
+    @DisplayName("sends request to the stationboard endpoint with station query param")
+    void sendsRequest_toStationboardEndpoint_withStationParam() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildStationsJson()));
+
+      transportClient.getStationBoard(STATION, null, null, null);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).contains("/stationboard");
+      assertThat(recorded.getPath()).contains("station=" + STATION);
+    }
+
+    @Test
+    @DisplayName("includes id query param when id is provided")
+    void includesIdParam_whenIdIsProvided() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildStationsJson()));
+
+      transportClient.getStationBoard(STATION, ID, null, null);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).contains("id=" + ID);
+    }
+
+    @Test
+    @DisplayName("omits id query param when id is null")
+    void omitsIdParam_whenIdIsNull() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildStationsJson()));
+
+      transportClient.getStationBoard(STATION, null, null, null);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).doesNotContain("id=");
+    }
+
+    @Test
+    @DisplayName("includes limit query param when limit is provided")
+    void includesLimitParam_whenLimitIsProvided() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildStationsJson()));
+
+      transportClient.getStationBoard(STATION, null, LIMIT, null);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).contains("limit=" + LIMIT);
+    }
+
+    @Test
+    @DisplayName("omits limit query param when limit is null")
+    void omitsLimitParam_whenLimitIsNull() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildStationsJson()));
+
+      transportClient.getStationBoard(STATION, null, null, null);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).doesNotContain("limit=");
+    }
+
+    @Test
+    @DisplayName("includes transportations[] params in lowercase when transport types are provided")
+    void includesTransportationsParams_inLowercase_whenTypesAreProvided() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildStationsJson()));
+
+      transportClient.getStationBoard(STATION, null, null, TYPES);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      String path = recorded.getPath();
+      assertThat(path).contains("train");
+      assertThat(path).contains("bus");
+    }
+
+    @Test
+    @DisplayName("omits transportations[] param when transport type list is null")
+    void omitsTransportationsParam_whenTransportTypeListIsNull() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildStationsJson()));
+
+      transportClient.getStationBoard(STATION, null, null, null);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).doesNotContain("transportations");
+    }
+
+    @Test
+    @DisplayName("omits transportations[] param when transport type list is empty")
+    void omitsTransportationsParam_whenTransportTypeListIsEmpty() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildStationsJson()));
+
+      transportClient.getStationBoard(STATION, null, null, List.of());
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).doesNotContain("transportations");
+    }
+
+    @Test
+    @DisplayName("uses GET method")
+    void usesGetMethod() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildStationsJson()));
+
+      transportClient.getStationBoard(STATION, ID, LIMIT, TYPES);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getMethod()).isEqualTo("GET");
+    }
+
+    // ── all params combined ───────────────────────────────────────────────────
+
+    @Test
+    @DisplayName("sends all query params when all arguments are provided")
+    void sendsAllQueryParams_whenAllArgumentsAreProvided() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildStationsJson()));
+
+      transportClient.getStationBoard(STATION, ID, LIMIT, TYPES);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      String path = recorded.getPath();
+      assertThat(path)
+          .contains("station=" + STATION)
+          .contains("id=" + ID)
+          .contains("limit=" + LIMIT)
+          .contains("train")
+          .contains("bus");
     }
   }
 

@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
@@ -51,7 +53,10 @@ class TransportClientImplExternalApiTest {
   @BeforeEach
   void setUp() {
     WebClient webClient =
-        WebClient.builder().baseUrl(BASE_URL).defaultHeader("Accept", "application/json").build();
+        WebClient.builder()
+            .baseUrl(BASE_URL)
+            .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+            .build();
 
     transportClient = new TransportClientImpl(webClient);
   }

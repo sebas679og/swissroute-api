@@ -13,14 +13,14 @@ import com.group4.swissrouteapi.dtos.responses.connections.ConnectionsResponse;
 import com.group4.swissrouteapi.dtos.responses.connections.Section;
 import com.group4.swissrouteapi.exceptions.NotFoundException;
 import com.group4.swissrouteapi.integrations.TransportClient;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiCoordinate;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiEndpoint;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiJourney;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiPrognosis;
+import com.group4.swissrouteapi.integrations.dto.responses.ApiStation;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiConnectionsResponse;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiCoordinateConnection;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiEndpoint;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiJourney;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiPrognosis;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiSection;
-import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStationConnection;
 import com.group4.swissrouteapi.integrations.dto.responses.connections.ApiStations;
 import com.group4.swissrouteapi.models.UserEntity;
 import com.group4.swissrouteapi.providers.UserDataProvider;
@@ -87,24 +87,20 @@ class ConnectionsServiceImplTest {
         .build();
   }
 
-  private ApiStationConnection apiStation(String id, String name) {
-    return new ApiStationConnection(
-        id, name, 1.0, new ApiCoordinateConnection("Point", 7.58, 47.56), null);
+  private ApiStation apiStation(String id, String name) {
+    return new ApiStation(id, name, 1.0, new ApiCoordinate("Point", 7.58, 47.56), null, null);
   }
 
   private ApiEndpoint apiEndpoint(
-      ApiStationConnection station,
-      String platform,
-      OffsetDateTime departure,
-      OffsetDateTime arrival) {
+      ApiStation station, String platform, OffsetDateTime departure, OffsetDateTime arrival) {
     ApiPrognosis prognosis = new ApiPrognosis(null, null, null, null, null);
     return new ApiEndpoint(
         station, arrival, null, departure, null, 0, platform, prognosis, null, station);
   }
 
   private ApiConnection buildApiConnection() {
-    ApiStationConnection fromStation = apiStation("8503000", "Basel SBB");
-    ApiStationConnection toStation = apiStation("8507000", "Bern");
+    ApiStation fromStation = apiStation("8503000", "Basel SBB");
+    ApiStation toStation = apiStation("8507000", "Bern");
 
     OffsetDateTime dep = OffsetDateTime.parse("2024-10-10T08:00:00+02:00");
     OffsetDateTime arr = OffsetDateTime.parse("2024-10-10T08:57:00+02:00");
@@ -114,7 +110,17 @@ class ConnectionsServiceImplTest {
 
     ApiJourney journey =
         new ApiJourney(
-            "IC 1", "IC", null, "1", "1", "SBB", "Bern", List.of(departure, arrival), 2, 3);
+            departure,
+            "IC 1",
+            "IC",
+            null,
+            "1",
+            "1",
+            "SBB",
+            "Bern",
+            List.of(departure, arrival),
+            2,
+            3);
 
     ApiSection section = new ApiSection(journey, null, departure, arrival);
 
@@ -123,8 +129,8 @@ class ConnectionsServiceImplTest {
   }
 
   private ApiConnectionsResponse buildApiResponse(List<ApiConnection> connections) {
-    ApiStationConnection from = apiStation("8503000", "Basel SBB");
-    ApiStationConnection to = apiStation("8507000", "Bern");
+    ApiStation from = apiStation("8503000", "Basel SBB");
+    ApiStation to = apiStation("8507000", "Bern");
     return new ApiConnectionsResponse(
         connections, from, to, new ApiStations(List.of(from), List.of(to)));
   }

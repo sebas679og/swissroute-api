@@ -1,5 +1,6 @@
 package com.group4.swissrouteapi.controllers;
 
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
@@ -641,6 +642,148 @@ public class FavoriteStationControllerTest extends AbstractIntegrationTest {
                         ApiPaths.FavoriteStations.FAVORITE_STATION,
                         favoriteStations.getFirst().getExternalStationId())
                     .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + generateTokenWithOtherUser()))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.NOT_FOUND.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+    }
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // Get Stations Board by Favorite Stations
+  // ──────────────────────────────────────────────────────────────────────────
+
+  @Nested
+  @DisplayName("Get Stations Board by favorite station")
+  class StationsBoardByFavoriteStation {
+
+    private static final String STATION_ID = "8502113";
+    private static final String STATION_NAME = "Aarau";
+
+    @BeforeEach
+    void setUp() {
+      favoriteStationRepository.deleteAll();
+      FavoriteStationEntity rawStation =
+          FavoriteStationEntity.builder()
+              .user(user)
+              .externalStationId(STATION_ID)
+              .stationName(STATION_NAME)
+              .build();
+      favoriteStationRepository.save(rawStation);
+    }
+
+    @Nested
+    @DisplayName("Success cases")
+    class SuccessCases {
+
+      @Test
+      void shouldReturn200OkWhenStationsAreFound() throws Exception {
+        stationsBoardStub.stubStationsBoardById(STATION_NAME, STATION_ID);
+        mockMvc
+            .perform(
+                get(ApiPaths.FavoriteStations.FAVORITE_STATION_BOARD, STATION_ID)
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.stationBoards").isArray())
+            .andExpect(jsonPath("$.stationBoards", hasSize(greaterThan(0))));
+      }
+
+      @Test
+      void shouldReturn404NotFoundWhenExternalApiReturnsNoResults() throws Exception {
+        stationsBoardStub.stubStationsBoardByNotFound(STATION_NAME, STATION_ID);
+        mockMvc
+            .perform(
+                get(ApiPaths.FavoriteStations.FAVORITE_STATION_BOARD, STATION_ID)
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.NOT_FOUND.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+    }
+
+    @Nested
+    @DisplayName("Security")
+    class Security {
+
+      @Test
+      void shouldReturn401UnauthorizedWhenTokenIsExpired() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.FavoriteStations.FAVORITE_STATION_BOARD, STATION_ID)
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + generateExpiredToken()))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn401UnauthorizedWhenTokenIsMalformed() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.FavoriteStations.FAVORITE_STATION_BOARD, STATION_ID)
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + "malformed.token.here"))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn401UnauthorizedWhenAuthorizationHeaderIsMissing() throws Exception {
+        mockMvc
+            .perform(get(ApiPaths.FavoriteStations.FAVORITE_STATION_BOARD, STATION_ID))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.code").value(HttpStatus.UNAUTHORIZED.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.UNAUTHORIZED.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn404NotFoundWhenUserFromTamperedJwtDoesNotExist() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.FavoriteStations.FAVORITE_STATION_BOARD, STATION_ID)
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + generateTokenWithOtherUser()))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.NOT_FOUND.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+    }
+
+    @Nested
+    @DisplayName("Request validation")
+    class RequestValidation {
+
+      @Test
+      void shouldReturn404NotFoundWhenStationDoesNotExistInDatabase() throws Exception {
+        mockMvc
+            .perform(
+                get(ApiPaths.FavoriteStations.FAVORITE_STATION_BOARD, "nonexistent-station-id")
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + token))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
+            .andExpect(jsonPath("$.name").value(HttpStatus.NOT_FOUND.name()))
+            .andExpect(jsonPath("$.description").exists())
+            .andExpect(jsonPath("$.timestamp").exists());
+      }
+
+      @Test
+      void shouldReturn404NotFoundWhenStationBelongsToAnotherUser() throws Exception {
+        UserEntity anotherUser = userRepository.save(UserDataProvider.createAnotherMockUser());
+        mockMvc
+            .perform(
+                get(ApiPaths.FavoriteStations.FAVORITE_STATION_BOARD, STATION_ID)
+                    .header(HttpHeaders.AUTHORIZATION, TYPE_TOKEN + generateToken(anotherUser)))
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.value()))
             .andExpect(jsonPath("$.name").value(HttpStatus.NOT_FOUND.name()))

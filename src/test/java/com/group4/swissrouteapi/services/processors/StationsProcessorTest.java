@@ -322,4 +322,78 @@ class StationsProcessorTest {
       verify(favoriteStationsRepository, never()).delete(any());
     }
   }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // getNameAndExternalStationId
+  // ─────────────────────────────────────────────────────────────────────────
+
+  @Nested
+  @DisplayName("getNameAndExternalStationId")
+  class GetNameAndExternalStationId {
+
+    @Test
+    @DisplayName("returns the entity when it exists for the given user and externalStationId")
+    void returnsEntity_whenItExistsForUserAndExternalStationId() {
+      UserEntity user = buildUser();
+      FavoriteStationEntity station = buildStation(user);
+
+      when(favoriteStationsRepository.findByUserIdAndExternalStationId(USER_ID, EXTERNAL_ID))
+          .thenReturn(Optional.of(station));
+
+      FavoriteStationEntity result =
+          stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID);
+
+      assertThat(result).isSameAs(station);
+    }
+
+    @Test
+    @DisplayName("delegates to repository with the exact userId and externalStationId")
+    void delegatesToRepository_withExactUserIdAndExternalStationId() {
+      UserEntity user = buildUser();
+      FavoriteStationEntity station = buildStation(user);
+
+      when(favoriteStationsRepository.findByUserIdAndExternalStationId(USER_ID, EXTERNAL_ID))
+          .thenReturn(Optional.of(station));
+
+      stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID);
+
+      verify(favoriteStationsRepository).findByUserIdAndExternalStationId(USER_ID, EXTERNAL_ID);
+    }
+
+    @Test
+    @DisplayName("calls findByUserIdAndExternalStationId exactly once")
+    void callsFindByUserIdAndExternalStationId_exactlyOnce() {
+      UserEntity user = buildUser();
+      FavoriteStationEntity station = buildStation(user);
+
+      when(favoriteStationsRepository.findByUserIdAndExternalStationId(USER_ID, EXTERNAL_ID))
+          .thenReturn(Optional.of(station));
+
+      stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID);
+
+      verify(favoriteStationsRepository, times(1)).findByUserIdAndExternalStationId(any(), any());
+    }
+
+    @Test
+    @DisplayName(
+        "throws NotFoundException when no station exists for the given user and externalStationId")
+    void throwsNotFoundException_whenNoStationExistsForUserAndExternalStationId() {
+      when(favoriteStationsRepository.findByUserIdAndExternalStationId(USER_ID, EXTERNAL_ID))
+          .thenReturn(Optional.empty());
+
+      assertThatThrownBy(() -> stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID))
+          .isInstanceOf(NotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("exception message is 'Station not found'")
+    void exceptionMessage_isStationNotFound() {
+      when(favoriteStationsRepository.findByUserIdAndExternalStationId(USER_ID, EXTERNAL_ID))
+          .thenReturn(Optional.empty());
+
+      assertThatThrownBy(() -> stationsProcessor.getNameAndExternalStationId(USER_ID, EXTERNAL_ID))
+          .isInstanceOf(NotFoundException.class)
+          .hasMessage("Station not found");
+    }
+  }
 }
