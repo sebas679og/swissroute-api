@@ -197,6 +197,29 @@ public class ApiTransportsConnectionsStub {
                     .withBodyFile("api-transports/connections/connections-not-found.json")));
   }
 
+  public void stubConnectionsByVia(
+          String from, String to, List<String> via) {
+    MappingBuilder stub =
+            get(urlPathEqualTo(ApiPaths.TransportApi.CONNECTIONS))
+                    .withQueryParam("from", equalTo(from))
+                    .withQueryParam("to", equalTo(to));
+
+    stub =
+            via.stream()
+                    .reduce(
+                            stub,
+                            (builder, type) -> builder.withQueryParam("via[]", equalTo(type)),
+                            (a, b) -> b);
+
+    wireMock.stubFor(
+            stub.willReturn(
+                    aResponse()
+                            .withStatus(HttpStatus.OK.value())
+                            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                            .withBodyFile(
+                                    "api-transports/connections/connections-by-vias.json")));
+  }
+
   public void reset() {
     wireMock.resetAll();
   }

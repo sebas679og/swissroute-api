@@ -77,5 +77,6 @@ public class ConnectionsQueryParams {
                   "Specifies up to five via locations. When specifying several vias, "
                       + "array notation (via=via1&via=via2) is required."))
   @Size(max = 5, message = "A maximum of 5 via locations is allowed")
+  @Builder.Default
   private List<String> via = new ArrayList<>();
 }

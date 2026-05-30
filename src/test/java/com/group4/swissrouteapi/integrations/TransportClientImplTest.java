@@ -23,6 +23,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -32,6 +35,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -565,6 +570,68 @@ class TransportClientImplTest {
 
       RecordedRequest recorded = mockWebServer.takeRequest();
       assertThat(recorded.getPath()).doesNotContain("transportations");
+    }
+
+    @Test
+    @DisplayName("should include via params when list is provided")
+    void shouldIncludeViaParamsWhenProvided() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(FROM, TO, null, null, List.of(), List.of("Olten", "Basel SBB"));
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      String path = recorded.getPath();
+      assertThat(path).contains("Olten").contains("Basel");
+    }
+
+    @Test
+    @DisplayName("should not include via param when list is empty")
+    void shouldNotIncludeViaWhenListIsEmpty() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(FROM, TO, null, null, List.of(), List.of());
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).doesNotContain("via");
+    }
+
+    @Test
+    @DisplayName("should not include via param when list is null")
+    void shouldNotIncludeViaWhenListIsNull() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(FROM, TO, null, null, List.of(), null);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).doesNotContain("via");
+    }
+
+    @Test
+    @DisplayName("should send via locations trimmed")
+    void shouldSendViaTrimmed() throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      transportClient.getConnections(FROM, TO, null, null, List.of(), List.of("  Olten  "));
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      assertThat(recorded.getPath()).contains("Olten");
+    }
+
+    @ParameterizedTest(name = "via list size: {0}")
+    @ValueSource(ints = {1, 2, 5})
+    @DisplayName("should include all via locations in the request")
+    void shouldIncludeAllViaLocations(int size) throws Exception {
+      mockWebServer.enqueue(jsonResponse(200, buildConnectionsResponse()));
+
+      List<String> vias = IntStream.range(0, size)
+              .mapToObj(i -> "Station" + i)
+              .collect(Collectors.toList());
+
+      transportClient.getConnections(FROM, TO, null, null, List.of(), vias);
+
+      RecordedRequest recorded = mockWebServer.takeRequest();
+      String path = recorded.getPath();
+      vias.forEach(via -> assertThat(path).contains(via));
     }
   }
 

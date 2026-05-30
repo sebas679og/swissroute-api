@@ -158,6 +158,14 @@ class ConnectionsServiceImplTest {
         .build();
   }
 
+  private ConnectionsQueryParams buildParamsWithVia() {
+    return ConnectionsQueryParams.builder()
+            .from(FROM)
+            .to(TO)
+            .via(List.of("Olten", "Basel SBB"))
+            .build();
+  }
+
   // ===========================================================================
   // Successful response
   // ===========================================================================
@@ -303,6 +311,92 @@ class ConnectionsServiceImplTest {
           .isInstanceOf(NotFoundException.class);
 
       verify(connectionsMapper, never()).toConnectionResponse(org.mockito.ArgumentMatchers.any());
+    }
+  }
+
+// ===========================================================================
+// via parameter
+// ===========================================================================
+
+  @Nested
+  @DisplayName("getConnections() - via parameter")
+  class ViaParameterTest {
+
+    @Test
+    @DisplayName("should pass via list to the transport client when provided")
+    void shouldPassViaListToClient() {
+      ApiConnection apiConn = buildApiConnection();
+      List<String> vias = List.of("Olten", "Basel SBB");
+
+      when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), vias))
+              .thenReturn(buildApiResponse(List.of(apiConn)));
+      when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
+      doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, buildUser);
+
+      connectionsService.getConnections(buildParamsWithVia(), USER_ID);
+
+      verify(transportClient).getConnections(FROM, TO, null, null, new ArrayList<>(), vias);
+    }
+
+    @Test
+    @DisplayName("should pass empty via list when not provided")
+    void shouldPassEmptyViaWhenNotProvided() {
+      ApiConnection apiConn = buildApiConnection();
+
+      when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>()))
+              .thenReturn(buildApiResponse(List.of(apiConn)));
+      when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
+      doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, buildUser);
+
+      connectionsService.getConnections(buildParams(), USER_ID);
+
+      verify(transportClient).getConnections(FROM, TO, null, null, new ArrayList<>(), new ArrayList<>());
+    }
+
+    @Test
+    @DisplayName("should return connections correctly when via is provided")
+    void shouldReturnConnectionsWhenViaIsProvided() {
+      ApiConnection apiConn = buildApiConnection();
+      Connection mapped = buildMappedConnection();
+      List<String> vias = List.of("Olten", "Basel SBB");
+
+      when(transportClient.getConnections(FROM, TO, null, null, new ArrayList<>(), vias))
+              .thenReturn(buildApiResponse(List.of(apiConn)));
+      when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(mapped);
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
+      doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, buildUser);
+
+      ConnectionsResponse result = connectionsService.getConnections(buildParamsWithVia(), USER_ID);
+
+      assertThat(result.getConnections()).containsExactly(mapped);
+    }
+
+    @Test
+    @DisplayName("should pass via alongside all other optional params")
+    void shouldPassViaAlongsideOtherOptionalParams() {
+      ApiConnection apiConn = buildApiConnection();
+      List<String> vias = List.of("Olten");
+
+      ConnectionsQueryParams params = ConnectionsQueryParams.builder()
+              .from(FROM)
+              .to(TO)
+              .date(DATE)
+              .time(TIME)
+              .transportations(List.of(TransportType.TRAIN))
+              .via(vias)
+              .build();
+
+      when(transportClient.getConnections(FROM, TO, DATE, TIME, List.of(TransportType.TRAIN), vias))
+              .thenReturn(buildApiResponse(List.of(apiConn)));
+      when(connectionsMapper.toConnectionResponse(apiConn)).thenReturn(buildMappedConnection());
+      when(userFinder.findById(USER_ID)).thenReturn(buildUser);
+      doNothing().when(historyProcessor).saveHistory(FROM, TO, 1, buildUser);
+
+      connectionsService.getConnections(params, USER_ID);
+
+      verify(transportClient).getConnections(FROM, TO, DATE, TIME, List.of(TransportType.TRAIN), vias);
     }
   }
 }

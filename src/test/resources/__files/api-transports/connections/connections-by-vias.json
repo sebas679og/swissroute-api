@@ -1,0 +1,6033 @@
+{
+  "connections": [
+    {
+      "from": {
+        "station": {
+          "id": "8501120",
+          "name": "Lausanne",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.516795,
+            "y": 6.629087
+          },
+          "distance": null
+        },
+        "arrival": null,
+        "arrivalTimestamp": null,
+        "departure": "2026-05-30T04:42:00+0200",
+        "departureTimestamp": 1780108920,
+        "delay": 0,
+        "platform": "70",
+        "prognosis": {
+          "platform": null,
+          "arrival": null,
+          "departure": "2026-05-30T04:42:00+0200",
+          "capacity1st": null,
+          "capacity2nd": null
+        },
+        "realtimeAvailability": null,
+        "location": {
+          "id": "8501120",
+          "name": "Lausanne",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.516795,
+            "y": 6.629087
+          },
+          "distance": null
+        }
+      },
+      "to": {
+        "station": {
+          "id": "8501008",
+          "name": "Genève",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.210228,
+            "y": 6.142435
+          },
+          "distance": null
+        },
+        "arrival": "2026-05-30T10:25:00+0200",
+        "arrivalTimestamp": 1780129500,
+        "departure": null,
+        "departureTimestamp": null,
+        "delay": null,
+        "platform": "3",
+        "prognosis": {
+          "platform": null,
+          "arrival": null,
+          "departure": null,
+          "capacity1st": null,
+          "capacity2nd": null
+        },
+        "realtimeAvailability": null,
+        "location": {
+          "id": "8501008",
+          "name": "Genève",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.210228,
+            "y": 6.142435
+          },
+          "distance": null
+        }
+      },
+      "duration": "00d05:43:00",
+      "transfers": 7,
+      "service": null,
+      "products": [
+        "S41",
+        "IC 1",
+        "IC 6",
+        "S29",
+        "IR 16",
+        "IR 55",
+        "IC 51",
+        "IC 1"
+      ],
+      "capacity1st": null,
+      "capacity2nd": null,
+      "sections": [
+        {
+          "journey": {
+            "name": "024509",
+            "category": "S",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "41",
+            "operator": "SBB",
+            "to": "Fribourg/Freiburg",
+            "passList": [
+              {
+                "station": {
+                  "id": "8501120",
+                  "name": "Lausanne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.516795,
+                    "y": 6.629087
+                  },
+                  "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2026-05-30T04:42:00+0200",
+                "departureTimestamp": 1780108920,
+                "delay": 0,
+                "platform": "70",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T04:42:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501120",
+                  "name": "Lausanne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.516795,
+                    "y": 6.629087
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504000",
+                  "name": "Pully-Nord",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.514685,
+                    "y": 6.657982
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T04:44:00+0200",
+                "arrivalTimestamp": 1780109040,
+                "departure": "2026-05-30T04:45:00+0200",
+                "departureTimestamp": 1780109100,
+                "delay": 0,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T04:45:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504000",
+                  "name": "Pully-Nord",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.514685,
+                    "y": 6.657982
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504010",
+                  "name": "La Conversion",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.513087,
+                    "y": 6.678307
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T04:47:00+0200",
+                "arrivalTimestamp": 1780109220,
+                "departure": "2026-05-30T04:47:00+0200",
+                "departureTimestamp": 1780109220,
+                "delay": 0,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T04:47:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504010",
+                  "name": "La Conversion",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.513087,
+                    "y": 6.678307
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504003",
+                  "name": "Bossière",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.509753,
+                    "y": 6.699305
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T04:49:00+0200",
+                "arrivalTimestamp": 1780109340,
+                "departure": "2026-05-30T04:49:00+0200",
+                "departureTimestamp": 1780109340,
+                "delay": 0,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T04:49:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504003",
+                  "name": "Bossière",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.509753,
+                    "y": 6.699305
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504011",
+                  "name": "Grandvaux",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.496948,
+                    "y": 6.722641
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T04:51:00+0200",
+                "arrivalTimestamp": 1780109460,
+                "departure": "2026-05-30T04:51:00+0200",
+                "departureTimestamp": 1780109460,
+                "delay": 0,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T04:51:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504011",
+                  "name": "Grandvaux",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.496948,
+                    "y": 6.722641
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504012",
+                  "name": "Puidoux",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.493838,
+                    "y": 6.76568
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T04:57:00+0200",
+                "arrivalTimestamp": 1780109820,
+                "departure": "2026-05-30T04:57:00+0200",
+                "departureTimestamp": 1780109820,
+                "delay": 0,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T04:57:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504012",
+                  "name": "Puidoux",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.493838,
+                    "y": 6.76568
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504007",
+                  "name": "Moreillon",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.508401,
+                    "y": 6.785629
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T05:00:00+0200",
+                "arrivalTimestamp": 1780110000,
+                "departure": "2026-05-30T05:00:00+0200",
+                "departureTimestamp": 1780110000,
+                "delay": 0,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T05:00:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504007",
+                  "name": "Moreillon",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.508401,
+                    "y": 6.785629
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504014",
+                  "name": "Palézieux",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.542766,
+                    "y": 6.83786
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T05:04:00+0200",
+                "arrivalTimestamp": 1780110240,
+                "departure": "2026-05-30T05:05:00+0200",
+                "departureTimestamp": 1780110300,
+                "delay": 0,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T05:05:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504014",
+                  "name": "Palézieux",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.542766,
+                    "y": 6.83786
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504020",
+                  "name": "Oron",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.572547,
+                    "y": 6.837099
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T05:09:00+0200",
+                "arrivalTimestamp": 1780110540,
+                "departure": "2026-05-30T05:09:00+0200",
+                "departureTimestamp": 1780110540,
+                "delay": 0,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T05:09:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504020",
+                  "name": "Oron",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.572547,
+                    "y": 6.837099
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504021",
+                  "name": "Vauderens",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.621453,
+                    "y": 6.850029
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T05:14:00+0200",
+                "arrivalTimestamp": 1780110840,
+                "departure": "2026-05-30T05:14:00+0200",
+                "departureTimestamp": 1780110840,
+                "delay": 0,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T05:14:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504021",
+                  "name": "Vauderens",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.621453,
+                    "y": 6.850029
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504023",
+                  "name": "Romont FR",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.693505,
+                    "y": 6.911801
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T05:21:00+0200",
+                "arrivalTimestamp": 1780111260,
+                "departure": "2026-05-30T05:21:00+0200",
+                "departureTimestamp": 1780111260,
+                "delay": 0,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T05:21:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504023",
+                  "name": "Romont FR",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.693505,
+                    "y": 6.911801
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504024",
+                  "name": "Villaz-St-Pierre",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.720582,
+                    "y": 6.96064
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T05:25:00+0200",
+                "arrivalTimestamp": 1780111500,
+                "departure": "2026-05-30T05:25:00+0200",
+                "departureTimestamp": 1780111500,
+                "delay": 0,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T05:25:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504024",
+                  "name": "Villaz-St-Pierre",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.720582,
+                    "y": 6.96064
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8501632",
+                  "name": "Avry-Matran",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.786031,
+                    "y": 7.080425
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T05:34:00+0200",
+                "arrivalTimestamp": 1780112040,
+                "departure": "2026-05-30T05:35:00+0200",
+                "departureTimestamp": 1780112100,
+                "delay": 0,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T05:35:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501632",
+                  "name": "Avry-Matran",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.786031,
+                    "y": 7.080425
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504100",
+                  "name": "Fribourg/Freiburg",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.803142,
+                    "y": 7.151039
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T05:42:00+0200",
+                "arrivalTimestamp": 1780112520,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": 0,
+                "platform": "1",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": "2026-05-30T05:42:00+0200",
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504100",
+                  "name": "Fribourg/Freiburg",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.803142,
+                    "y": 7.151039
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8501120",
+              "name": "Lausanne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.516795,
+                "y": 6.629087
+              },
+              "distance": null
+            },
+            "arrival": null,
+            "arrivalTimestamp": null,
+            "departure": "2026-05-30T04:42:00+0200",
+            "departureTimestamp": 1780108920,
+            "delay": 0,
+            "platform": "70",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": "2026-05-30T04:42:00+0200",
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501120",
+              "name": "Lausanne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.516795,
+                "y": 6.629087
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8504100",
+              "name": "Fribourg/Freiburg",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.803142,
+                "y": 7.151039
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T05:42:00+0200",
+            "arrivalTimestamp": 1780112520,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": 0,
+            "platform": "1",
+            "prognosis": {
+              "platform": null,
+              "arrival": "2026-05-30T05:42:00+0200",
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8504100",
+              "name": "Fribourg/Freiburg",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.803142,
+                "y": 7.151039
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "000705",
+            "category": "IC",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "1",
+            "operator": "SBB",
+            "to": "Zürich HB",
+            "passList": [
+              {
+                "station": {
+                  "id": "8504100",
+                  "name": "Fribourg/Freiburg",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.803142,
+                    "y": 7.151039
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T05:42:00+0200",
+                "arrivalTimestamp": 1780112520,
+                "departure": "2026-05-30T06:03:00+0200",
+                "departureTimestamp": 1780113780,
+                "delay": null,
+                "platform": "1",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504100",
+                  "name": "Fribourg/Freiburg",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.803142,
+                    "y": 7.151039
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T06:26:00+0200",
+                "arrivalTimestamp": 1780115160,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "8",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8504100",
+              "name": "Fribourg/Freiburg",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.803142,
+                "y": 7.151039
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T05:42:00+0200",
+            "arrivalTimestamp": 1780112520,
+            "departure": "2026-05-30T06:03:00+0200",
+            "departureTimestamp": 1780113780,
+            "delay": null,
+            "platform": "1",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8504100",
+              "name": "Fribourg/Freiburg",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.803142,
+                "y": 7.151039
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T06:26:00+0200",
+            "arrivalTimestamp": 1780115160,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "8",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "000606",
+            "category": "IC",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "6",
+            "operator": "SBB",
+            "to": "Basel SBB",
+            "passList": [
+              {
+                "station": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T06:26:00+0200",
+                "arrivalTimestamp": 1780115160,
+                "departure": "2026-05-30T06:33:00+0200",
+                "departureTimestamp": 1780115580,
+                "delay": 1,
+                "platform": "6",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T06:34:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:12:00+0200",
+                "arrivalTimestamp": 1780117920,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": 0,
+                "platform": "7",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": "2026-05-30T07:12:00+0200",
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T06:26:00+0200",
+            "arrivalTimestamp": 1780115160,
+            "departure": "2026-05-30T06:33:00+0200",
+            "departureTimestamp": 1780115580,
+            "delay": 1,
+            "platform": "6",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": "2026-05-30T06:34:00+0200",
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:12:00+0200",
+            "arrivalTimestamp": 1780117920,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": 0,
+            "platform": "7",
+            "prognosis": {
+              "platform": null,
+              "arrival": "2026-05-30T07:12:00+0200",
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "008927",
+            "category": "S",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "29",
+            "operator": "SBB",
+            "to": "Turgi",
+            "passList": [
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:12:00+0200",
+                "arrivalTimestamp": 1780117920,
+                "departure": "2026-05-30T07:23:00+0200",
+                "departureTimestamp": 1780118580,
+                "delay": null,
+                "platform": "9",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:32:00+0200",
+                "arrivalTimestamp": 1780119120,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "1",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:12:00+0200",
+            "arrivalTimestamp": 1780117920,
+            "departure": "2026-05-30T07:23:00+0200",
+            "departureTimestamp": 1780118580,
+            "delay": null,
+            "platform": "9",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:32:00+0200",
+            "arrivalTimestamp": 1780119120,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "1",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "002160",
+            "category": "IR",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "16",
+            "operator": "SBB",
+            "to": "Olten",
+            "passList": [
+              {
+                "station": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:32:00+0200",
+                "arrivalTimestamp": 1780119120,
+                "departure": "2026-05-30T07:46:00+0200",
+                "departureTimestamp": 1780119960,
+                "delay": null,
+                "platform": "5",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:55:00+0200",
+                "arrivalTimestamp": 1780120500,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "7",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:32:00+0200",
+            "arrivalTimestamp": 1780119120,
+            "departure": "2026-05-30T07:46:00+0200",
+            "departureTimestamp": 1780119960,
+            "delay": null,
+            "platform": "5",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:55:00+0200",
+            "arrivalTimestamp": 1780120500,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "7",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "001760",
+            "category": "IR",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "55",
+            "operator": "SBB",
+            "to": "Biel/Bienne",
+            "passList": [
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:55:00+0200",
+                "arrivalTimestamp": 1780120500,
+                "departure": "2026-05-30T08:01:00+0200",
+                "departureTimestamp": 1780120860,
+                "delay": null,
+                "platform": "3",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500212",
+                  "name": "Oensingen",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.28503,
+                    "y": 7.709875
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:13:00+0200",
+                "arrivalTimestamp": 1780121580,
+                "departure": "2026-05-30T08:13:00+0200",
+                "departureTimestamp": 1780121580,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500212",
+                  "name": "Oensingen",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.28503,
+                    "y": 7.709875
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500207",
+                  "name": "Solothurn",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.204189,
+                    "y": 7.542692
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:26:00+0200",
+                "arrivalTimestamp": 1780122360,
+                "departure": "2026-05-30T08:27:00+0200",
+                "departureTimestamp": 1780122420,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500207",
+                  "name": "Solothurn",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.204189,
+                    "y": 7.542692
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500202",
+                  "name": "Grenchen Süd",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.188767,
+                    "y": 7.398183
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:34:00+0200",
+                "arrivalTimestamp": 1780122840,
+                "departure": "2026-05-30T08:34:00+0200",
+                "departureTimestamp": 1780122840,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500202",
+                  "name": "Grenchen Süd",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.188767,
+                    "y": 7.398183
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504300",
+                  "name": "Biel/Bienne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.132893,
+                    "y": 7.242918
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:45:00+0200",
+                "arrivalTimestamp": 1780123500,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "4",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504300",
+                  "name": "Biel/Bienne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.132893,
+                    "y": 7.242918
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:55:00+0200",
+            "arrivalTimestamp": 1780120500,
+            "departure": "2026-05-30T08:01:00+0200",
+            "departureTimestamp": 1780120860,
+            "delay": null,
+            "platform": "3",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8504300",
+              "name": "Biel/Bienne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.132893,
+                "y": 7.242918
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T08:45:00+0200",
+            "arrivalTimestamp": 1780123500,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "4",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8504300",
+              "name": "Biel/Bienne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.132893,
+                "y": 7.242918
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "001612",
+            "category": "IC",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "51",
+            "operator": "SBB",
+            "to": "Lausanne",
+            "passList": [
+              {
+                "station": {
+                  "id": "8504300",
+                  "name": "Biel/Bienne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.132893,
+                    "y": 7.242918
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:45:00+0200",
+                "arrivalTimestamp": 1780123500,
+                "departure": "2026-05-30T08:48:00+0200",
+                "departureTimestamp": 1780123680,
+                "delay": null,
+                "platform": "5",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504300",
+                  "name": "Biel/Bienne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.132893,
+                    "y": 7.242918
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504221",
+                  "name": "Neuchâtel",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.996727,
+                    "y": 6.9357
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:07:00+0200",
+                "arrivalTimestamp": 1780124820,
+                "departure": "2026-05-30T09:09:00+0200",
+                "departureTimestamp": 1780124940,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504221",
+                  "name": "Neuchâtel",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.996727,
+                    "y": 6.9357
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504200",
+                  "name": "Yverdon-les-Bains",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.78155,
+                    "y": 6.640943
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:28:00+0200",
+                "arrivalTimestamp": 1780126080,
+                "departure": "2026-05-30T09:29:00+0200",
+                "departureTimestamp": 1780126140,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504200",
+                  "name": "Yverdon-les-Bains",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.78155,
+                    "y": 6.640943
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:48:00+0200",
+                "arrivalTimestamp": 1780127280,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "4",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8504300",
+              "name": "Biel/Bienne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.132893,
+                "y": 7.242918
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T08:45:00+0200",
+            "arrivalTimestamp": 1780123500,
+            "departure": "2026-05-30T08:48:00+0200",
+            "departureTimestamp": 1780123680,
+            "delay": null,
+            "platform": "5",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8504300",
+              "name": "Biel/Bienne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.132893,
+                "y": 7.242918
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8501118",
+              "name": "Renens VD",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.537046,
+                "y": 6.57892
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T09:48:00+0200",
+            "arrivalTimestamp": 1780127280,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "4",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501118",
+              "name": "Renens VD",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.537046,
+                "y": 6.57892
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "000708",
+            "category": "IC",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "1",
+            "operator": "SBB",
+            "to": "Genève-Aéroport",
+            "passList": [
+              {
+                "station": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:48:00+0200",
+                "arrivalTimestamp": 1780127280,
+                "departure": "2026-05-30T09:53:00+0200",
+                "departureTimestamp": 1780127580,
+                "delay": null,
+                "platform": "5",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8501008",
+                  "name": "Genève",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.210228,
+                    "y": 6.142435
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T10:25:00+0200",
+                "arrivalTimestamp": 1780129500,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "3",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501008",
+                  "name": "Genève",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.210228,
+                    "y": 6.142435
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8501118",
+              "name": "Renens VD",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.537046,
+                "y": 6.57892
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T09:48:00+0200",
+            "arrivalTimestamp": 1780127280,
+            "departure": "2026-05-30T09:53:00+0200",
+            "departureTimestamp": 1780127580,
+            "delay": null,
+            "platform": "5",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501118",
+              "name": "Renens VD",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.537046,
+                "y": 6.57892
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8501008",
+              "name": "Genève",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.210228,
+                "y": 6.142435
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T10:25:00+0200",
+            "arrivalTimestamp": 1780129500,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "3",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501008",
+              "name": "Genève",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.210228,
+                "y": 6.142435
+              },
+              "distance": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "from": {
+        "station": {
+          "id": "8501120",
+          "name": "Lausanne",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.516795,
+            "y": 6.629087
+          },
+          "distance": null
+        },
+        "arrival": null,
+        "arrivalTimestamp": null,
+        "departure": "2026-05-30T05:39:00+0200",
+        "departureTimestamp": 1780112340,
+        "delay": null,
+        "platform": "1",
+        "prognosis": {
+          "platform": null,
+          "arrival": null,
+          "departure": null,
+          "capacity1st": null,
+          "capacity2nd": null
+        },
+        "realtimeAvailability": null,
+        "location": {
+          "id": "8501120",
+          "name": "Lausanne",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.516795,
+            "y": 6.629087
+          },
+          "distance": null
+        }
+      },
+      "to": {
+        "station": {
+          "id": "8501008",
+          "name": "Genève",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.210228,
+            "y": 6.142435
+          },
+          "distance": null
+        },
+        "arrival": "2026-05-30T10:55:00+0200",
+        "arrivalTimestamp": 1780131300,
+        "departure": null,
+        "departureTimestamp": null,
+        "delay": null,
+        "platform": "3",
+        "prognosis": {
+          "platform": null,
+          "arrival": null,
+          "departure": null,
+          "capacity1st": null,
+          "capacity2nd": null
+        },
+        "realtimeAvailability": null,
+        "location": {
+          "id": "8501008",
+          "name": "Genève",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.210228,
+            "y": 6.142435
+          },
+          "distance": null
+        }
+      },
+      "duration": "00d05:16:00",
+      "transfers": 5,
+      "service": null,
+      "products": [
+        "IR 15",
+        "ICE",
+        "S29",
+        "RE12",
+        "IC 5",
+        "IR 90"
+      ],
+      "capacity1st": null,
+      "capacity2nd": null,
+      "sections": [
+        {
+          "journey": {
+            "name": "002507",
+            "category": "IR",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "15",
+            "operator": "SBB",
+            "to": "Luzern",
+            "passList": [
+              {
+                "station": {
+                  "id": "8501120",
+                  "name": "Lausanne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.516795,
+                    "y": 6.629087
+                  },
+                  "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2026-05-30T05:39:00+0200",
+                "departureTimestamp": 1780112340,
+                "delay": null,
+                "platform": "1",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501120",
+                  "name": "Lausanne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.516795,
+                    "y": 6.629087
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504014",
+                  "name": "Palézieux",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.542766,
+                    "y": 6.83786
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T05:54:00+0200",
+                "arrivalTimestamp": 1780113240,
+                "departure": "2026-05-30T05:56:00+0200",
+                "departureTimestamp": 1780113360,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504014",
+                  "name": "Palézieux",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.542766,
+                    "y": 6.83786
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504023",
+                  "name": "Romont FR",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.693505,
+                    "y": 6.911801
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T06:10:00+0200",
+                "arrivalTimestamp": 1780114200,
+                "departure": "2026-05-30T06:12:00+0200",
+                "departureTimestamp": 1780114320,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504023",
+                  "name": "Romont FR",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.693505,
+                    "y": 6.911801
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504100",
+                  "name": "Fribourg/Freiburg",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.803142,
+                    "y": 7.151039
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T06:30:00+0200",
+                "arrivalTimestamp": 1780115400,
+                "departure": "2026-05-30T06:33:00+0200",
+                "departureTimestamp": 1780115580,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504100",
+                  "name": "Fribourg/Freiburg",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.803142,
+                    "y": 7.151039
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T06:56:00+0200",
+                "arrivalTimestamp": 1780116960,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "10",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8501120",
+              "name": "Lausanne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.516795,
+                "y": 6.629087
+              },
+              "distance": null
+            },
+            "arrival": null,
+            "arrivalTimestamp": null,
+            "departure": "2026-05-30T05:39:00+0200",
+            "departureTimestamp": 1780112340,
+            "delay": null,
+            "platform": "1",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501120",
+              "name": "Lausanne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.516795,
+                "y": 6.629087
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T06:56:00+0200",
+            "arrivalTimestamp": 1780116960,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "10",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "000374",
+            "category": "ICE",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "000374",
+            "operator": "SBB",
+            "to": "Basel Bad Bf",
+            "passList": [
+              {
+                "station": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T06:56:00+0200",
+                "arrivalTimestamp": 1780116960,
+                "departure": "2026-05-30T07:04:00+0200",
+                "departureTimestamp": 1780117440,
+                "delay": null,
+                "platform": "5",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:42:00+0200",
+                "arrivalTimestamp": 1780119720,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "7",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T06:56:00+0200",
+            "arrivalTimestamp": 1780116960,
+            "departure": "2026-05-30T07:04:00+0200",
+            "departureTimestamp": 1780117440,
+            "delay": null,
+            "platform": "5",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:42:00+0200",
+            "arrivalTimestamp": 1780119720,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "7",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "008929",
+            "category": "S",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "29",
+            "operator": "SBB",
+            "to": "Turgi",
+            "passList": [
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:42:00+0200",
+                "arrivalTimestamp": 1780119720,
+                "departure": "2026-05-30T07:49:00+0200",
+                "departureTimestamp": 1780120140,
+                "delay": null,
+                "platform": "8",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:57:00+0200",
+                "arrivalTimestamp": 1780120620,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "3",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:42:00+0200",
+            "arrivalTimestamp": 1780119720,
+            "departure": "2026-05-30T07:49:00+0200",
+            "departureTimestamp": 1780120140,
+            "delay": null,
+            "platform": "8",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:57:00+0200",
+            "arrivalTimestamp": 1780120620,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "3",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "004760",
+            "category": "RE",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "12",
+            "operator": "SBB",
+            "to": "Olten",
+            "passList": [
+              {
+                "station": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:57:00+0200",
+                "arrivalTimestamp": 1780120620,
+                "departure": "2026-05-30T08:13:00+0200",
+                "departureTimestamp": 1780121580,
+                "delay": null,
+                "platform": "5",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:24:00+0200",
+                "arrivalTimestamp": 1780122240,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "3AB",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:57:00+0200",
+            "arrivalTimestamp": 1780120620,
+            "departure": "2026-05-30T08:13:00+0200",
+            "departureTimestamp": 1780121580,
+            "delay": null,
+            "platform": "5",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T08:24:00+0200",
+            "arrivalTimestamp": 1780122240,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "3AB",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "000512",
+            "category": "IC",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "5",
+            "operator": "SBB",
+            "to": "Lausanne",
+            "passList": [
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:24:00+0200",
+                "arrivalTimestamp": 1780122240,
+                "departure": "2026-05-30T08:35:00+0200",
+                "departureTimestamp": 1780122900,
+                "delay": null,
+                "platform": "4",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500207",
+                  "name": "Solothurn",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.204189,
+                    "y": 7.542692
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:58:00+0200",
+                "arrivalTimestamp": 1780124280,
+                "departure": "2026-05-30T08:59:00+0200",
+                "departureTimestamp": 1780124340,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500207",
+                  "name": "Solothurn",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.204189,
+                    "y": 7.542692
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504300",
+                  "name": "Biel/Bienne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.132893,
+                    "y": 7.242918
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:14:00+0200",
+                "arrivalTimestamp": 1780125240,
+                "departure": "2026-05-30T09:18:00+0200",
+                "departureTimestamp": 1780125480,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504300",
+                  "name": "Biel/Bienne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.132893,
+                    "y": 7.242918
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504221",
+                  "name": "Neuchâtel",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.996727,
+                    "y": 6.9357
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:37:00+0200",
+                "arrivalTimestamp": 1780126620,
+                "departure": "2026-05-30T09:39:00+0200",
+                "departureTimestamp": 1780126740,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504221",
+                  "name": "Neuchâtel",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.996727,
+                    "y": 6.9357
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504200",
+                  "name": "Yverdon-les-Bains",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.78155,
+                    "y": 6.640943
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:58:00+0200",
+                "arrivalTimestamp": 1780127880,
+                "departure": "2026-05-30T09:59:00+0200",
+                "departureTimestamp": 1780127940,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504200",
+                  "name": "Yverdon-les-Bains",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.78155,
+                    "y": 6.640943
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T10:18:00+0200",
+                "arrivalTimestamp": 1780129080,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "4",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T08:24:00+0200",
+            "arrivalTimestamp": 1780122240,
+            "departure": "2026-05-30T08:35:00+0200",
+            "departureTimestamp": 1780122900,
+            "delay": null,
+            "platform": "4",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8501118",
+              "name": "Renens VD",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.537046,
+                "y": 6.57892
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T10:18:00+0200",
+            "arrivalTimestamp": 1780129080,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "4",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501118",
+              "name": "Renens VD",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.537046,
+                "y": 6.57892
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "001812",
+            "category": "IR",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "90",
+            "operator": "SBB",
+            "to": "Genève-Aéroport",
+            "passList": [
+              {
+                "station": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T10:18:00+0200",
+                "arrivalTimestamp": 1780129080,
+                "departure": "2026-05-30T10:23:00+0200",
+                "departureTimestamp": 1780129380,
+                "delay": null,
+                "platform": "5",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8501008",
+                  "name": "Genève",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.210228,
+                    "y": 6.142435
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T10:55:00+0200",
+                "arrivalTimestamp": 1780131300,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "3",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501008",
+                  "name": "Genève",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.210228,
+                    "y": 6.142435
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8501118",
+              "name": "Renens VD",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.537046,
+                "y": 6.57892
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T10:18:00+0200",
+            "arrivalTimestamp": 1780129080,
+            "departure": "2026-05-30T10:23:00+0200",
+            "departureTimestamp": 1780129380,
+            "delay": null,
+            "platform": "5",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501118",
+              "name": "Renens VD",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.537046,
+                "y": 6.57892
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8501008",
+              "name": "Genève",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.210228,
+                "y": 6.142435
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T10:55:00+0200",
+            "arrivalTimestamp": 1780131300,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "3",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501008",
+              "name": "Genève",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.210228,
+                "y": 6.142435
+              },
+              "distance": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "from": {
+        "station": {
+          "id": "8501120",
+          "name": "Lausanne",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.516795,
+            "y": 6.629087
+          },
+          "distance": null
+        },
+        "arrival": null,
+        "arrivalTimestamp": null,
+        "departure": "2026-05-30T05:39:00+0200",
+        "departureTimestamp": 1780112340,
+        "delay": null,
+        "platform": "1",
+        "prognosis": {
+          "platform": null,
+          "arrival": null,
+          "departure": null,
+          "capacity1st": null,
+          "capacity2nd": null
+        },
+        "realtimeAvailability": null,
+        "location": {
+          "id": "8501120",
+          "name": "Lausanne",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.516795,
+            "y": 6.629087
+          },
+          "distance": null
+        }
+      },
+      "to": {
+        "station": {
+          "id": "8501008",
+          "name": "Genève",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.210228,
+            "y": 6.142435
+          },
+          "distance": null
+        },
+        "arrival": "2026-05-30T11:25:00+0200",
+        "arrivalTimestamp": 1780133100,
+        "departure": null,
+        "departureTimestamp": null,
+        "delay": null,
+        "platform": "3",
+        "prognosis": {
+          "platform": null,
+          "arrival": null,
+          "departure": null,
+          "capacity1st": null,
+          "capacity2nd": null
+        },
+        "realtimeAvailability": null,
+        "location": {
+          "id": "8501008",
+          "name": "Genève",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.210228,
+            "y": 6.142435
+          },
+          "distance": null
+        }
+      },
+      "duration": "00d05:46:00",
+      "transfers": 3,
+      "service": null,
+      "products": [
+        "IR 15",
+        "ICE",
+        "IR 16",
+        "IC 1"
+      ],
+      "capacity1st": null,
+      "capacity2nd": null,
+      "sections": [
+        {
+          "journey": {
+            "name": "002507",
+            "category": "IR",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "15",
+            "operator": "SBB",
+            "to": "Luzern",
+            "passList": [
+              {
+                "station": {
+                  "id": "8501120",
+                  "name": "Lausanne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.516795,
+                    "y": 6.629087
+                  },
+                  "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2026-05-30T05:39:00+0200",
+                "departureTimestamp": 1780112340,
+                "delay": null,
+                "platform": "1",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501120",
+                  "name": "Lausanne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.516795,
+                    "y": 6.629087
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504014",
+                  "name": "Palézieux",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.542766,
+                    "y": 6.83786
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T05:54:00+0200",
+                "arrivalTimestamp": 1780113240,
+                "departure": "2026-05-30T05:56:00+0200",
+                "departureTimestamp": 1780113360,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504014",
+                  "name": "Palézieux",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.542766,
+                    "y": 6.83786
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504023",
+                  "name": "Romont FR",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.693505,
+                    "y": 6.911801
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T06:10:00+0200",
+                "arrivalTimestamp": 1780114200,
+                "departure": "2026-05-30T06:12:00+0200",
+                "departureTimestamp": 1780114320,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504023",
+                  "name": "Romont FR",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.693505,
+                    "y": 6.911801
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504100",
+                  "name": "Fribourg/Freiburg",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.803142,
+                    "y": 7.151039
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T06:30:00+0200",
+                "arrivalTimestamp": 1780115400,
+                "departure": "2026-05-30T06:33:00+0200",
+                "departureTimestamp": 1780115580,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504100",
+                  "name": "Fribourg/Freiburg",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.803142,
+                    "y": 7.151039
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T06:56:00+0200",
+                "arrivalTimestamp": 1780116960,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "10",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8501120",
+              "name": "Lausanne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.516795,
+                "y": 6.629087
+              },
+              "distance": null
+            },
+            "arrival": null,
+            "arrivalTimestamp": null,
+            "departure": "2026-05-30T05:39:00+0200",
+            "departureTimestamp": 1780112340,
+            "delay": null,
+            "platform": "1",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501120",
+              "name": "Lausanne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.516795,
+                "y": 6.629087
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T06:56:00+0200",
+            "arrivalTimestamp": 1780116960,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "10",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "000374",
+            "category": "ICE",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "000374",
+            "operator": "SBB",
+            "to": "Basel Bad Bf",
+            "passList": [
+              {
+                "station": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T06:56:00+0200",
+                "arrivalTimestamp": 1780116960,
+                "departure": "2026-05-30T07:04:00+0200",
+                "departureTimestamp": 1780117440,
+                "delay": null,
+                "platform": "5",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:42:00+0200",
+                "arrivalTimestamp": 1780119720,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "7",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T06:56:00+0200",
+            "arrivalTimestamp": 1780116960,
+            "departure": "2026-05-30T07:04:00+0200",
+            "departureTimestamp": 1780117440,
+            "delay": null,
+            "platform": "5",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:42:00+0200",
+            "arrivalTimestamp": 1780119720,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "7",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "002163",
+            "category": "IR",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "16",
+            "operator": "SBB",
+            "to": "Zürich HB",
+            "passList": [
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:42:00+0200",
+                "arrivalTimestamp": 1780119720,
+                "departure": "2026-05-30T08:04:00+0200",
+                "departureTimestamp": 1780121040,
+                "delay": null,
+                "platform": "7",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:13:00+0200",
+                "arrivalTimestamp": 1780121580,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "2",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:42:00+0200",
+            "arrivalTimestamp": 1780119720,
+            "departure": "2026-05-30T08:04:00+0200",
+            "departureTimestamp": 1780121040,
+            "delay": null,
+            "platform": "7",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T08:13:00+0200",
+            "arrivalTimestamp": 1780121580,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "2",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "000710",
+            "category": "IC",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "1",
+            "operator": "SBB",
+            "to": "Genève-Aéroport",
+            "passList": [
+              {
+                "station": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:13:00+0200",
+                "arrivalTimestamp": 1780121580,
+                "departure": "2026-05-30T08:30:00+0200",
+                "departureTimestamp": 1780122600,
+                "delay": null,
+                "platform": "4",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:24:00+0200",
+                "arrivalTimestamp": 1780125840,
+                "departure": "2026-05-30T09:34:00+0200",
+                "departureTimestamp": 1780126440,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504100",
+                  "name": "Fribourg/Freiburg",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.803142,
+                    "y": 7.151039
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:56:00+0200",
+                "arrivalTimestamp": 1780127760,
+                "departure": "2026-05-30T10:00:00+0200",
+                "departureTimestamp": 1780128000,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504100",
+                  "name": "Fribourg/Freiburg",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.803142,
+                    "y": 7.151039
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8501120",
+                  "name": "Lausanne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.516795,
+                    "y": 6.629087
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T10:43:00+0200",
+                "arrivalTimestamp": 1780130580,
+                "departure": "2026-05-30T10:46:00+0200",
+                "departureTimestamp": 1780130760,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501120",
+                  "name": "Lausanne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.516795,
+                    "y": 6.629087
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T10:51:00+0200",
+                "arrivalTimestamp": 1780131060,
+                "departure": "2026-05-30T10:53:00+0200",
+                "departureTimestamp": 1780131180,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8501008",
+                  "name": "Genève",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.210228,
+                    "y": 6.142435
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T11:25:00+0200",
+                "arrivalTimestamp": 1780133100,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "3",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501008",
+                  "name": "Genève",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.210228,
+                    "y": 6.142435
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T08:13:00+0200",
+            "arrivalTimestamp": 1780121580,
+            "departure": "2026-05-30T08:30:00+0200",
+            "departureTimestamp": 1780122600,
+            "delay": null,
+            "platform": "4",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8501008",
+              "name": "Genève",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.210228,
+                "y": 6.142435
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T11:25:00+0200",
+            "arrivalTimestamp": 1780133100,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "3",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501008",
+              "name": "Genève",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.210228,
+                "y": 6.142435
+              },
+              "distance": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "from": {
+        "station": {
+          "id": "8501120",
+          "name": "Lausanne",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.516795,
+            "y": 6.629087
+          },
+          "distance": null
+        },
+        "arrival": null,
+        "arrivalTimestamp": null,
+        "departure": "2026-05-30T06:16:00+0200",
+        "departureTimestamp": 1780114560,
+        "delay": 0,
+        "platform": "1",
+        "prognosis": {
+          "platform": null,
+          "arrival": null,
+          "departure": "2026-05-30T06:16:00+0200",
+          "capacity1st": null,
+          "capacity2nd": null
+        },
+        "realtimeAvailability": null,
+        "location": {
+          "id": "8501120",
+          "name": "Lausanne",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.516795,
+            "y": 6.629087
+          },
+          "distance": null
+        }
+      },
+      "to": {
+        "station": {
+          "id": "8501008",
+          "name": "Genève",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.210228,
+            "y": 6.142435
+          },
+          "distance": null
+        },
+        "arrival": "2026-05-30T11:25:00+0200",
+        "arrivalTimestamp": 1780133100,
+        "departure": null,
+        "departureTimestamp": null,
+        "delay": null,
+        "platform": "3",
+        "prognosis": {
+          "platform": null,
+          "arrival": null,
+          "departure": null,
+          "capacity1st": null,
+          "capacity2nd": null
+        },
+        "realtimeAvailability": null,
+        "location": {
+          "id": "8501008",
+          "name": "Genève",
+          "score": null,
+          "coordinate": {
+            "type": "WGS84",
+            "x": 46.210228,
+            "y": 6.142435
+          },
+          "distance": null
+        }
+      },
+      "duration": "00d05:09:00",
+      "transfers": 6,
+      "service": null,
+      "products": [
+        "IC",
+        "IC 61",
+        "S29",
+        "IR 16",
+        "IR 55",
+        "IC 51",
+        "IC 1"
+      ],
+      "capacity1st": null,
+      "capacity2nd": null,
+      "sections": [
+        {
+          "journey": {
+            "name": "000901",
+            "category": "IC",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "000901",
+            "operator": "SBB",
+            "to": "Zürich HB",
+            "passList": [
+              {
+                "station": {
+                  "id": "8501120",
+                  "name": "Lausanne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.516795,
+                    "y": 6.629087
+                  },
+                  "distance": null
+                },
+                "arrival": null,
+                "arrivalTimestamp": null,
+                "departure": "2026-05-30T06:16:00+0200",
+                "departureTimestamp": 1780114560,
+                "delay": 0,
+                "platform": "1",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T06:16:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501120",
+                  "name": "Lausanne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.516795,
+                    "y": 6.629087
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504100",
+                  "name": "Fribourg/Freiburg",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.803142,
+                    "y": 7.151039
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:00:00+0200",
+                "arrivalTimestamp": 1780117200,
+                "departure": "2026-05-30T07:03:00+0200",
+                "departureTimestamp": 1780117380,
+                "delay": 1,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": "2026-05-30T07:04:00+0200",
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504100",
+                  "name": "Fribourg/Freiburg",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.803142,
+                    "y": 7.151039
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:26:00+0200",
+                "arrivalTimestamp": 1780118760,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": 0,
+                "platform": "6",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": "2026-05-30T07:26:00+0200",
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8501120",
+              "name": "Lausanne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.516795,
+                "y": 6.629087
+              },
+              "distance": null
+            },
+            "arrival": null,
+            "arrivalTimestamp": null,
+            "departure": "2026-05-30T06:16:00+0200",
+            "departureTimestamp": 1780114560,
+            "delay": 0,
+            "platform": "1",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": "2026-05-30T06:16:00+0200",
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501120",
+              "name": "Lausanne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.516795,
+                "y": 6.629087
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:26:00+0200",
+            "arrivalTimestamp": 1780118760,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": 0,
+            "platform": "6",
+            "prognosis": {
+              "platform": null,
+              "arrival": "2026-05-30T07:26:00+0200",
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "000608",
+            "category": "IC",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "61",
+            "operator": "SBB",
+            "to": "Basel SBB",
+            "passList": [
+              {
+                "station": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T07:26:00+0200",
+                "arrivalTimestamp": 1780118760,
+                "departure": "2026-05-30T07:33:00+0200",
+                "departureTimestamp": 1780119180,
+                "delay": null,
+                "platform": "5",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8507000",
+                  "name": "Bern",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.948823,
+                    "y": 7.439123
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:12:00+0200",
+                "arrivalTimestamp": 1780121520,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "7",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T07:26:00+0200",
+            "arrivalTimestamp": 1780118760,
+            "departure": "2026-05-30T07:33:00+0200",
+            "departureTimestamp": 1780119180,
+            "delay": null,
+            "platform": "5",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8507000",
+              "name": "Bern",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.948823,
+                "y": 7.439123
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T08:12:00+0200",
+            "arrivalTimestamp": 1780121520,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "7",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "008931",
+            "category": "S",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "29",
+            "operator": "SBB",
+            "to": "Turgi",
+            "passList": [
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:12:00+0200",
+                "arrivalTimestamp": 1780121520,
+                "departure": "2026-05-30T08:23:00+0200",
+                "departureTimestamp": 1780122180,
+                "delay": null,
+                "platform": "9",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:32:00+0200",
+                "arrivalTimestamp": 1780122720,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "1",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T08:12:00+0200",
+            "arrivalTimestamp": 1780121520,
+            "departure": "2026-05-30T08:23:00+0200",
+            "departureTimestamp": 1780122180,
+            "delay": null,
+            "platform": "9",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T08:32:00+0200",
+            "arrivalTimestamp": 1780122720,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "1",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "002162",
+            "category": "IR",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "16",
+            "operator": "SBB",
+            "to": "Olten",
+            "passList": [
+              {
+                "station": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:32:00+0200",
+                "arrivalTimestamp": 1780122720,
+                "departure": "2026-05-30T08:46:00+0200",
+                "departureTimestamp": 1780123560,
+                "delay": null,
+                "platform": "5",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8502113",
+                  "name": "Aarau",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.391352,
+                    "y": 8.05127
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:55:00+0200",
+                "arrivalTimestamp": 1780124100,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "7",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T08:32:00+0200",
+            "arrivalTimestamp": 1780122720,
+            "departure": "2026-05-30T08:46:00+0200",
+            "departureTimestamp": 1780123560,
+            "delay": null,
+            "platform": "5",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8502113",
+              "name": "Aarau",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.391352,
+                "y": 8.05127
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T08:55:00+0200",
+            "arrivalTimestamp": 1780124100,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "7",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "001762",
+            "category": "IR",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "55",
+            "operator": "SBB",
+            "to": "Biel/Bienne",
+            "passList": [
+              {
+                "station": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T08:55:00+0200",
+                "arrivalTimestamp": 1780124100,
+                "departure": "2026-05-30T09:01:00+0200",
+                "departureTimestamp": 1780124460,
+                "delay": null,
+                "platform": "3",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500218",
+                  "name": "Olten",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.351927,
+                    "y": 7.907693
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500212",
+                  "name": "Oensingen",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.28503,
+                    "y": 7.709875
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:13:00+0200",
+                "arrivalTimestamp": 1780125180,
+                "departure": "2026-05-30T09:13:00+0200",
+                "departureTimestamp": 1780125180,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500212",
+                  "name": "Oensingen",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.28503,
+                    "y": 7.709875
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500207",
+                  "name": "Solothurn",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.204189,
+                    "y": 7.542692
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:26:00+0200",
+                "arrivalTimestamp": 1780125960,
+                "departure": "2026-05-30T09:27:00+0200",
+                "departureTimestamp": 1780126020,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500207",
+                  "name": "Solothurn",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.204189,
+                    "y": 7.542692
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8500202",
+                  "name": "Grenchen Süd",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.188767,
+                    "y": 7.398183
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:34:00+0200",
+                "arrivalTimestamp": 1780126440,
+                "departure": "2026-05-30T09:34:00+0200",
+                "departureTimestamp": 1780126440,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8500202",
+                  "name": "Grenchen Süd",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.188767,
+                    "y": 7.398183
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504300",
+                  "name": "Biel/Bienne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.132893,
+                    "y": 7.242918
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:45:00+0200",
+                "arrivalTimestamp": 1780127100,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "4",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504300",
+                  "name": "Biel/Bienne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.132893,
+                    "y": 7.242918
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T08:55:00+0200",
+            "arrivalTimestamp": 1780124100,
+            "departure": "2026-05-30T09:01:00+0200",
+            "departureTimestamp": 1780124460,
+            "delay": null,
+            "platform": "3",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8500218",
+              "name": "Olten",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.351927,
+                "y": 7.907693
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8504300",
+              "name": "Biel/Bienne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.132893,
+                "y": 7.242918
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T09:45:00+0200",
+            "arrivalTimestamp": 1780127100,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "4",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8504300",
+              "name": "Biel/Bienne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.132893,
+                "y": 7.242918
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "001614",
+            "category": "IC",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "51",
+            "operator": "SBB",
+            "to": "Lausanne",
+            "passList": [
+              {
+                "station": {
+                  "id": "8504300",
+                  "name": "Biel/Bienne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.132893,
+                    "y": 7.242918
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T09:45:00+0200",
+                "arrivalTimestamp": 1780127100,
+                "departure": "2026-05-30T09:48:00+0200",
+                "departureTimestamp": 1780127280,
+                "delay": null,
+                "platform": "5",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504300",
+                  "name": "Biel/Bienne",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 47.132893,
+                    "y": 7.242918
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504221",
+                  "name": "Neuchâtel",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.996727,
+                    "y": 6.9357
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T10:07:00+0200",
+                "arrivalTimestamp": 1780128420,
+                "departure": "2026-05-30T10:09:00+0200",
+                "departureTimestamp": 1780128540,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504221",
+                  "name": "Neuchâtel",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.996727,
+                    "y": 6.9357
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8504200",
+                  "name": "Yverdon-les-Bains",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.78155,
+                    "y": 6.640943
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T10:28:00+0200",
+                "arrivalTimestamp": 1780129680,
+                "departure": "2026-05-30T10:29:00+0200",
+                "departureTimestamp": 1780129740,
+                "delay": null,
+                "platform": null,
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8504200",
+                  "name": "Yverdon-les-Bains",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.78155,
+                    "y": 6.640943
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T10:48:00+0200",
+                "arrivalTimestamp": 1780130880,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "4",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8504300",
+              "name": "Biel/Bienne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.132893,
+                "y": 7.242918
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T09:45:00+0200",
+            "arrivalTimestamp": 1780127100,
+            "departure": "2026-05-30T09:48:00+0200",
+            "departureTimestamp": 1780127280,
+            "delay": null,
+            "platform": "5",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8504300",
+              "name": "Biel/Bienne",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 47.132893,
+                "y": 7.242918
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8501118",
+              "name": "Renens VD",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.537046,
+                "y": 6.57892
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T10:48:00+0200",
+            "arrivalTimestamp": 1780130880,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "4",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501118",
+              "name": "Renens VD",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.537046,
+                "y": 6.57892
+              },
+              "distance": null
+            }
+          }
+        },
+        {
+          "journey": {
+            "name": "000710",
+            "category": "IC",
+            "subcategory": null,
+            "categoryCode": null,
+            "number": "1",
+            "operator": "SBB",
+            "to": "Genève-Aéroport",
+            "passList": [
+              {
+                "station": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T10:48:00+0200",
+                "arrivalTimestamp": 1780130880,
+                "departure": "2026-05-30T10:53:00+0200",
+                "departureTimestamp": 1780131180,
+                "delay": null,
+                "platform": "5",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501118",
+                  "name": "Renens VD",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.537046,
+                    "y": 6.57892
+                  },
+                  "distance": null
+                }
+              },
+              {
+                "station": {
+                  "id": "8501008",
+                  "name": "Genève",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.210228,
+                    "y": 6.142435
+                  },
+                  "distance": null
+                },
+                "arrival": "2026-05-30T11:25:00+0200",
+                "arrivalTimestamp": 1780133100,
+                "departure": null,
+                "departureTimestamp": null,
+                "delay": null,
+                "platform": "3",
+                "prognosis": {
+                  "platform": null,
+                  "arrival": null,
+                  "departure": null,
+                  "capacity1st": null,
+                  "capacity2nd": null
+                },
+                "realtimeAvailability": null,
+                "location": {
+                  "id": "8501008",
+                  "name": "Genève",
+                  "score": null,
+                  "coordinate": {
+                    "type": "WGS84",
+                    "x": 46.210228,
+                    "y": 6.142435
+                  },
+                  "distance": null
+                }
+              }
+            ],
+            "capacity1st": null,
+            "capacity2nd": null
+          },
+          "walk": null,
+          "departure": {
+            "station": {
+              "id": "8501118",
+              "name": "Renens VD",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.537046,
+                "y": 6.57892
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T10:48:00+0200",
+            "arrivalTimestamp": 1780130880,
+            "departure": "2026-05-30T10:53:00+0200",
+            "departureTimestamp": 1780131180,
+            "delay": null,
+            "platform": "5",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501118",
+              "name": "Renens VD",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.537046,
+                "y": 6.57892
+              },
+              "distance": null
+            }
+          },
+          "arrival": {
+            "station": {
+              "id": "8501008",
+              "name": "Genève",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.210228,
+                "y": 6.142435
+              },
+              "distance": null
+            },
+            "arrival": "2026-05-30T11:25:00+0200",
+            "arrivalTimestamp": 1780133100,
+            "departure": null,
+            "departureTimestamp": null,
+            "delay": null,
+            "platform": "3",
+            "prognosis": {
+              "platform": null,
+              "arrival": null,
+              "departure": null,
+              "capacity1st": null,
+              "capacity2nd": null
+            },
+            "realtimeAvailability": null,
+            "location": {
+              "id": "8501008",
+              "name": "Genève",
+              "score": null,
+              "coordinate": {
+                "type": "WGS84",
+                "x": 46.210228,
+                "y": 6.142435
+              },
+              "distance": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "from": {
+    "id": "8501120",
+    "name": "Lausanne",
+    "score": null,
+    "coordinate": {
+      "type": "WGS84",
+      "x": 46.516795,
+      "y": 6.629087
+    },
+    "distance": null
+  },
+  "to": {
+    "id": "8507000",
+    "name": "Bern",
+    "score": null,
+    "coordinate": {
+      "type": "WGS84",
+      "x": 46.948823,
+      "y": 7.439123
+    },
+    "distance": null
+  },
+  "stations": {
+    "from": [
+      {
+        "id": "8501120",
+        "name": "Lausanne",
+        "score": null,
+        "coordinate": {
+          "type": "WGS84",
+          "x": 46.516795,
+          "y": 6.629087
+        },
+        "distance": null
+      }
+    ],
+    "to": [
+      {
+        "id": "8507000",
+        "name": "Bern",
+        "score": null,
+        "coordinate": {
+          "type": "WGS84",
+          "x": 46.948823,
+          "y": 7.439123
+        },
+        "distance": null
+      }
+    ]
+  }
+}
