@@ -24,12 +24,12 @@ ARG IMAGE_NAME="Swiss Route API"
 ARG UID=1010
 ARG GID=1010
 
-LABEL group4.sports-pulse.build-date=$BUILD_DATE \
-      group4.sports-pulse.name=$IMAGE_NAME \
-      group4.sports-pulse.description=$IMAGE_DESCRIPTION \
-      group4.sports-pulse.base.image="eclipse-temurin:21-jre" \
-      group4.sports-pulse.version=$BUILD_VERSION \
-      maintainer="group4"
+LABEL group4.swiss-route.build-date=$BUILD_DATE \
+      group4.swiss-route.name=$IMAGE_NAME \
+      group4.swiss-route.description=$IMAGE_DESCRIPTION \
+      group4.swiss-route.base.image="eclipse-temurin:21-jre" \
+      group4.swiss-route.version=$BUILD_VERSION \
+      maintainer="Sebastian Orjuela"
 
 RUN groupadd -g "${GID}" group4 \
     && useradd --create-home --no-log-init -u "${UID}" -g group4 group4
