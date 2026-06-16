@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.group4.swissrouteapi.dtos.responses.ErrorResponse;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
  * validation-related exceptions like {@link MethodArgumentNotValidException}. Builds standardized
  * {@link ErrorResponse} objects with appropriate HTTP status codes and descriptive messages.
  */
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -146,6 +148,34 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleServiceUnavailableException(
       ServiceUnavailableException ex) {
     return buildErrorResponse(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+  }
+
+  /**
+   * Handles unexpected exceptions that are not explicitly mapped to a custom exception handler.
+   *
+   * <p>This method acts as a global fallback to catch any {@link java.lang.Exception} thrown during
+   * request processing. It ensures that the client receives a consistent error response even when
+   * the error type is not anticipated.
+   *
+   * <p>Responsibilities:
+   *
+   * <ul>
+   *   <li>Logs the exception details at error level if logging is enabled.
+   *   <li>Returns a standardized {@link ErrorResponse} with {@link
+   *       org.springframework.http.HttpStatus#INTERNAL_SERVER_ERROR} (500).
+   *   <li>Provides a generic error message to avoid exposing sensitive details.
+   * </ul>
+   *
+   * @param ex the unexpected exception thrown during request handling
+   * @return a {@link ResponseEntity} containing an {@link ErrorResponse} with HTTP status 500 and a
+   *     generic error message
+   */
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<ErrorResponse> handleException(Exception ex) {
+    if (log.isErrorEnabled()) {
+      log.error("Unexpected error", ex);
+    }
+    return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
   }
 
   private ResponseEntity<ErrorResponse> badRequest(String message) {
